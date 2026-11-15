@@ -115,7 +115,7 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         threading = prefs.getBoolean("threading", true);
         subject_top = prefs.getBoolean("subject_top", false);
-        subject_italic = prefs.getBoolean("subject_italic", true);
+        subject_italic = prefs.getBoolean("subject_italic", false);
         account_color = prefs.getInt("account_color", 1);
 
         account = prefs.getLong("widget." + appWidgetId + ".account", -1L);

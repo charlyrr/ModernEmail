@@ -1765,7 +1765,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swReverseAlways.setEnabled(swReverseAddresses.isChecked());
 
             swSubjectTop.setChecked(prefs.getBoolean("subject_top", false));
-            swSubjectItalic.setChecked(prefs.getBoolean("subject_italic", true));
+            swSubjectItalic.setChecked(prefs.getBoolean("subject_italic", false));
             swHighlightSubject.setChecked(prefs.getBoolean("highlight_subject", false));
 
             int[] fontSizeValues = getResources().getIntArray(R.array.fontSizeValues);
@@ -1804,10 +1804,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swLabels.setChecked(prefs.getBoolean("labels_header", true));
             swFlags.setChecked(prefs.getBoolean("flags", true));
             swFlagsBackground.setChecked(prefs.getBoolean("flags_background", false));
-            swPreview.setChecked(prefs.getBoolean("preview", false));
-            swPreviewItalic.setChecked(prefs.getBoolean("preview_italic", true));
+            swPreview.setChecked(prefs.getBoolean("preview", true));
+            swPreviewItalic.setChecked(prefs.getBoolean("preview_italic", false));
             swPreviewItalic.setEnabled(swPreview.isChecked());
-            spPreviewLines.setSelection(prefs.getInt("preview_lines", 1) - 1);
+            spPreviewLines.setSelection(prefs.getInt("preview_lines", 2) - 1);
             spPreviewLines.setEnabled(swPreview.isChecked());
             swAlignHeader.setChecked(prefs.getBoolean("align_header", false));
 

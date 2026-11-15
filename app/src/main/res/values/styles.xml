@@ -276,6 +276,181 @@
         <item name="colorDrawerBackground">@color/black</item>
     </style>
 
+
+    <!-- Minimalista: blanco puro, acento azul, mucho espacio -->
+    <style name="AppThemeMinimalLight" parent="AppThemeBaseLight">
+        <item name="colorPrimary">@color/minimalLightToolbar</item>
+        <item name="colorPrimaryDark">@color/minimalLightStatus</item>
+        <item name="colorAccent">@color/minimalLightAccent</item>
+        <item name="colorControlActivated">@color/minimalLightAccent</item>
+        <item name="colorUnreadHighlight">@color/minimalLightDeep</item>
+        <item name="colorBookmark">@color/minimalLightAccent</item>
+        <item name="colorFabBackground">@color/minimalLightContainer</item>
+        <item name="colorFabForeground">@color/minimalLightOn</item>
+        <item name="colorActionBackground">@color/minimalLightAction</item>
+        <item name="colorActionForegroundDisabled">@color/minimalLightDisabled</item>
+        <item name="colorInfoForeground">@color/minimalLightOn</item>
+        <item name="colorInfoBackground">@color/minimalLightContainer</item>
+        <item name="colorButtonTonal">@color/minimalLightContainer</item>
+        <item name="colorButtonTonalText">@color/minimalLightOn</item>
+        <item name="colorCardBackground">@color/minimalLightCard</item>
+        <item name="colorDrawerBackground">@color/minimalLightDrawer</item>
+        <item name="colorBackgroundFloating">@color/minimalLightFloating</item>
+        <item name="android:colorBackgroundFloating">@color/minimalLightFloating</item>
+        <item name="android:windowBackground">@color/minimalLightSurface</item>
+        <item name="android:textColorLink">@color/minimalLightDeep</item>
+        <item name="android:textColorLinkInverse">@color/minimalLightDeep</item>
+        <item name="colorActionForeground">@color/minimalLightText</item>
+        <item name="colorDrawerText">@color/minimalLightText</item>
+    </style>
+    <style name="AppThemeMinimalDark" parent="AppThemeBaseDark">
+        <item name="colorPrimary">@color/minimalDarkToolbar</item>
+        <item name="colorPrimaryDark">@color/minimalDarkStatus</item>
+        <item name="colorAccent">@color/minimalDarkAccent</item>
+        <item name="colorControlActivated">@color/minimalDarkAccent</item>
+        <item name="colorUnreadHighlight">@color/minimalDarkDeep</item>
+        <item name="colorBookmark">@color/minimalDarkAccent</item>
+        <item name="colorFabBackground">@color/minimalDarkContainer</item>
+        <item name="colorFabForeground">@color/minimalDarkOn</item>
+        <item name="colorActionBackground">@color/minimalDarkAction</item>
+        <item name="colorActionForegroundDisabled">@color/minimalDarkDisabled</item>
+        <item name="colorInfoForeground">@color/minimalDarkOn</item>
+        <item name="colorInfoBackground">@color/minimalDarkContainer</item>
+        <item name="colorButtonTonal">@color/minimalDarkContainer</item>
+        <item name="colorButtonTonalText">@color/minimalDarkOn</item>
+        <item name="colorCardBackground">@color/minimalDarkCard</item>
+        <item name="colorDrawerBackground">@color/minimalDarkDrawer</item>
+        <item name="colorBackgroundFloating">@color/minimalDarkFloating</item>
+        <item name="android:colorBackgroundFloating">@color/minimalDarkFloating</item>
+        <item name="android:windowBackground">@color/minimalDarkSurface</item>
+        <item name="android:textColorLink">@color/minimalDarkDeep</item>
+        <item name="android:textColorLinkInverse">@color/minimalDarkDeep</item>
+    </style>
+    <style name="AppThemeMinimalBlack" parent="AppThemeMinimalDark">
+        <item name="themeName">black</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorCardBackground">@color/minimalDarkSurface</item>
+        <item name="android:windowBackground">@drawable/background_black</item>
+        <item name="colorDrawerBackground">@color/black</item>
+    </style>
+
+    <!-- Violeta: lavanda suave y violeta profundo, aire elegante -->
+    <style name="AppThemeVioletLight" parent="AppThemeBaseLight">
+        <item name="colorPrimary">@color/violetLightToolbar</item>
+        <item name="colorPrimaryDark">@color/violetLightStatus</item>
+        <item name="colorAccent">@color/violetLightAccent</item>
+        <item name="colorControlActivated">@color/violetLightAccent</item>
+        <item name="colorUnreadHighlight">@color/violetLightDeep</item>
+        <item name="colorBookmark">@color/violetLightAccent</item>
+        <item name="colorFabBackground">@color/violetLightContainer</item>
+        <item name="colorFabForeground">@color/violetLightOn</item>
+        <item name="colorActionBackground">@color/violetLightAction</item>
+        <item name="colorActionForegroundDisabled">@color/violetLightDisabled</item>
+        <item name="colorInfoForeground">@color/violetLightOn</item>
+        <item name="colorInfoBackground">@color/violetLightContainer</item>
+        <item name="colorButtonTonal">@color/violetLightContainer</item>
+        <item name="colorButtonTonalText">@color/violetLightOn</item>
+        <item name="colorCardBackground">@color/violetLightCard</item>
+        <item name="colorDrawerBackground">@color/violetLightDrawer</item>
+        <item name="colorBackgroundFloating">@color/violetLightFloating</item>
+        <item name="android:colorBackgroundFloating">@color/violetLightFloating</item>
+        <item name="android:windowBackground">@color/violetLightSurface</item>
+        <item name="android:textColorLink">@color/violetLightDeep</item>
+        <item name="android:textColorLinkInverse">@color/violetLightDeep</item>
+        <item name="colorActionForeground">@color/violetLightText</item>
+        <item name="colorDrawerText">@color/violetLightText</item>
+    </style>
+    <style name="AppThemeVioletDark" parent="AppThemeBaseDark">
+        <item name="colorPrimary">@color/violetDarkToolbar</item>
+        <item name="colorPrimaryDark">@color/violetDarkStatus</item>
+        <item name="colorAccent">@color/violetDarkAccent</item>
+        <item name="colorControlActivated">@color/violetDarkAccent</item>
+        <item name="colorUnreadHighlight">@color/violetDarkDeep</item>
+        <item name="colorBookmark">@color/violetDarkAccent</item>
+        <item name="colorFabBackground">@color/violetDarkContainer</item>
+        <item name="colorFabForeground">@color/violetDarkOn</item>
+        <item name="colorActionBackground">@color/violetDarkAction</item>
+        <item name="colorActionForegroundDisabled">@color/violetDarkDisabled</item>
+        <item name="colorInfoForeground">@color/violetDarkOn</item>
+        <item name="colorInfoBackground">@color/violetDarkContainer</item>
+        <item name="colorButtonTonal">@color/violetDarkContainer</item>
+        <item name="colorButtonTonalText">@color/violetDarkOn</item>
+        <item name="colorCardBackground">@color/violetDarkCard</item>
+        <item name="colorDrawerBackground">@color/violetDarkDrawer</item>
+        <item name="colorBackgroundFloating">@color/violetDarkFloating</item>
+        <item name="android:colorBackgroundFloating">@color/violetDarkFloating</item>
+        <item name="android:windowBackground">@color/violetDarkSurface</item>
+        <item name="android:textColorLink">@color/violetDarkDeep</item>
+        <item name="android:textColorLinkInverse">@color/violetDarkDeep</item>
+    </style>
+    <style name="AppThemeVioletBlack" parent="AppThemeVioletDark">
+        <item name="themeName">black</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorCardBackground">@color/violetDarkSurface</item>
+        <item name="android:windowBackground">@drawable/background_black</item>
+        <item name="colorDrawerBackground">@color/black</item>
+    </style>
+
+    <!-- Profesional: barra azul sólida, sobrio y muy legible -->
+    <style name="AppThemeAzureLight" parent="AppThemeBaseLight">
+        <item name="colorPrimary">@color/azureLightToolbar</item>
+        <item name="colorPrimaryDark">@color/azureLightStatus</item>
+        <item name="colorAccent">@color/azureLightAccent</item>
+        <item name="colorControlActivated">@color/azureLightAccent</item>
+        <item name="colorUnreadHighlight">@color/azureLightDeep</item>
+        <item name="colorBookmark">@color/azureLightAccent</item>
+        <item name="colorFabBackground">@color/azureLightContainer</item>
+        <item name="colorFabForeground">@color/azureLightOn</item>
+        <item name="colorActionBackground">@color/azureLightAction</item>
+        <item name="colorActionForegroundDisabled">@color/azureLightDisabled</item>
+        <item name="colorInfoForeground">@color/azureLightOn</item>
+        <item name="colorInfoBackground">@color/azureLightContainer</item>
+        <item name="colorButtonTonal">@color/azureLightContainer</item>
+        <item name="colorButtonTonalText">@color/azureLightOn</item>
+        <item name="colorCardBackground">@color/azureLightCard</item>
+        <item name="colorDrawerBackground">@color/azureLightDrawer</item>
+        <item name="colorBackgroundFloating">@color/azureLightFloating</item>
+        <item name="android:colorBackgroundFloating">@color/azureLightFloating</item>
+        <item name="android:windowBackground">@color/azureLightSurface</item>
+        <item name="android:textColorLink">@color/azureLightDeep</item>
+        <item name="android:textColorLinkInverse">@color/azureLightDeep</item>
+        <item name="colorActionForeground">@color/azureLightText</item>
+        <item name="colorDrawerText">@color/azureLightText</item>
+    </style>
+    <style name="AppThemeAzureDark" parent="AppThemeBaseDark">
+        <item name="colorPrimary">@color/azureDarkToolbar</item>
+        <item name="colorPrimaryDark">@color/azureDarkStatus</item>
+        <item name="colorAccent">@color/azureDarkAccent</item>
+        <item name="colorControlActivated">@color/azureDarkAccent</item>
+        <item name="colorUnreadHighlight">@color/azureDarkDeep</item>
+        <item name="colorBookmark">@color/azureDarkAccent</item>
+        <item name="colorFabBackground">@color/azureDarkContainer</item>
+        <item name="colorFabForeground">@color/azureDarkOn</item>
+        <item name="colorActionBackground">@color/azureDarkAction</item>
+        <item name="colorActionForegroundDisabled">@color/azureDarkDisabled</item>
+        <item name="colorInfoForeground">@color/azureDarkOn</item>
+        <item name="colorInfoBackground">@color/azureDarkContainer</item>
+        <item name="colorButtonTonal">@color/azureDarkContainer</item>
+        <item name="colorButtonTonalText">@color/azureDarkOn</item>
+        <item name="colorCardBackground">@color/azureDarkCard</item>
+        <item name="colorDrawerBackground">@color/azureDarkDrawer</item>
+        <item name="colorBackgroundFloating">@color/azureDarkFloating</item>
+        <item name="android:colorBackgroundFloating">@color/azureDarkFloating</item>
+        <item name="android:windowBackground">@color/azureDarkSurface</item>
+        <item name="android:textColorLink">@color/azureDarkDeep</item>
+        <item name="android:textColorLinkInverse">@color/azureDarkDeep</item>
+    </style>
+    <style name="AppThemeAzureBlack" parent="AppThemeAzureDark">
+        <item name="themeName">black</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorCardBackground">@color/azureDarkCard</item>
+        <item name="android:windowBackground">@drawable/background_black</item>
+        <item name="colorDrawerBackground">@color/black</item>
+    </style>
+
     <!-- Light -->
 
     <style name="AppThemeBlueOrangeLight" parent="AppThemeBaseLight">

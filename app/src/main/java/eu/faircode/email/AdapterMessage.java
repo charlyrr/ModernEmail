@@ -8589,7 +8589,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (fz_subject >= 0)
             font_size_subject = Helper.getTextSize(context, fz_subject);
 
-        this.subject_italic = prefs.getBoolean("subject_italic", true);
+        this.subject_italic = prefs.getBoolean("subject_italic", false);
         this.sender_ellipsize = prefs.getString("sender_ellipsize", compact ? "end" : "full");
         this.subject_ellipsize = prefs.getString("subject_ellipsize", "full");
         this.show_filtered = prefs.getBoolean("show_filtered", false);
@@ -8597,9 +8597,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.labels_header = prefs.getBoolean("labels_header", true);
         this.flags = prefs.getBoolean("flags", true);
         this.flags_background = prefs.getBoolean("flags_background", false);
-        this.preview = prefs.getBoolean("preview", false);
-        this.preview_italic = prefs.getBoolean("preview_italic", true);
-        this.preview_lines = prefs.getInt("preview_lines", 1);
+        this.preview = prefs.getBoolean("preview", true);
+        this.preview_italic = prefs.getBoolean("preview_italic", false);
+        this.preview_lines = prefs.getInt("preview_lines", 2);
         this.align_header = prefs.getBoolean("align_header", false);
         this.message_zoom = prefs.getInt("message_zoom", 100);
         this.line_spacing = prefs.getInt("line_spacing", 100);

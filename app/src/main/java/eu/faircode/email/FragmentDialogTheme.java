@@ -67,7 +67,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         boolean cards = prefs.getBoolean("cards", true);
 
         int checkedId = rgTheme.getCheckedRadioButtonId();
-        boolean modern = (checkedId == R.id.rbThemeModern);
+        boolean modern = (getFamily(checkedId) != null);
         boolean grey = (checkedId == R.id.rbThemeGrey);
         boolean solarized = (checkedId == R.id.rbThemeSolarized);
         boolean blank = (checkedId == R.id.rbThemeBlank);
@@ -195,15 +195,10 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         swHtmlLight.setChecked(default_light);
         swComposerLight.setChecked(composer_light);
 
-        switch (theme) {
-            case "modern_system":
-            case "modern_system_black":
-            case "modern_light":
-            case "modern_dark":
-            case "modern_black":
-                rgTheme.check(R.id.rbThemeModern);
-                break;
-
+        Integer familyId = getFamilyButton(theme);
+        if (familyId != null)
+            rgTheme.check(familyId);
+        else switch (theme) {
             case "light":
             case "dark":
             case "system":
@@ -337,12 +332,13 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                         editor.remove("highlight_color");
 
                         int checkedRadioButtonId = rgTheme.getCheckedRadioButtonId();
-                        if (checkedRadioButtonId == R.id.rbThemeModern) {
+                        String family = getFamily(checkedRadioButtonId);
+                        if (family != null) {
                             if (system)
-                                editor.putString("theme", "modern_system" + (black ? "_black" : "")).apply();
+                                editor.putString("theme", family + "_system" + (black ? "_black" : "")).apply();
                             else
                                 editor.putString("theme",
-                                        "modern" + (black ? "_black" : dark ? "_dark" : "_light")).apply();
+                                        family + (black ? "_black" : dark ? "_dark" : "_light")).apply();
                         } else if (checkedRadioButtonId == R.id.rbThemeBlueOrange) {
                             if (system)
                                 editor.putString("theme",
@@ -433,19 +429,27 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             night = false;
         EntityLog.log(context, "Activity theme=" + theme + " light=" + light + " night=" + night);
 
-        switch (theme) {
-            // Moderno
-            case "modern_light":
-                return R.style.AppThemeModernLight;
-            case "modern_dark":
-                return (light ? R.style.AppThemeModernLight : R.style.AppThemeModernDark);
-            case "modern_black":
-                return (light ? R.style.AppThemeModernLight : R.style.AppThemeModernBlack);
-            case "modern_system":
-                return (night ? R.style.AppThemeModernDark : R.style.AppThemeModernLight);
-            case "modern_system_black":
-                return (night ? R.style.AppThemeModernBlack : R.style.AppThemeModernLight);
+        // Familias de temas de ModernEmail: <familia>_light/_dark/_black/_system/_system_black
+        for (String family : FAMILIES)
+            if (theme.startsWith(family + "_")) {
+                int[] styles = getFamilyStyles(family);
+                String mode = theme.substring(family.length() + 1);
+                switch (mode) {
+                    case "light":
+                        return styles[0];
+                    case "dark":
+                        return (light ? styles[0] : styles[1]);
+                    case "black":
+                        return (light ? styles[0] : styles[2]);
+                    case "system_black":
+                        return (night ? styles[2] : styles[0]);
+                    case "system":
+                    default:
+                        return (night ? styles[1] : styles[0]);
+                }
+            }
 
+        switch (theme) {
             // Light
             case "light":
             case "blue_orange_light":
@@ -694,6 +698,63 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         }
     }
 
+    // Temas de ModernEmail: prefijo guardado en la preferencia "theme"
+    static final String[] FAMILIES = new String[]{"modern", "minimal", "violet", "azure"};
+
+    private static String getFamily(int buttonId) {
+        if (buttonId == R.id.rbThemeModern)
+            return "modern";
+        if (buttonId == R.id.rbThemeMinimal)
+            return "minimal";
+        if (buttonId == R.id.rbThemeViolet)
+            return "violet";
+        if (buttonId == R.id.rbThemeAzure)
+            return "azure";
+        return null;
+    }
+
+    private static Integer getFamilyButton(String theme) {
+        if (theme.startsWith("modern_"))
+            return R.id.rbThemeModern;
+        if (theme.startsWith("minimal_"))
+            return R.id.rbThemeMinimal;
+        if (theme.startsWith("violet_"))
+            return R.id.rbThemeViolet;
+        if (theme.startsWith("azure_"))
+            return R.id.rbThemeAzure;
+        return null;
+    }
+
+    // {claro, oscuro, negro}
+    private static int[] getFamilyStyles(String family) {
+        switch (family) {
+            case "minimal":
+                return new int[]{R.style.AppThemeMinimalLight, R.style.AppThemeMinimalDark, R.style.AppThemeMinimalBlack};
+            case "violet":
+                return new int[]{R.style.AppThemeVioletLight, R.style.AppThemeVioletDark, R.style.AppThemeVioletBlack};
+            case "azure":
+                return new int[]{R.style.AppThemeAzureLight, R.style.AppThemeAzureDark, R.style.AppThemeAzureBlack};
+            case "modern":
+            default:
+                return new int[]{R.style.AppThemeModernLight, R.style.AppThemeModernDark, R.style.AppThemeModernBlack};
+        }
+    }
+
+    // {fondo lista claro, tarjeta clara, fondo lista oscuro, tarjeta oscura}
+    private static int[] getFamilyBackgrounds(String family) {
+        switch (family) {
+            case "minimal":
+                return new int[]{R.color.minimalLightBackground, R.color.minimalLightCard, R.color.minimalDarkBackground, R.color.minimalDarkCard};
+            case "violet":
+                return new int[]{R.color.violetLightBackground, R.color.violetLightCard, R.color.violetDarkBackground, R.color.violetDarkCard};
+            case "azure":
+                return new int[]{R.color.azureLightBackground, R.color.azureLightCard, R.color.azureDarkBackground, R.color.azureDarkCard};
+            case "modern":
+            default:
+                return new int[]{R.color.modernLightBackground, R.color.modernLightCard, R.color.modernDarkBackground, R.color.modernDarkCard};
+        }
+    }
+
     static void setBackground(Context context, View view, boolean compose) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean cards = prefs.getBoolean("cards", true);
@@ -704,19 +765,19 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         boolean black = (theme.endsWith("black") || "black_and_white".equals(theme));
         boolean solarized = theme.startsWith("solarized");
         boolean you = theme.startsWith("you_");
-        boolean modern = theme.startsWith("modern");
+        String family = null;
+        for (String f : FAMILIES)
+            if (theme.startsWith(f + "_"))
+                family = f;
 
         Integer color = null;
         if (cards) {
-            if (modern) {
+            if (family != null) {
+                int[] bg = getFamilyBackgrounds(family);
                 if (!dark)
-                    color = ContextCompat.getColor(context, compose
-                            ? R.color.modernLightCard
-                            : R.color.modernLightBackground);
+                    color = ContextCompat.getColor(context, compose ? bg[1] : bg[0]);
                 else if (!black)
-                    color = ContextCompat.getColor(context, compose
-                            ? R.color.modernDarkCard
-                            : R.color.modernDarkBackground);
+                    color = ContextCompat.getColor(context, compose ? bg[3] : bg[2]);
             } else if (you && !black && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 if (!dark && beige)
                     color = ContextCompat.getColor(context, R.color.lightColorBackground_cards_beige);
