@@ -81,7 +81,7 @@ public class ViewCardOptional extends CardView {
             setLayoutParams(lparam);
         }
 
-        setContentPadding(hmargin, margin, hmargin, margin);
+        setContentPadding(margin, margin, margin, margin);
 
         super.onAttachedToWindow();
     }

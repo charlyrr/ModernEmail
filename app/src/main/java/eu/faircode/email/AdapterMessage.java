@@ -371,6 +371,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private View header;
 
         private ImageView ivBadge;
+        private View vwUnread;
         private View vwColor;
         private ImageButton ibExpander;
         private ImageView ibFlagged;
@@ -761,6 +762,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             header = itemView.findViewById(R.id.inHeader);
 
             ivBadge = itemView.findViewById(R.id.ivBadge);
+            vwUnread = itemView.findViewById(R.id.vwUnread);
             vwColor = itemView.findViewById(R.id.vwColor);
             ibExpander = itemView.findViewById(R.id.ibExpander);
             ibFlagged = itemView.findViewById(R.id.ibFlagged);
@@ -1998,6 +2000,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         void bindSeen(TupleMessageEx message) {
+            // ModernMail: punto de "no leído" (sólo existe en la fila normal)
+            if (vwUnread != null)
+                vwUnread.setVisibility(message.unseen > 0 ? View.VISIBLE : View.GONE);
+
             if (cards && shadow_unread && shadow_border) {
                 boolean shadow = (message.unseen > 0);
                 int color = (shadow

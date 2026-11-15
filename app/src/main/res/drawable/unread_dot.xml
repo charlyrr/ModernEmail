@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Punto de "no leído" en la lista de mensajes -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="?attr/colorAccent" />
+    <size android:width="8dp" android:height="8dp" />
+</shape>
