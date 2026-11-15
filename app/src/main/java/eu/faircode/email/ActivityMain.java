@@ -469,6 +469,12 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             }
             editor.putBoolean("landscape3", false);
 
+            // ModernMail: tema Minimalista y sus ajustes en la primera apertura
+            if (!prefs.contains("theme")) {
+                editor.putString("theme", "minimal_system");
+                FragmentDialogTheme.applyPreset(editor, "minimal");
+            }
+
             // Default send bubbles off when accessibility enabled
             if (Helper.isAccessibilityEnabled(this))
                 editor.putBoolean("send_chips", false);

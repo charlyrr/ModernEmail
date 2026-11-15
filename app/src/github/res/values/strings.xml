@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Nombre visible de esta versión (variante "github") -->
-    <string name="app_name" translatable="false">ModernEmail</string>
+    <string name="app_name" translatable="false">ModernMail</string>
 </resources>

@@ -1,5 +1,5 @@
-name: Compilar APK ModernEmail
-run-name: APK ModernEmail - ${{ github.ref_name }} - ${{ github.sha }}
+name: Compilar APK ModernMail
+run-name: APK ModernMail - ${{ github.ref_name }} - ${{ github.sha }}
 
 # Se ejecuta en cada push a la rama estetica-moderna o a mano desde la pestaña Actions
 on:
@@ -47,7 +47,7 @@ jobs:
             PASS="$(openssl rand -hex 16)"
             keytool -genkeypair -noprompt -keystore app/modern.keystore \
               -alias modern -keyalg RSA -keysize 4096 -validity 10000 \
-              -storepass "$PASS" -keypass "$PASS" -dname "CN=ModernEmail"
+              -storepass "$PASS" -keypass "$PASS" -dname "CN=ModernMail"
             echo "::warning::Firmado con una clave temporal. Para poder actualizar sin desinstalar, configura los secretos MODERN_KEYSTORE_BASE64 y MODERN_KEYSTORE_PASSWORD."
           fi
           echo "::add-mask::$PASS"
@@ -66,6 +66,6 @@ jobs:
       - name: Subir el APK
         uses: actions/upload-artifact@v6
         with:
-          name: ModernEmail-APK
+          name: ModernMail-APK
           path: app/build/outputs/apk/github/release/*.apk
           if-no-files-found: error

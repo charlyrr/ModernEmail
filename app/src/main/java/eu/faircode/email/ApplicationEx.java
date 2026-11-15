@@ -1089,7 +1089,7 @@ public class ApplicationEx extends Application
 
         if (version < 2243 && "a".equals(BuildConfig.REVISION)) {
             boolean beige = prefs.getBoolean("beige", true);
-            String theme = prefs.getString("theme", "modern_system");
+            String theme = prefs.getString("theme", "minimal_system");
             boolean you = theme.startsWith("you_");
             if (you && beige)
                 editor.putBoolean("beige", false);

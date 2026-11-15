@@ -104,7 +104,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
         final Context context = getContext();
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String theme = prefs.getString("theme", "modern_system");
+        String theme = prefs.getString("theme", "minimal_system");
         boolean default_light = prefs.getBoolean("default_light", false);
         boolean composer_light = prefs.getBoolean("composer_light", false);
         boolean debug = prefs.getBoolean("debug", false);
@@ -135,6 +135,21 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         rbThemeYou.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.S ? View.GONE : View.VISIBLE);
         rbThemeYouMono.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.S ? View.GONE : View.VISIBLE);
         tvYou.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.S ? View.GONE : View.VISIBLE);
+
+        // ModernMail: sólo se ofrecen los temas propios; los originales siguen
+        // funcionando si ya estaban elegidos, pero no aparecen en la lista
+        for (int id : new int[]{
+                R.id.rbThemeModern, R.id.rbThemeBlueOrange, R.id.rbThemeRedGreen,
+                R.id.rbThemeYellowPurple, R.id.rbThemeGrey, R.id.rbThemeSolarized,
+                R.id.rbThemeBlank, R.id.rbThemeBlackOrWhite, R.id.rbThemeBlackAndWhite,
+                R.id.rbThemeYou, R.id.rbThemeYouMono}) {
+            View v = dview.findViewById(id);
+            if (v != null)
+                v.setVisibility(View.GONE);
+        }
+        tvYou.setVisibility(View.GONE);
+        swReverse.setVisibility(View.GONE);
+        swBeige.setVisibility(View.GONE);
 
         tvYou.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,6 +348,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
                         int checkedRadioButtonId = rgTheme.getCheckedRadioButtonId();
                         String family = getFamily(checkedRadioButtonId);
+                        if (family != null)
+                            applyPreset(editor, family);
                         if (family != null) {
                             if (system)
                                 editor.putString("theme", family + "_system" + (black ? "_black" : "")).apply();
@@ -420,7 +437,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
     static int getTheme(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String theme = prefs.getString("theme", "modern_system");
+        String theme = prefs.getString("theme", "minimal_system");
         boolean composer_light = prefs.getBoolean("composer_light", false);
 
         boolean night = Helper.isNight(context);
@@ -694,7 +711,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             default:
                 if (!theme.startsWith("you_") && !theme.startsWith("you_mono_"))
                     Log.e("Unknown theme=" + theme);
-                return (night ? R.style.AppThemeModernDark : R.style.AppThemeModernLight);
+                return (night ? R.style.AppThemeMinimalDark : R.style.AppThemeMinimalLight);
         }
     }
 
@@ -723,6 +740,26 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         if (theme.startsWith("azure_"))
             return R.id.rbThemeAzure;
         return null;
+    }
+
+    // Ajustes de visualización que acompañan a cada tema de ModernMail
+    static void applyPreset(SharedPreferences.Editor editor, String family) {
+        boolean minimal = "minimal".equals(family);
+        boolean azure = "azure".equals(family);
+
+        editor.putBoolean("cards", !minimal);
+        editor.putBoolean("dividers", true);
+        editor.putBoolean("compact", false);
+        editor.putBoolean("beige", false);
+        editor.putBoolean("avatars", true);
+        editor.putBoolean("circular", true);
+        editor.putBoolean("generated_icons", true);
+        editor.putBoolean("preview", true);
+        editor.putInt("preview_lines", azure ? 1 : 2);
+        editor.putBoolean("preview_italic", false);
+        editor.putBoolean("subject_italic", false);
+        editor.putBoolean("highlight_unread", !minimal);
+        editor.putBoolean("color_stripe", !minimal);
     }
 
     // {claro, oscuro, negro}
@@ -760,7 +797,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         boolean cards = prefs.getBoolean("cards", true);
         boolean beige = prefs.getBoolean("beige", true);
         boolean tabular_card_bg = prefs.getBoolean("tabular_card_bg", false);
-        String theme = prefs.getString("theme", "modern_system");
+        String theme = prefs.getString("theme", "minimal_system");
         boolean dark = Helper.isDarkTheme(context);
         boolean black = (theme.endsWith("black") || "black_and_white".equals(theme));
         boolean solarized = theme.startsWith("solarized");
