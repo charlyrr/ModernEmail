@@ -27,3 +27,4 @@ app/.cxx/
 build
 captures
 gradle
+app/modern.keystore

@@ -1,0 +1,71 @@
+name: Compilar APK ModernEmail
+run-name: APK ModernEmail - ${{ github.ref_name }} - ${{ github.sha }}
+
+# Se ejecuta en cada push a la rama estetica-moderna o a mano desde la pestaña Actions
+on:
+  push:
+    branches: [ estetica-moderna ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: modern-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Instalar JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      # Firma del APK:
+      # - Si existen los secretos MODERN_KEYSTORE_BASE64 y MODERN_KEYSTORE_PASSWORD se usa
+      #   siempre la misma clave, y cada APK nuevo se instala encima del anterior.
+      # - Si no existen, se genera una clave temporal: el APK funciona, pero para
+      #   actualizar habría que desinstalar la versión anterior.
+      - name: Preparar la firma
+        env:
+          KEYSTORE_BASE64: ${{ secrets.MODERN_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.MODERN_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > app/modern.keystore
+            PASS="$KEYSTORE_PASSWORD"
+            echo "Usando la clave de firma permanente."
+          else
+            PASS="$(openssl rand -hex 16)"
+            keytool -genkeypair -noprompt -keystore app/modern.keystore \
+              -alias modern -keyalg RSA -keysize 4096 -validity 10000 \
+              -storepass "$PASS" -keypass "$PASS" -dname "CN=ModernEmail"
+            echo "::warning::Firmado con una clave temporal. Para poder actualizar sin desinstalar, configura los secretos MODERN_KEYSTORE_BASE64 y MODERN_KEYSTORE_PASSWORD."
+          fi
+          echo "::add-mask::$PASS"
+          {
+            echo "storeFile=modern.keystore"
+            echo "storePassword=$PASS"
+            echo "keyAlias=modern"
+            echo "keyPassword=$PASS"
+          } > keystore.properties
+
+      - name: Compilar
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace assembleGithubRelease
+
+      - name: Subir el APK
+        uses: actions/upload-artifact@v6
+        with:
+          name: ModernEmail-APK
+          path: app/build/outputs/apk/github/release/*.apk
+          if-no-files-found: error

@@ -203,6 +203,8 @@ android {
     productFlavors {
         github {
             dimension "all"
+            // ModernEmail: identificador propio para poder instalarla junto a FairEmail
+            applicationIdSuffix ".modern"
             manifestPlaceholders.largeHeap = false
             manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes(("github" + getVersionCode() + getRevision()).getBytes()).toString();
             externalNativeBuild {
