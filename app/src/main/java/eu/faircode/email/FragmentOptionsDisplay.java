@@ -1385,7 +1385,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
-        String theme = prefs.getString("theme", "blue_orange_system");
+        String theme = prefs.getString("theme", "modern_system");
         boolean bw = "black_and_white".equals(theme);
 
         swTextSeparators.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

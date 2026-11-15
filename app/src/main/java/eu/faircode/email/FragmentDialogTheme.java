@@ -67,6 +67,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         boolean cards = prefs.getBoolean("cards", true);
 
         int checkedId = rgTheme.getCheckedRadioButtonId();
+        boolean modern = (checkedId == R.id.rbThemeModern);
         boolean grey = (checkedId == R.id.rbThemeGrey);
         boolean solarized = (checkedId == R.id.rbThemeSolarized);
         boolean blank = (checkedId == R.id.rbThemeBlank);
@@ -74,13 +75,13 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         boolean bandw = (checkedId == R.id.rbThemeBlackAndWhite);
         boolean mono = (checkedId == R.id.rbThemeYouMono);
         boolean you = (checkedId == R.id.rbThemeYou || mono);
-        boolean colored = (grey || bw || solarized || you ||
+        boolean colored = (modern || grey || bw || solarized || you ||
                 checkedId == R.id.rbThemeBlueOrange ||
                 checkedId == R.id.rbThemeRedGreen ||
                 checkedId == R.id.rbThemeYellowPurple);
         int optionId = rgThemeOptions.getCheckedRadioButtonId();
 
-        swReverse.setEnabled(colored && !grey && !solarized && !bw && !mono);
+        swReverse.setEnabled(colored && !modern && !grey && !solarized && !bw && !mono);
 
         rgThemeOptions.setEnabled(colored);
         for (int i = 0; i < rgThemeOptions.getChildCount(); i++)
@@ -89,7 +90,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         tvSystem.setEnabled(colored && optionId == R.id.rbThemeSystem);
 
         swBlack.setEnabled(colored && !grey && !bw && !solarized && optionId != R.id.rbThemeLight);
-        swBeige.setEnabled(cards && !bandw && !solarized && optionId != R.id.rbThemeDark);
+        swBeige.setEnabled(cards && !modern && !bandw && !solarized && optionId != R.id.rbThemeDark);
 
         swHtmlLight.setEnabled(colored ? optionId != R.id.rbThemeLight : !blank);
         swComposerLight.setEnabled(colored ? optionId != R.id.rbThemeLight : !blank);
@@ -103,7 +104,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
         final Context context = getContext();
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String theme = prefs.getString("theme", "blue_orange_system");
+        String theme = prefs.getString("theme", "modern_system");
         boolean default_light = prefs.getBoolean("default_light", false);
         boolean composer_light = prefs.getBoolean("composer_light", false);
         boolean debug = prefs.getBoolean("debug", false);
@@ -195,6 +196,14 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         swComposerLight.setChecked(composer_light);
 
         switch (theme) {
+            case "modern_system":
+            case "modern_system_black":
+            case "modern_light":
+            case "modern_dark":
+            case "modern_black":
+                rgTheme.check(R.id.rbThemeModern);
+                break;
+
             case "light":
             case "dark":
             case "system":
@@ -328,7 +337,13 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                         editor.remove("highlight_color");
 
                         int checkedRadioButtonId = rgTheme.getCheckedRadioButtonId();
-                        if (checkedRadioButtonId == R.id.rbThemeBlueOrange) {
+                        if (checkedRadioButtonId == R.id.rbThemeModern) {
+                            if (system)
+                                editor.putString("theme", "modern_system" + (black ? "_black" : "")).apply();
+                            else
+                                editor.putString("theme",
+                                        "modern" + (black ? "_black" : dark ? "_dark" : "_light")).apply();
+                        } else if (checkedRadioButtonId == R.id.rbThemeBlueOrange) {
                             if (system)
                                 editor.putString("theme",
                                         (reverse ? "orange_blue_system" : "blue_orange_system") +
@@ -409,7 +424,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
     static int getTheme(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String theme = prefs.getString("theme", "blue_orange_system");
+        String theme = prefs.getString("theme", "modern_system");
         boolean composer_light = prefs.getBoolean("composer_light", false);
 
         boolean night = Helper.isNight(context);
@@ -419,6 +434,18 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         EntityLog.log(context, "Activity theme=" + theme + " light=" + light + " night=" + night);
 
         switch (theme) {
+            // Moderno
+            case "modern_light":
+                return R.style.AppThemeModernLight;
+            case "modern_dark":
+                return (light ? R.style.AppThemeModernLight : R.style.AppThemeModernDark);
+            case "modern_black":
+                return (light ? R.style.AppThemeModernLight : R.style.AppThemeModernBlack);
+            case "modern_system":
+                return (night ? R.style.AppThemeModernDark : R.style.AppThemeModernLight);
+            case "modern_system_black":
+                return (night ? R.style.AppThemeModernBlack : R.style.AppThemeModernLight);
+
             // Light
             case "light":
             case "blue_orange_light":
@@ -663,7 +690,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             default:
                 if (!theme.startsWith("you_") && !theme.startsWith("you_mono_"))
                     Log.e("Unknown theme=" + theme);
-                return R.style.AppThemeBlueOrangeLight;
+                return (night ? R.style.AppThemeModernDark : R.style.AppThemeModernLight);
         }
     }
 
@@ -672,15 +699,25 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         boolean cards = prefs.getBoolean("cards", true);
         boolean beige = prefs.getBoolean("beige", true);
         boolean tabular_card_bg = prefs.getBoolean("tabular_card_bg", false);
-        String theme = prefs.getString("theme", "blue_orange_system");
+        String theme = prefs.getString("theme", "modern_system");
         boolean dark = Helper.isDarkTheme(context);
         boolean black = (theme.endsWith("black") || "black_and_white".equals(theme));
         boolean solarized = theme.startsWith("solarized");
         boolean you = theme.startsWith("you_");
+        boolean modern = theme.startsWith("modern");
 
         Integer color = null;
         if (cards) {
-            if (you && !black && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (modern) {
+                if (!dark)
+                    color = ContextCompat.getColor(context, compose
+                            ? R.color.modernLightCard
+                            : R.color.modernLightBackground);
+                else if (!black)
+                    color = ContextCompat.getColor(context, compose
+                            ? R.color.modernDarkCard
+                            : R.color.modernDarkBackground);
+            } else if (you && !black && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 if (!dark && beige)
                     color = ContextCompat.getColor(context, R.color.lightColorBackground_cards_beige);
                 else

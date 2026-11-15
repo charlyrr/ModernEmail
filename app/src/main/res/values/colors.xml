@@ -28,16 +28,16 @@
     <color name="colorWidgetRead">#ddd</color>
 
     <color name="lightColorItemSelected">#ccc</color>
-    <color name="lightColorSeparator">#ccc</color>
-    <color name="lightColorThumb">#ccc</color>
+    <color name="lightColorSeparator">#e2e4ea</color>
+    <color name="lightColorThumb">#c4c7d0</color>
     <color name="lightColorWarning">#ffff4f00</color>
 
     <color name="lightColorDrawerScrim">#99000000</color>
-    <color name="lightColorDrawerText">#111</color>
-    <color name="lightColorDrawerBackground">#eee</color>
+    <color name="lightColorDrawerText">#1b1c22</color>
+    <color name="lightColorDrawerBackground">#f3f4f8</color>
 
     <color name="lightColorCardBackground">#fff</color>
-    <color name="lightColorBackground_cards">#eee</color>
+    <color name="lightColorBackground_cards">#f0f1f5</color>
     <!-- Cosmic Latte -->
     <color name="lightColorBackground_cards_beige">#fff8e7</color>
 
@@ -48,13 +48,13 @@
     <color name="whiteActionForegroundDisabled">#aaa</color>
 
     <color name="darkColorItemSelected">#555</color>
-    <color name="darkColorSeparator">#444</color>
+    <color name="darkColorSeparator">#33353d</color>
     <color name="darkColorThumb">#555</color>
     <color name="darkColorWarning">#ffffae42</color>
 
-    <color name="darkColorDrawerScrim">#997f7f7f</color>
+    <color name="darkColorDrawerScrim">#99000000</color>
     <color name="darkColorDrawerText">#fff</color>
-    <color name="darkColorDrawerBackground">#222</color>
+    <color name="darkColorDrawerBackground">#1b1c21</color>
 
     <color name="darkColorCardBackground">#222</color>
 
@@ -151,7 +151,36 @@
 
     <!-- default: #323232 -->
     <!-- https://issuetracker.google.com/issues/37120757 -->
-    <color name="design_snackbar_background_color" tools:override="true">#222</color>
+    <color name="design_snackbar_background_color" tools:override="true">#2b2d35</color>
+
+    <!-- Botones tonales (todos los temas) -->
+    <color name="lightButtonTonal">#e6e8f0</color>
+    <color name="lightButtonTonalText">#1b1c22</color>
+    <color name="darkButtonTonal">#33363f</color>
+    <color name="darkButtonTonalText">#e4e5ec</color>
+
+    <!-- Tema "Moderno": índigo elegante sobre superficies neutras frías -->
+    <color name="modernLightSurface">#f8f9fc</color>
+    <color name="modernLightBackground">#f1f2f7</color>
+    <color name="modernLightCard">#ffffff</color>
+    <color name="modernLightFloating">#ffffff</color>
+    <color name="modernLightPrimary">#4f5bd5</color>
+    <color name="modernLightPrimaryDeep">#3a45b8</color>
+    <color name="modernLightContainer">#e1e4ff</color>
+    <color name="modernLightOnContainer">#151b5e</color>
+    <color name="modernLightAction">#eceef6</color>
+    <color name="modernLightActionDisabled">#b2b5c2</color>
+    <color name="modernLightText">#1a1b21</color>
+
+    <color name="modernDarkSurface">#15161b</color>
+    <color name="modernDarkBackground">#101115</color>
+    <color name="modernDarkCard">#1d1f26</color>
+    <color name="modernDarkFloating">#24262e</color>
+    <color name="modernDarkPrimary">#aab2ff</color>
+    <color name="modernDarkContainer">#323a86</color>
+    <color name="modernDarkOnContainer">#e0e2ff</color>
+    <color name="modernDarkAction">#2a2c35</color>
+    <color name="modernDarkActionDisabled">#5c5f6b</color>
 
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>

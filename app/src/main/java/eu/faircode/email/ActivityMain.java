@@ -65,7 +65,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
 
         long cake = Helper.getAvailableStorageSpace();
         if (cake < Helper.MIN_REQUIRED_SPACE && accept_space < now) {
-            setTheme(R.style.AppThemeBlueOrangeLight);
+            setTheme(R.style.AppThemeModernLight);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_space);
 
@@ -101,7 +101,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
         if (!accept_unsupported &&
                 !Helper.isSupportedDevice() &&
                 Helper.isPlayStoreInstall()) {
-            setTheme(R.style.AppThemeBlueOrangeLight);
+            setTheme(R.style.AppThemeModernLight);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_unsupported);
 
@@ -476,9 +476,9 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             editor.apply();
 
             if (Helper.isNight(this))
-                setTheme(R.style.AppThemeBlueOrangeDark);
+                setTheme(R.style.AppThemeModernDark);
             else
-                setTheme(R.style.AppThemeBlueOrangeLight);
+                setTheme(R.style.AppThemeModernLight);
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);

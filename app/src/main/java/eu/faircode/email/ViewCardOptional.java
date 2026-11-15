@@ -35,6 +35,8 @@ public class ViewCardOptional extends CardView {
     private boolean compact;
     private int padding;
     private int margin;
+    private int hmargin;
+    private int vmargin;
     private int ident;
     private Integer color = null;
 
@@ -61,7 +63,12 @@ public class ViewCardOptional extends CardView {
 
         margin = Helper.dp2pixels(context, (padding + (cards ? 1 : 0)) * 3);
 
-        setRadius(cards ? margin : 0);
+        // Estética moderna: más aire lateral, separación vertical fina y esquinas suaves
+        hmargin = margin + Helper.dp2pixels(context, cards ? 4 : 0);
+        vmargin = (cards ? Math.max(Helper.dp2pixels(context, 2), margin / 2) : margin);
+        int radius = Helper.dp2pixels(context, compact ? 10 : 14);
+
+        setRadius(cards ? Math.max(margin, radius) : 0);
         setCardElevation(0);
         setCardBackgroundColor(Color.TRANSPARENT);
     }
@@ -70,11 +77,11 @@ public class ViewCardOptional extends CardView {
     protected void onAttachedToWindow() {
         if (cards) {
             ViewGroup.MarginLayoutParams lparam = (ViewGroup.MarginLayoutParams) getLayoutParams();
-            lparam.setMargins(margin, margin, margin, margin);
+            lparam.setMargins(hmargin, vmargin, hmargin, vmargin);
             setLayoutParams(lparam);
         }
 
-        setContentPadding(margin, margin, margin, margin);
+        setContentPadding(hmargin, margin, hmargin, margin);
 
         super.onAttachedToWindow();
     }

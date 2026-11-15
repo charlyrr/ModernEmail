@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Botón tonal en forma de píldora con efecto ripple -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+    <item>
+        <inset
+            android:insetLeft="4dp"
+            android:insetTop="5dp"
+            android:insetRight="4dp"
+            android:insetBottom="5dp">
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/button_corner_radius" />
+                <solid android:color="@color/button_modern_background" />
+                <padding
+                    android:bottom="6dp"
+                    android:left="14dp"
+                    android:right="14dp"
+                    android:top="6dp" />
+            </shape>
+        </inset>
+    </item>
+</ripple>

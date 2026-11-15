@@ -26,6 +26,8 @@
     <attr name="colorInfoForeground" format="reference" />
     <attr name="colorInfoBackground" format="reference" />
     <attr name="activatableItemBackground" format="reference" />
+    <attr name="colorButtonTonal" format="reference|color" />
+    <attr name="colorButtonTonalText" format="reference|color" />
 
     <style name="AppThemeBaseLight" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="themeName">light</item>
@@ -94,7 +96,16 @@
         <item name="android:buttonStyleToggle">@style/buttonStyleToggle</item>
         <item name="android:radioButtonStyle">@style/radioButtonStyle</item>
 
-        <item name="android:scrollbarSize">6dp</item>
+        <!-- Estética moderna (común a todos los temas) -->
+        <item name="alertDialogTheme">@style/ModernAlertDialog</item>
+        <item name="popupMenuStyle">@style/ModernPopupMenu</item>
+        <item name="floatingActionButtonStyle">@style/ModernFab</item>
+        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="buttonStyleSmall">@style/buttonStyleSmall</item>
+        <item name="colorButtonTonal">@color/lightButtonTonal</item>
+        <item name="colorButtonTonalText">@color/lightButtonTonalText</item>
+
+        <item name="android:scrollbarSize">5dp</item>
         <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>
         <item name="android:scrollbarTrackVertical">@drawable/scroll_track</item>
         <item name="android:scrollbarFadeDuration">5000</item>
@@ -168,7 +179,16 @@
         <item name="android:buttonStyleToggle">@style/buttonStyleToggle</item>
         <item name="android:radioButtonStyle">@style/radioButtonStyle</item>
 
-        <item name="android:scrollbarSize">6dp</item>
+        <!-- Estética moderna (común a todos los temas) -->
+        <item name="alertDialogTheme">@style/ModernAlertDialog</item>
+        <item name="popupMenuStyle">@style/ModernPopupMenu</item>
+        <item name="floatingActionButtonStyle">@style/ModernFab</item>
+        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="buttonStyleSmall">@style/buttonStyleSmall</item>
+        <item name="colorButtonTonal">@color/darkButtonTonal</item>
+        <item name="colorButtonTonalText">@color/darkButtonTonalText</item>
+
+        <item name="android:scrollbarSize">5dp</item>
         <item name="android:scrollbarThumbVertical">@drawable/scroll_thumb</item>
         <item name="android:scrollbarTrackVertical">@drawable/scroll_track</item>
         <item name="android:scrollbarFadeDuration">5000</item>
@@ -179,6 +199,81 @@
         </item>
 
         <item name="viewInflaterClass">eu.faircode.email.AppCompatViewInflaterEx</item>
+    </style>
+
+    <!-- Moderno: barra superior a juego con la superficie y acento índigo -->
+
+    <style name="AppThemeModernLight" parent="AppThemeBaseLight">
+        <item name="colorPrimary">@color/modernLightSurface</item>
+        <item name="colorPrimaryDark">@color/modernLightSurface</item>
+        <item name="colorAccent">@color/modernLightPrimary</item>
+        <item name="colorControlActivated">@color/modernLightPrimary</item>
+
+        <item name="colorUnreadHighlight">@color/modernLightPrimaryDeep</item>
+        <item name="colorBookmark">@color/modernLightPrimary</item>
+
+        <item name="colorFabBackground">@color/modernLightContainer</item>
+        <item name="colorFabForeground">@color/modernLightOnContainer</item>
+
+        <item name="colorActionForeground">@color/modernLightText</item>
+        <item name="colorActionForegroundDisabled">@color/modernLightActionDisabled</item>
+        <item name="colorActionBackground">@color/modernLightAction</item>
+
+        <item name="colorInfoForeground">@color/modernLightOnContainer</item>
+        <item name="colorInfoBackground">@color/modernLightContainer</item>
+
+        <item name="colorButtonTonal">@color/modernLightContainer</item>
+        <item name="colorButtonTonalText">@color/modernLightOnContainer</item>
+
+        <item name="colorCardBackground">@color/modernLightCard</item>
+        <item name="colorDrawerBackground">@color/modernLightSurface</item>
+        <item name="colorDrawerText">@color/modernLightText</item>
+        <item name="colorBackgroundFloating">@color/modernLightFloating</item>
+        <item name="android:colorBackgroundFloating">@color/modernLightFloating</item>
+        <item name="android:windowBackground">@color/modernLightSurface</item>
+
+        <item name="android:textColorLink">@color/modernLightPrimaryDeep</item>
+        <item name="android:textColorLinkInverse">@color/modernLightPrimaryDeep</item>
+    </style>
+
+    <style name="AppThemeModernDark" parent="AppThemeBaseDark">
+        <item name="colorPrimary">@color/modernDarkSurface</item>
+        <item name="colorPrimaryDark">@color/modernDarkSurface</item>
+        <item name="colorAccent">@color/modernDarkPrimary</item>
+        <item name="colorControlActivated">@color/modernDarkPrimary</item>
+
+        <item name="colorUnreadHighlight">@color/modernDarkPrimary</item>
+        <item name="colorBookmark">@color/modernDarkPrimary</item>
+
+        <item name="colorFabBackground">@color/modernDarkContainer</item>
+        <item name="colorFabForeground">@color/modernDarkOnContainer</item>
+
+        <item name="colorActionBackground">@color/modernDarkAction</item>
+        <item name="colorActionForegroundDisabled">@color/modernDarkActionDisabled</item>
+
+        <item name="colorInfoForeground">@color/modernDarkOnContainer</item>
+        <item name="colorInfoBackground">@color/modernDarkContainer</item>
+
+        <item name="colorButtonTonal">@color/modernDarkContainer</item>
+        <item name="colorButtonTonalText">@color/modernDarkOnContainer</item>
+
+        <item name="colorCardBackground">@color/modernDarkCard</item>
+        <item name="colorDrawerBackground">@color/modernDarkSurface</item>
+        <item name="colorBackgroundFloating">@color/modernDarkFloating</item>
+        <item name="android:colorBackgroundFloating">@color/modernDarkFloating</item>
+        <item name="android:windowBackground">@color/modernDarkBackground</item>
+
+        <item name="android:textColorLink">@color/modernDarkPrimary</item>
+        <item name="android:textColorLinkInverse">@color/modernDarkPrimary</item>
+    </style>
+
+    <style name="AppThemeModernBlack" parent="AppThemeModernDark">
+        <item name="themeName">black</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorCardBackground">@color/modernDarkSurface</item>
+        <item name="android:windowBackground">@drawable/background_black</item>
+        <item name="colorDrawerBackground">@color/black</item>
     </style>
 
     <!-- Light -->
@@ -638,16 +733,63 @@
 
     <style name="buttonStyle" parent="Base.Widget.AppCompat.Button">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:background">@drawable/button_modern</item>
+        <item name="android:textColor">@color/button_modern_text</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
     <style name="buttonStyleSmall" parent="Base.Widget.AppCompat.Button.Small">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
+        <item name="android:background">@drawable/button_modern</item>
+        <item name="android:textColor">@color/button_modern_text</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
     <style name="buttonStyleToggle" parent="Base.Widget.AppCompat.Button">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Diálogos con esquinas de 28dp y botones sin mayúsculas -->
+    <style name="ModernAlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_background_modern</item>
+        <item name="buttonBarButtonStyle">@style/ModernDialogButton</item>
+        <item name="buttonBarPositiveButtonStyle">@style/ModernDialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ModernDialogButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ModernDialogButton</item>
+    </style>
+
+    <style name="ModernDialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <!-- Menús emergentes redondeados -->
+    <style name="ModernPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_background_modern</item>
+        <item name="android:popupElevation">6dp</item>
+        <item name="overlapAnchor">false</item>
+    </style>
+
+    <!-- Botón flotante con forma "squircle" (Material 3) -->
+    <style name="ModernFab" parent="Widget.Design.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ModernFabShape</item>
+        <item name="elevation">4dp</item>
+        <item name="pressedTranslationZ">4dp</item>
+    </style>
+
+    <style name="ModernFabShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/fab_corner_radius</item>
     </style>
 
     <style name="radioButtonStyle" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
@@ -675,11 +817,11 @@
     </style>
 
     <style name="ChipLight" parent="Base.Theme.Material3.Light">
-        <item name="chipCornerRadius">6dp</item>
+        <item name="chipCornerRadius">8dp</item>
     </style>
 
     <style name="ChipDark" parent="Base.Theme.Material3.Dark">
-        <item name="chipCornerRadius">6dp</item>
+        <item name="chipCornerRadius">8dp</item>
     </style>
 
     <style name="actionBarStyleLight" parent="ThemeOverlay.AppCompat.ActionBar" />

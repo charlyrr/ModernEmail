@@ -2,14 +2,16 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
+            <corners android:radius="3dp" />
             <solid android:color="?attr/colorAccent" />
-            <size android:width="6dp" android:height="60dp" />
+            <size android:width="5dp" android:height="60dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
+            <corners android:radius="3dp" />
             <solid android:color="?attr/colorThumb" />
-            <size android:width="6dp" android:height="60dp" />
+            <size android:width="5dp" android:height="60dp" />
         </shape>
     </item>
 </selector>
