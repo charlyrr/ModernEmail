@@ -30,7 +30,9 @@ android {
         targetSdkVersion 37
         //targetSdkPreview "VanillaIceCream"
         versionCode getVersionCode()
-        versionName "1." + getVersionCode()
+        // ModernMail: cada compilación publicada añade su número (1.2341.N) para que
+        // los gestores de actualizaciones como Obtainium distingan las versiones
+        versionName "1." + getVersionCode() + (project.hasProperty("mmBuild") ? "." + project.property("mmBuild") : "")
 
         manifestPlaceholders = [namespace: applicationId.replace('.debug', '')]
 

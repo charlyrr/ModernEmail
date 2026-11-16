@@ -7,8 +7,9 @@ on:
     branches: [ estetica-moderna ]
   workflow_dispatch:
 
+# "write" es necesario para publicar el APK en Releases
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: modern-apk-${{ github.ref }}
@@ -35,6 +36,7 @@ jobs:
       # - Sin el secreto se genera una clave temporal: el APK funciona, pero para
       #   actualizar hay que desinstalar la versión anterior.
       - name: Preparar la firma
+        id: firma
         env:
           KEYSTORE_PASSWORD: ${{ secrets.MODERN_KEYSTORE_PASSWORD }}
         run: |
@@ -42,6 +44,7 @@ jobs:
             gpg --batch --yes --pinentry-mode loopback --passphrase "$KEYSTORE_PASSWORD" \
               -o app/modern.keystore -d app/modern.keystore.gpg
             PASS="$KEYSTORE_PASSWORD"
+            echo "permanente=true" >> "$GITHUB_OUTPUT"
             echo "::notice::APK firmado con la clave permanente."
           else
             PASS="$(openssl rand -hex 16)"
@@ -61,7 +64,7 @@ jobs:
       - name: Compilar
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon --stacktrace assembleGithubRelease
+          ./gradlew --no-daemon --stacktrace -PmmBuild=${{ github.run_number }} assembleGithubRelease
 
       - name: Subir el APK
         uses: actions/upload-artifact@v6
@@ -69,3 +72,19 @@ jobs:
           name: ModernMail-APK
           path: app/build/outputs/apk/github/release/*.apk
           if-no-files-found: error
+
+      # Publica el APK en Releases para poder actualizar desde el móvil (p. ej. con Obtainium).
+      # Sólo con la clave permanente: un APK con firma temporal no se podría instalar encima.
+      - name: Publicar en Releases
+        if: steps.firma.outputs.permanente == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BASE="$(grep -oP 'def getVersionCode = \{ -> return \K[0-9]+' app/build.gradle)"
+          VERSION="1.${BASE}.${{ github.run_number }}"
+          cp app/build/outputs/apk/github/release/*.apk "ModernMail-${VERSION}.apk"
+          gh release create "v${VERSION}" "ModernMail-${VERSION}.apk" \
+            --repo "${{ github.repository }}" \
+            --target "${{ github.sha }}" \
+            --title "ModernMail ${VERSION}" \
+            --notes "Compilación automática de la rama ${{ github.ref_name }}."
