@@ -8262,13 +8262,13 @@ public class FragmentMessages extends FragmentBase
             boolean thread = (viewType == AdapterMessage.ViewType.THREAD);
             rvMessage.animate().cancel();
             rvMessage.setAlpha(0f);
-            rvMessage.setTranslationX(Helper.dp2pixels(rvMessage.getContext(), thread ? 40 : -20));
+            rvMessage.setTranslationX(Helper.dp2pixels(rvMessage.getContext(), thread ? 72 : -40));
             rvMessage.animate()
                     .alpha(1f)
                     .translationX(0f)
-                    .setStartDelay(thread ? 60 : 0)
-                    .setDuration(thread ? 300 : 220)
-                    .setInterpolator(new android.view.animation.DecelerateInterpolator(1.8f))
+                    .setStartDelay(thread ? 80 : 40)
+                    .setDuration(thread ? 520 : 420)
+                    .setInterpolator(new android.view.animation.DecelerateInterpolator(2.2f))
                     .start();
         } catch (Throwable ex) {
             Log.w(ex);
