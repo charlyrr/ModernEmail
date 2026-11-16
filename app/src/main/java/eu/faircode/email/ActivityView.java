@@ -2844,7 +2844,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        // ModernMail: el correo entra deslizándose y la lista se retira suavemente
+        // ModernMail: fundido corto entre pantallas; el contenido se anima al cargar
         if (content_pane == null)
             fragmentTransaction.setCustomAnimations(
                     R.anim.mm_open_enter, R.anim.mm_open_exit,

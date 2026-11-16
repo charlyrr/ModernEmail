@@ -8248,9 +8248,34 @@ public class FragmentMessages extends FragmentBase
                 initialized = true;
             updateListState("Observed", SimpleTask.getCount(), messages.size());
 
+            boolean reveal = (grpReady.getVisibility() != View.VISIBLE);
             grpReady.setVisibility(View.VISIBLE);
+            if (reveal)
+                revealMessages();
         }
     };
+
+    // ModernMail: el contenido entra con un deslizamiento suave cuando ya está cargado
+    // (al abrir un correo llega desde la derecha; al volver a la lista, desde la izquierda)
+    private void revealMessages() {
+        try {
+            boolean thread = (viewType == AdapterMessage.ViewType.THREAD);
+            rvMessage.animate().cancel();
+            rvMessage.setAlpha(0f);
+            rvMessage.setTranslationX(Helper.dp2pixels(rvMessage.getContext(), thread ? 40 : -20));
+            rvMessage.animate()
+                    .alpha(1f)
+                    .translationX(0f)
+                    .setStartDelay(thread ? 60 : 0)
+                    .setDuration(thread ? 300 : 220)
+                    .setInterpolator(new android.view.animation.DecelerateInterpolator(1.8f))
+                    .start();
+        } catch (Throwable ex) {
+            Log.w(ex);
+            rvMessage.setAlpha(1f);
+            rvMessage.setTranslationX(0f);
+        }
+    }
 
     private void updateListState(String reason, int tasks, int items) {
         Context context = getContext();
