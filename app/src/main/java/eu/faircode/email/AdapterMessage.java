@@ -758,6 +758,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             super(itemView);
 
             card = itemView.findViewById(R.id.card);
+            if (card != null && viewType == R.layout.item_message_normal)
+                card.setGrouped(AdapterMessage.this.viewType != ViewType.THREAD);
             view = itemView.findViewById(R.id.clItem);
             header = itemView.findViewById(R.id.inHeader);
 
@@ -2002,7 +2004,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         void bindSeen(TupleMessageEx message) {
             // ModernMail: punto de "no leído" (sólo existe en la fila normal)
             if (vwUnread != null)
-                vwUnread.setVisibility(message.unseen > 0 ? View.VISIBLE : View.GONE);
+                vwUnread.setVisibility(message.unseen > 0 ? View.VISIBLE : View.INVISIBLE);
 
             if (cards && shadow_unread && shadow_border) {
                 boolean shadow = (message.unseen > 0);

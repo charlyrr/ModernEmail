@@ -277,8 +277,9 @@
     </style>
 
 
-    <!-- Minimalista: blanco puro, acento azul, mucho espacio -->
+    <!-- Aire: gris muy claro, bloques blancos, acento azul -->
     <style name="AppThemeMinimalLight" parent="AppThemeBaseLight">
+        <item name="colorSeparator">@color/minimalLightSeparator</item>
         <item name="colorPrimary">@color/minimalLightToolbar</item>
         <item name="colorPrimaryDark">@color/minimalLightStatus</item>
         <item name="colorAccent">@color/minimalLightAccent</item>
@@ -304,6 +305,7 @@
         <item name="colorDrawerText">@color/minimalLightText</item>
     </style>
     <style name="AppThemeMinimalDark" parent="AppThemeBaseDark">
+        <item name="colorSeparator">@color/minimalDarkSeparator</item>
         <item name="colorPrimary">@color/minimalDarkToolbar</item>
         <item name="colorPrimaryDark">@color/minimalDarkStatus</item>
         <item name="colorAccent">@color/minimalDarkAccent</item>

@@ -744,13 +744,20 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
     // Ajustes de visualización que acompañan a cada tema de ModernMail
     static void applyPreset(SharedPreferences.Editor editor, String family) {
-        boolean minimal = "minimal".equals(family);
+        boolean aire = "minimal".equals(family);
         boolean azure = "azure".equals(family);
 
-        editor.putBoolean("cards", !minimal);
+        // Lista agrupada en bloques por día
+        editor.putBoolean("cards", true);
+        editor.putInt("spacing", 0);
+        editor.putBoolean("date", true);
+        editor.putBoolean("date_fixed", false);
+        editor.putBoolean("date_week", false);
         editor.putBoolean("dividers", true);
         editor.putBoolean("compact", false);
         editor.putBoolean("beige", false);
+
+        // Fila de mensaje
         editor.putBoolean("avatars", true);
         editor.putBoolean("circular", true);
         editor.putBoolean("generated_icons", true);
@@ -758,8 +765,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         editor.putInt("preview_lines", azure ? 1 : 2);
         editor.putBoolean("preview_italic", false);
         editor.putBoolean("subject_italic", false);
-        editor.putBoolean("highlight_unread", !minimal);
-        editor.putBoolean("color_stripe", !minimal);
+        editor.putBoolean("highlight_unread", !aire);
+        editor.putBoolean("color_stripe", !aire);
     }
 
     // {claro, oscuro, negro}

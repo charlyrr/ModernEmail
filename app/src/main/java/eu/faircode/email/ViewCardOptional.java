@@ -22,7 +22,10 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Outline;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -39,6 +42,12 @@ public class ViewCardOptional extends CardView {
     private int vmargin;
     private int ident;
     private Integer color = null;
+
+    // ModernMail: filas agrupadas en bloques redondeados (lista de mensajes)
+    private boolean grouped = false;
+    private Boolean groupFirst = null;
+    private Boolean groupLast = null;
+    private View divider = null;
 
     public ViewCardOptional(@NonNull Context context) {
         super(context);
@@ -77,13 +86,56 @@ public class ViewCardOptional extends CardView {
     protected void onAttachedToWindow() {
         if (cards) {
             ViewGroup.MarginLayoutParams lparam = (ViewGroup.MarginLayoutParams) getLayoutParams();
-            lparam.setMargins(hmargin, vmargin, hmargin, vmargin);
+            if (grouped) {
+                int side = Helper.dp2pixels(getContext(), 16);
+                lparam.setMargins(side, 0, side, 0);
+            } else
+                lparam.setMargins(hmargin, vmargin, hmargin, vmargin);
             setLayoutParams(lparam);
         }
 
-        setContentPadding(margin, margin, margin, margin);
+        if (grouped)
+            setContentPadding(0, 0, 0, 0);
+        else
+            setContentPadding(margin, margin, margin, margin);
 
         super.onAttachedToWindow();
+    }
+
+    // La fila forma parte de un bloque: sin márgenes verticales ni esquinas propias
+    void setGrouped(boolean grouped) {
+        this.grouped = (grouped && cards);
+        if (this.grouped) {
+            setRadius(0);
+            divider = findViewById(R.id.vwRowDivider);
+        }
+    }
+
+    // Posición dentro del bloque: redondea sólo las esquinas exteriores
+    void setGroup(final boolean first, final boolean last) {
+        if (!grouped)
+            return;
+        if (groupFirst != null && groupFirst == first && groupLast == last)
+            return;
+        groupFirst = first;
+        groupLast = last;
+
+        final int radius = Helper.dp2pixels(getContext(), 14);
+        setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                // El contorno se prolonga fuera de la fila por el lado que no se redondea
+                outline.setRoundRect(
+                        0, first ? 0 : -radius,
+                        view.getWidth(), view.getHeight() + (last ? 0 : radius),
+                        radius);
+            }
+        });
+        setClipToOutline(true);
+        invalidateOutline();
+
+        if (divider != null)
+            divider.setVisibility(last ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

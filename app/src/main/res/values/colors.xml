@@ -182,34 +182,36 @@
     <color name="modernDarkAction">#2a2c35</color>
     <color name="modernDarkActionDisabled">#5c5f6b</color>
 
-    <!-- Tema "Minimalista: blanco puro, acento azul, mucho espacio" -->
-    <color name="minimalLightToolbar">#ffffff</color>
-    <color name="minimalLightStatus">#ffffff</color>
-    <color name="minimalLightSurface">#ffffff</color>
-    <color name="minimalLightBackground">#f2f2f6</color>
+    <!-- Tema "Aire: gris muy claro, bloques blancos, acento azul" -->
+    <color name="minimalLightSeparator">#d9d9de</color>
+    <color name="minimalDarkSeparator">#38383a</color>
+    <color name="minimalLightToolbar">#f2f2f7</color>
+    <color name="minimalLightStatus">#f2f2f7</color>
+    <color name="minimalLightSurface">#f2f2f7</color>
+    <color name="minimalLightBackground">#f2f2f7</color>
     <color name="minimalLightCard">#ffffff</color>
     <color name="minimalLightFloating">#ffffff</color>
-    <color name="minimalLightAccent">#2563eb</color>
-    <color name="minimalLightDeep">#1d4ed8</color>
-    <color name="minimalLightContainer">#e5edfd</color>
-    <color name="minimalLightOn">#0f2a66</color>
-    <color name="minimalLightAction">#f1f2f5</color>
-    <color name="minimalLightDisabled">#b9bcc4</color>
-    <color name="minimalLightText">#111114</color>
-    <color name="minimalLightDrawer">#f7f7f9</color>
-    <color name="minimalDarkToolbar">#111113</color>
-    <color name="minimalDarkStatus">#111113</color>
-    <color name="minimalDarkSurface">#111113</color>
-    <color name="minimalDarkBackground">#0b0b0d</color>
-    <color name="minimalDarkCard">#1c1c1f</color>
-    <color name="minimalDarkFloating">#232326</color>
-    <color name="minimalDarkAccent">#6b9bff</color>
-    <color name="minimalDarkDeep">#6b9bff</color>
-    <color name="minimalDarkContainer">#1e3a70</color>
-    <color name="minimalDarkOn">#dce6ff</color>
-    <color name="minimalDarkAction">#232327</color>
-    <color name="minimalDarkDisabled">#5e6068</color>
-    <color name="minimalDarkDrawer">#111113</color>
+    <color name="minimalLightAccent">#0a66e4</color>
+    <color name="minimalLightDeep">#0a57c2</color>
+    <color name="minimalLightContainer">#e3ecfc</color>
+    <color name="minimalLightOn">#0b3f94</color>
+    <color name="minimalLightAction">#e4e4ea</color>
+    <color name="minimalLightDisabled">#b4b4bb</color>
+    <color name="minimalLightText">#111113</color>
+    <color name="minimalLightDrawer">#f2f2f7</color>
+    <color name="minimalDarkToolbar">#000000</color>
+    <color name="minimalDarkStatus">#000000</color>
+    <color name="minimalDarkSurface">#000000</color>
+    <color name="minimalDarkBackground">#000000</color>
+    <color name="minimalDarkCard">#1c1c1e</color>
+    <color name="minimalDarkFloating">#2c2c2e</color>
+    <color name="minimalDarkAccent">#4c9aff</color>
+    <color name="minimalDarkDeep">#4c9aff</color>
+    <color name="minimalDarkContainer">#1b3a66</color>
+    <color name="minimalDarkOn">#d9e8ff</color>
+    <color name="minimalDarkAction">#2c2c2e</color>
+    <color name="minimalDarkDisabled">#5e5e63</color>
+    <color name="minimalDarkDrawer">#1c1c1e</color>
 
     <!-- Tema "Violeta: lavanda suave y violeta profundo, aire elegante" -->
     <color name="violetLightToolbar">#fbfaff</color>

@@ -1137,7 +1137,7 @@ public class FragmentMessages extends FragmentBase
                 if (!ch && !dh)
                     return null;
 
-                View header = inflater.inflate(R.layout.item_group, parent, false);
+                View header = inflater.inflate(cards ? R.layout.item_group_message : R.layout.item_group, parent, false);
                 TextView tvCategory = header.findViewById(R.id.tvCategory);
                 TextView tvDate = header.findViewById(R.id.tvDate);
                 tvCategory.setVisibility(ch ? View.VISIBLE : View.GONE);
@@ -1243,6 +1243,46 @@ public class FragmentMessages extends FragmentBase
             }
         };
         rvMessage.addItemDecoration(dateDecorator);
+
+        // ModernMail: agrupa las filas en bloques por día (primera y última con esquinas redondeadas)
+        rvMessage.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                if (!cards || adapter == null)
+                    return;
+                try {
+                    boolean byday = (date && !date_fixed && !date_week &&
+                            SORT_DATE_HEADER.contains(adapter.getSort()));
+                    int count = adapter.getItemCount();
+                    for (int i = 0; i < parent.getChildCount(); i++) {
+                        View child = parent.getChildAt(i);
+                        View card = child.findViewById(R.id.card);
+                        if (!(card instanceof ViewCardOptional))
+                            continue;
+                        int pos = parent.getChildAdapterPosition(child);
+                        if (pos == RecyclerView.NO_POSITION)
+                            continue;
+                        TupleMessageEx message = adapter.getItemAtPosition(pos);
+                        TupleMessageEx prev = (pos > 0 ? adapter.getItemAtPosition(pos - 1) : null);
+                        TupleMessageEx next = (pos + 1 < count ? adapter.getItemAtPosition(pos + 1) : null);
+                        boolean first = (pos == 0 || (byday && !sameDay(prev, message)));
+                        boolean last = (pos == count - 1 || (byday && !sameDay(message, next)));
+                        ((ViewCardOptional) card).setGroup(first, last);
+                    }
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
+            }
+
+            private boolean sameDay(TupleMessageEx m1, TupleMessageEx m2) {
+                if (m1 == null || m2 == null || m1.received == null || m2.received == null)
+                    return true;
+                java.util.TimeZone tz = java.util.TimeZone.getDefault();
+                long d1 = (m1.received + tz.getOffset(m1.received)) / (24 * 3600 * 1000L);
+                long d2 = (m2.received + tz.getOffset(m2.received)) / (24 * 3600 * 1000L);
+                return (d1 == d2);
+            }
+        });
 
         gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override

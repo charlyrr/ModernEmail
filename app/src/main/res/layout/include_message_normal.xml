@@ -65,6 +65,17 @@
         app:layout_constraintStart_toEndOf="@+id/ibExpander"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Punto de "no leído": en el margen izquierdo, a la altura del avatar -->
+    <View
+        android:id="@+id/vwUnread"
+        android:layout_width="9dp"
+        android:layout_height="9dp"
+        android:background="@drawable/unread_dot"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/ibAvatar"
+        app:layout_constraintStart_toEndOf="@id/paddingStart"
+        app:layout_constraintTop_toTopOf="@id/ibAvatar" />
+
     <!-- Avatar: arriba a la izquierda, tamaño fijo (el adaptador lo ajusta al tamaño de letra) -->
     <ImageButton
         android:id="@+id/ibAvatar"
@@ -74,8 +85,9 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         android:padding="0dp"
+        android:layout_marginStart="6dp"
         android:scaleType="centerCrop"
-        app:layout_constraintStart_toEndOf="@id/paddingStart"
+        app:layout_constraintStart_toEndOf="@id/vwUnread"
         app:layout_constraintTop_toBottomOf="@id/paddingTop"
         app:layout_constraintVertical_bias="0"
         app:srcCompat="@drawable/twotone_person_24" />
@@ -206,17 +218,6 @@
         android:text="123 KB"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintEnd_toStartOf="@+id/vwUnread"
-        app:layout_constraintTop_toTopOf="@+id/tvFrom" />
-
-    <View
-        android:id="@+id/vwUnread"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:layout_marginEnd="6dp"
-        android:background="@drawable/unread_dot"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
         app:layout_constraintEnd_toStartOf="@+id/tvTime"
         app:layout_constraintTop_toTopOf="@+id/tvFrom" />
@@ -502,4 +503,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrierRowBottom" />
+
+    <!-- Separador fino entre filas de un mismo bloque (lo muestra ViewCardOptional) -->
+    <View
+        android:id="@+id/vwRowDivider"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginStart="@dimen/message_row_gap"
+        android:background="?attr/colorSeparator"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibAvatar"
+        app:layout_constraintTop_toBottomOf="@id/paddingBottom" />
 </androidx.constraintlayout.widget.ConstraintLayout>
