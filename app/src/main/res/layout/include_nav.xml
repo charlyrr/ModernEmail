@@ -9,16 +9,34 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
+    <!-- ModernMail (Aire): título grande del panel -->
+    <TextView
+        android:id="@+id/tvNavTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="18dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="18dp"
+        android:paddingBottom="2dp"
+        android:text="@string/mm_tab_mailboxes"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
         android:id="@+id/ibExpanderNav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/title_legend_expander"
         android:padding="6dp"
         android:tooltipText="@string/title_legend_expander"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNavTitle"
         app:srcCompat="@drawable/expander_hor" />
 
     <ImageButton
@@ -95,7 +113,7 @@
         android:id="@+id/vSeparatorOptions"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?attr/colorSeparator"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ibExpanderNav" />
@@ -113,6 +131,9 @@
         app:srcCompat="@drawable/expander3" />
 
     <eu.faircode.email.FixedRecyclerView
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/aire_block_bg"
         android:id="@+id/rvAccount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -126,7 +147,7 @@
         android:id="@+id/vSeparatorAccount"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?attr/colorSeparator"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rvAccount" />
@@ -144,6 +165,9 @@
         app:srcCompat="@drawable/expander" />
 
     <eu.faircode.email.FixedRecyclerView
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/aire_block_bg"
         android:id="@+id/rvUnified"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -157,7 +181,7 @@
         android:id="@+id/vSeparatorUnified"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?attr/colorSeparator"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rvUnified" />
@@ -175,6 +199,9 @@
         app:srcCompat="@drawable/expander" />
 
     <eu.faircode.email.FixedRecyclerView
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/aire_block_bg"
         android:id="@+id/rvSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -188,7 +215,7 @@
         android:id="@+id/vSeparatorSearch"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?attr/colorSeparator"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rvSearch" />
@@ -206,6 +233,9 @@
         app:srcCompat="@drawable/expander" />
 
     <eu.faircode.email.FixedRecyclerView
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/aire_block_bg"
         android:id="@+id/rvMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -219,7 +249,7 @@
         android:id="@+id/vSeparatorMenu"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?attr/colorSeparator"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rvMenu" />
@@ -237,6 +267,9 @@
         app:srcCompat="@drawable/expander" />
 
     <eu.faircode.email.FixedRecyclerView
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/aire_block_bg"
         android:id="@+id/rvMenuExtra"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -211,7 +211,7 @@
     <color name="minimalDarkOn">#d9e8ff</color>
     <color name="minimalDarkAction">#2c2c2e</color>
     <color name="minimalDarkDisabled">#5e5e63</color>
-    <color name="minimalDarkDrawer">#1c1c1e</color>
+    <color name="minimalDarkDrawer">#000000</color>
 
     <!-- Tema "Violeta: lavanda suave y violeta profundo, aire elegante" -->
     <color name="violetLightToolbar">#fbfaff</color>

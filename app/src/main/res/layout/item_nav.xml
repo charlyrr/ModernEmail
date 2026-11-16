@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorDrawerBackground">
+    android:background="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
-        android:minHeight="42dp">
+        android:minHeight="48dp">
 
         <ImageView
             android:id="@+id/ivItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="14dp"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,6 +58,7 @@
             android:singleLine="true"
             android:text="Nav item"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvItemExtra"
             app:layout_constraintStart_toEndOf="@id/ivItem"
@@ -101,5 +102,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/twotone_warning_24"
             app:tint="?attr/colorWarning" />
+
+        <!-- Separador fino entre elementos del bloque -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginStart="52dp"
+            android:background="?attr/colorSeparator"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -395,9 +395,15 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         ibExpanderExtra = drawerContainer.findViewById(R.id.ibExpanderExtra);
         rvMenuExtra = drawerContainer.findViewById(R.id.rvMenuExtra);
 
+        // ModernMail: cada sección del panel es un bloque redondeado que recorta su contenido
+        for (View block : new View[]{rvAccount, rvUnified, rvSearch, rvMenu, rvMenuExtra})
+            if (block != null)
+                block.setClipToOutline(true);
+
         ViewGroup.LayoutParams lparam = drawerContainer.getLayoutParams();
         lparam.width = getDrawerWidth();
         drawerContainer.setLayoutParams(lparam);
+        updateNavBlocks();
 
         // Navigation expander
         ibExpanderNav.setOnClickListener(new View.OnClickListener() {
@@ -1343,6 +1349,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         ViewGroup.LayoutParams lparam = drawerContainer.getLayoutParams();
         lparam.width = getDrawerWidth();
         drawerContainer.setLayoutParams(lparam);
+        updateNavBlocks();
 
         ViewGroup childContent = (ViewGroup) drawerLayout.getChildAt(0);
         ViewGroup childDrawer = (ViewGroup) drawerLayout.getChildAt(1);
@@ -1384,6 +1391,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         ViewGroup.LayoutParams lparam = drawerContainer.getLayoutParams();
         lparam.width = getDrawerWidth();
         drawerContainer.setLayoutParams(lparam);
+        updateNavBlocks();
 
         ViewGroup childContent = (ViewGroup) drawerLayout.getChildAt(0);
         ViewGroup childDrawer = (ViewGroup) drawerLayout.getChildAt(1);
@@ -1396,6 +1404,26 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private String getOrientation() {
         Configuration config = getResources().getConfiguration();
         return (config.orientation == ORIENTATION_PORTRAIT ? "portrait" : "landscape");
+    }
+
+    // ModernMail: en modo "sólo iconos" los bloques no llevan márgenes y se oculta el título
+    private void updateNavBlocks() {
+        try {
+            int margin = Helper.dp2pixels(this, nav_expanded ? 12 : 0);
+            for (View block : new View[]{rvAccount, rvUnified, rvSearch, rvMenu, rvMenuExtra}) {
+                if (block == null)
+                    continue;
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) block.getLayoutParams();
+                lp.setMarginStart(margin);
+                lp.setMarginEnd(margin);
+                block.setLayoutParams(lp);
+            }
+            View title = drawerContainer.findViewById(R.id.tvNavTitle);
+            if (title != null)
+                title.setVisibility(nav_expanded ? View.VISIBLE : View.GONE);
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
     }
 
     private int getDrawerWidth() {
