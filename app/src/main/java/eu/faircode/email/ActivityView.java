@@ -2844,6 +2844,11 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        // ModernMail: el correo entra deslizándose y la lista se retira suavemente
+        if (content_pane == null)
+            fragmentTransaction.setCustomAnimations(
+                    R.anim.mm_open_enter, R.anim.mm_open_exit,
+                    R.anim.mm_close_enter, R.anim.mm_close_exit);
         fragmentTransaction.replace(pane, fragment, "thread").addToBackStack("thread");
         fragmentTransaction.commit();
     }

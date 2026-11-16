@@ -781,7 +781,23 @@ public class FragmentDialogTheme extends FragmentDialogBase {
     }
 
     // Versión de los ajustes de diseño: al subirla se vuelven a aplicar una vez
-    private static final int PRESET_VERSION = 3;
+    private static final int PRESET_VERSION = 4;
+
+    // Aplica los ajustes del tema propio en uso (o del tema Aire si no hay ninguno)
+    static void applyCurrentPreset(SharedPreferences prefs, SharedPreferences.Editor editor) {
+        String theme = prefs.getString("theme", "minimal_system");
+        String family = null;
+        for (String f : FAMILIES)
+            if (theme.startsWith(f + "_") && !"modern".equals(f))
+                family = f;
+
+        if (family == null) {
+            family = "minimal";
+            editor.putString("theme", "minimal_system");
+        }
+        applyPreset(editor, family);
+        editor.putInt("mm_preset", PRESET_VERSION);
+    }
 
     // Garantiza que la app usa uno de los temas propios con sus ajustes
     static void ensurePreset(Context context) {
@@ -790,19 +806,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             if (prefs.getInt("mm_preset", 0) >= PRESET_VERSION)
                 return;
 
-            String theme = prefs.getString("theme", "minimal_system");
-            String family = null;
-            for (String f : FAMILIES)
-                if (theme.startsWith(f + "_") && !"modern".equals(f))
-                    family = f;
-
             SharedPreferences.Editor editor = prefs.edit();
-            if (family == null) {
-                family = "minimal";
-                editor.putString("theme", "minimal_system");
-            }
-            applyPreset(editor, family);
-            editor.putInt("mm_preset", PRESET_VERSION);
+            applyCurrentPreset(prefs, editor);
             editor.apply();
         } catch (Throwable ex) {
             Log.w(ex);

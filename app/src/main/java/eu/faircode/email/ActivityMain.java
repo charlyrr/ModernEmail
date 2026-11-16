@@ -469,11 +469,9 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             }
             editor.putBoolean("landscape3", false);
 
-            // ModernMail: tema Minimalista y sus ajustes en la primera apertura
-            if (!prefs.contains("theme")) {
-                editor.putString("theme", "minimal_system");
-                FragmentDialogTheme.applyPreset(editor, "minimal");
-            }
+            // ModernMail: los ajustes del diseño van siempre después de los valores por
+            // defecto anteriores (que activan el modo compacto en móviles) para no ser pisados
+            FragmentDialogTheme.applyCurrentPreset(prefs, editor);
 
             // Default send bubbles off when accessibility enabled
             if (Helper.isAccessibilityEnabled(this))
