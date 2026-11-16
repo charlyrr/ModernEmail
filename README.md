@@ -1,3 +1,7 @@
+> **ModernMail** — Este repositorio es una versión modificada de FairEmail con otro diseño.
+> No es la aplicación oficial ni cuenta con soporte de su autor. Consulta [MODERNMAIL.md](MODERNMAIL.md).
+> El texto que sigue es el README original de FairEmail.
+
 <img src="https://github.com/M66B/FairEmail/raw/master/images/banner7_long.png" />
 
 <p align="center">

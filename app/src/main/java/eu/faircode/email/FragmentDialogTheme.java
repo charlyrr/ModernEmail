@@ -745,7 +745,6 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
     // Ajustes de visualización que acompañan a cada tema de ModernMail
     static void applyPreset(SharedPreferences.Editor editor, String family) {
-        boolean aire = "minimal".equals(family);
         boolean azure = "azure".equals(family);
 
         // Lista agrupada en bloques por día

@@ -61,10 +61,26 @@ jobs:
             echo "keyPassword=$PASS"
           } > keystore.properties
 
+      # La primera compilación de una versión se publica como "1.3"; las siguientes
+      # de la misma versión llevan el número de compilación ("1.3.21") para distinguirse.
+      - name: Calcular la versión
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BASE="$(grep -oP 'def modernMailVersion = "\K[^"]+' app/build.gradle)"
+          if gh release view "v${BASE}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            VERSION="${BASE}.${{ github.run_number }}"
+          else
+            VERSION="${BASE}"
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "::notice::Versión ${VERSION}"
+
       - name: Compilar
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon --stacktrace -PmmBuild=${{ github.run_number }} assembleGithubRelease
+          ./gradlew --no-daemon --stacktrace -PmmVersionName=${{ steps.version.outputs.version }} assembleGithubRelease
 
       - name: Subir el APK
         uses: actions/upload-artifact@v6
@@ -80,11 +96,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          BASE="$(grep -oP 'def getVersionCode = \{ -> return \K[0-9]+' app/build.gradle)"
-          VERSION="1.${BASE}.${{ github.run_number }}"
+          VERSION="${{ steps.version.outputs.version }}"
           cp app/build/outputs/apk/github/release/*.apk "ModernMail-${VERSION}.apk"
           gh release create "v${VERSION}" "ModernMail-${VERSION}.apk" \
             --repo "${{ github.repository }}" \
             --target "${{ github.sha }}" \
             --title "ModernMail ${VERSION}" \
-            --notes "Compilación automática de la rama ${{ github.ref_name }}."
+            --notes "ModernMail ${VERSION}. Qué es y qué cambia respecto a FairEmail: https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/MODERNMAIL.md"
