@@ -7923,6 +7923,9 @@ public class FragmentMessages extends FragmentBase
 
     private void updateMore() {
         if (selectionTracker != null && selectionTracker.hasSelection()) {
+            // ModernMail: durante la selección, las acciones ocupan el sitio de la barra inferior
+            if (llAireBar != null)
+                llAireBar.setVisibility(View.GONE);
             fabMore.show();
 
             long[] selection = getSelection();
@@ -8102,6 +8105,8 @@ public class FragmentMessages extends FragmentBase
             tvSelectedCount.setVisibility(View.GONE);
             cardMore.setVisibility(View.GONE);
             cardMore.setTag(null);
+            if (llAireBar != null)
+                llAireBar.setVisibility(isAireList() ? View.VISIBLE : View.GONE);
         }
     }
 

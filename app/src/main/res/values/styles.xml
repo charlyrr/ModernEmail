@@ -332,7 +332,7 @@
         <item name="themeName">black</item>
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorCardBackground">@color/minimalDarkSurface</item>
+        <item name="colorCardBackground">@color/minimalDarkCard</item>
         <item name="android:windowBackground">@drawable/background_black</item>
         <item name="colorDrawerBackground">@color/black</item>
     </style>
