@@ -1,10 +1,15 @@
 name: Compilar APK ModernMail
 run-name: APK ModernMail - ${{ github.ref_name }} - ${{ github.sha }}
 
-# Se ejecuta en cada push a la rama estetica-moderna o a mano desde la pestaña Actions
+# Se ejecuta en cada cambio de código en master, a mano desde la pestaña Actions,
+# o lanzado por el flujo que incorpora las novedades de FairEmail
 on:
   push:
-    branches: [ estetica-moderna ]
+    branches: [ master ]
+    paths-ignore:
+      - '**.md'
+      - '.gitattributes'
+      - '.github/**'
   workflow_dispatch:
 
 # "write" es necesario para publicar el APK en Releases
@@ -68,6 +73,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # Si el código es el mismo que el de la última versión publicada, no se repite
+          ULTIMA="$(gh api "repos/${{ github.repository }}/releases/latest" --jq .target_commitish 2>/dev/null || true)"
+          if [ "${{ github.event_name }}" = "push" ] && [ -n "$ULTIMA" ] \
+              && git fetch -q --depth=1 origin "$ULTIMA" 2>/dev/null \
+              && git diff --quiet "$ULTIMA" HEAD -- . ':(exclude)*.md' ':(exclude).github' ':(exclude).gitattributes'; then
+            echo "omitir=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Sin cambios de código desde la última versión publicada: no se compila."
+            exit 0
+          fi
           BASE="$(grep -oP 'def modernMailVersion = "\K[^"]+' app/build.gradle)"
           if gh release view "v${BASE}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
             VERSION="${BASE}.${{ github.run_number }}"
@@ -78,11 +92,13 @@ jobs:
           echo "::notice::Versión ${VERSION}"
 
       - name: Compilar
+        if: steps.version.outputs.omitir != 'true'
         run: |
           chmod +x gradlew
           ./gradlew --no-daemon --stacktrace -PmmVersionName=${{ steps.version.outputs.version }} assembleGithubRelease
 
       - name: Subir el APK
+        if: steps.version.outputs.omitir != 'true'
         uses: actions/upload-artifact@v6
         with:
           name: ModernMail-APK
@@ -92,7 +108,7 @@ jobs:
       # Publica el APK en Releases para poder actualizar desde el móvil (p. ej. con Obtainium).
       # Sólo con la clave permanente: un APK con firma temporal no se podría instalar encima.
       - name: Publicar en Releases
-        if: steps.firma.outputs.permanente == 'true'
+        if: steps.firma.outputs.permanente == 'true' && steps.version.outputs.omitir != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -102,4 +118,4 @@ jobs:
             --repo "${{ github.repository }}" \
             --target "${{ github.sha }}" \
             --title "ModernMail ${VERSION}" \
-            --notes "ModernMail ${VERSION}. Qué es y qué cambia respecto a FairEmail: https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/MODERNMAIL.md"
+            --notes "ModernMail ${VERSION}. Qué es y qué cambia respecto a FairEmail: https://github.com/${{ github.repository }}#readme"

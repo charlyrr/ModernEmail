@@ -1,0 +1,65 @@
+name: Incorporar novedades de FairEmail
+
+# Trae los cambios del FairEmail original, los fusiona con los de ModernMail y,
+# si no hay conflictos, lanza la compilación de una versión nueva.
+on:
+  schedule:
+    - cron: '17 4 * * 1'   # los lunes de madrugada (UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: sync-fairemail
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Fusionar FairEmail
+        id: fusion
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # README.md lleva "merge=ours" en .gitattributes: se conserva siempre el nuestro
+          git config merge.ours.driver true
+
+          git remote add fairemail https://github.com/M66B/FairEmail.git
+          git fetch --no-tags fairemail master
+
+          if git merge-base --is-ancestor fairemail/master HEAD; then
+            echo "::notice::ModernMail ya incluye la última versión de FairEmail."
+            exit 0
+          fi
+
+          if ! git merge --no-commit --no-ff fairemail/master; then
+            echo "::error::Las novedades de FairEmail chocan con cambios de ModernMail en: $(git diff --name-only --diff-filter=U | tr '\n' ' ')"
+            echo "Hay que resolver esos archivos a mano y volver a lanzar este flujo."
+            exit 1
+          fi
+
+          # Los flujos de GitHub Actions son los de ModernMail: no se toman los de FairEmail
+          git reset -q HEAD -- .github/workflows
+          git checkout -- .github/workflows
+          git clean -fdq .github/workflows
+
+          git commit -q -m "Incorporar novedades de FairEmail"
+          git push origin HEAD:master
+          echo "fusionado=true" >> "$GITHUB_OUTPUT"
+
+      # Un push hecho por este flujo no dispara otros flujos, así que se lanza a mano
+      - name: Compilar la versión nueva
+        if: steps.fusion.outputs.fusionado == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run modern-apk.yml --repo "${{ github.repository }}" --ref master
