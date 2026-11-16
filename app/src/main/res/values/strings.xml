@@ -371,6 +371,7 @@
 
     <string name="title_setup_theme">Select theme</string>
 
+    <string name="mm_all_read">All read</string>
     <string name="mm_search">Search</string>
     <string name="mm_filter_all">All</string>
     <string name="mm_filter_unread">Unread</string>

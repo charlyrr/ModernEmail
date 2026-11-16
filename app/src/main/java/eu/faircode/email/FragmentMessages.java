@@ -7894,8 +7894,9 @@ public class FragmentMessages extends FragmentBase
         if (viewType == AdapterMessage.ViewType.UNIFIED && type == null) {
             // ModernMail: título "Entrada" y, debajo, los correos sin leer
             setTitle(R.string.mm_tab_inbox);
-            if (unseen > 0)
-                name = getString(R.string.mm_unread_count, NF.format(unseen));
+            name = (unseen > 0
+                    ? getString(R.string.mm_unread_count, NF.format(unseen))
+                    : getString(R.string.mm_all_read));
         } else if (unseen > 0)
             name = getString(R.string.title_name_count, name, NF.format(unseen));
         setSubtitle(name);

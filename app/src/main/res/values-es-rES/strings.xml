@@ -315,6 +315,7 @@
     <string name="title_setup_biometrics_disable">Desactivar</string>
     <string name="title_setup_biometrics_unlock">Desbloquear</string>
     <string name="title_setup_theme">Seleccionar tema</string>
+    <string name="mm_all_read">Todo leído</string>
     <string name="mm_search">Buscar</string>
     <string name="mm_filter_all">Todos</string>
     <string name="mm_filter_unread">No leídos</string>
