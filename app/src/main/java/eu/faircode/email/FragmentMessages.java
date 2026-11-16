@@ -2941,6 +2941,12 @@ public class FragmentMessages extends FragmentBase
         }
 
         @Override
+        public void bodyReady(long id) {
+            // ModernMail: el cuerpo ya está pintado; se puede mostrar el correo animado
+            runReveal();
+        }
+
+        @Override
         public void ready(long id) {
             iProperties.setValue("ready", id, true);
 
@@ -8257,18 +8263,49 @@ public class FragmentMessages extends FragmentBase
 
     // ModernMail: el contenido entra con un deslizamiento suave cuando ya está cargado
     // (al abrir un correo llega desde la derecha; al volver a la lista, desde la izquierda)
+    private boolean revealPending = false;
+
     private void revealMessages() {
         try {
             boolean thread = (viewType == AdapterMessage.ViewType.THREAD);
             rvMessage.animate().cancel();
             rvMessage.setAlpha(0f);
-            rvMessage.setTranslationX(Helper.dp2pixels(rvMessage.getContext(), thread ? 72 : -40));
+            rvMessage.setTranslationX(Helper.dp2pixels(rvMessage.getContext(), thread ? 56 : -32));
+            revealPending = true;
+
+            if (thread)
+                // Se espera a que el cuerpo del correo esté pintado (bodyReady), con un límite
+                rvMessage.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        runReveal();
+                    }
+                }, 500);
+            else
+                runReveal();
+        } catch (Throwable ex) {
+            Log.w(ex);
+            revealPending = false;
+            rvMessage.setAlpha(1f);
+            rvMessage.setTranslationX(0f);
+        }
+    }
+
+    private void runReveal() {
+        if (!revealPending || rvMessage == null)
+            return;
+        revealPending = false;
+        try {
+            boolean thread = (viewType == AdapterMessage.ViewType.THREAD);
+            // Un fotograma de margen para que el contenido recién cargado se haya dibujado;
+            // withLayer usa aceleración gráfica mientras dura el movimiento
             rvMessage.animate()
                     .alpha(1f)
                     .translationX(0f)
-                    .setStartDelay(thread ? 80 : 40)
-                    .setDuration(thread ? 520 : 420)
-                    .setInterpolator(new android.view.animation.DecelerateInterpolator(2.2f))
+                    .setStartDelay(thread ? 30 : 20)
+                    .setDuration(thread ? 460 : 380)
+                    .setInterpolator(new android.view.animation.DecelerateInterpolator(2.0f))
+                    .withLayer()
                     .start();
         } catch (Throwable ex) {
             Log.w(ex);

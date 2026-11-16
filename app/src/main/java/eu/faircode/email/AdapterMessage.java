@@ -3604,6 +3604,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     } catch (Throwable ex) {
                                         Log.e(ex);
                                     }
+                                    properties.bodyReady(message.id);
                                 }
                             });
 
@@ -3628,12 +3629,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     } catch (Throwable ex) {
                                         Log.e(ex);
                                     }
+                                    properties.bodyReady(message.id);
                                 }
                             });
                         }
                     } else {
                         bindExtras(message);
                         cowner.start(); // Show attachments
+                        properties.bodyReady(message.id);
                     }
 
                     if (scroll)
@@ -3658,6 +3661,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
+                    properties.bodyReady(message.id);
                     if (ex instanceof OutOfMemoryError)
                         Helper.setSnackbarOptions(
                                         Snackbar.make(parentFragment.getView(), new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
@@ -9661,6 +9665,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         void scrollBy(int x, int y);
 
         void ready(long id);
+
+        // ModernMail: el cuerpo del mensaje ya está en pantalla
+        void bodyReady(long id);
 
         void move(long id, String type);
 
