@@ -45,6 +45,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.text.LineBreaker;
 import android.net.Uri;
@@ -1630,13 +1631,24 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 String an = message.accountName;
                 int slash = (an == null ? -1 : an.indexOf('/'));
                 String shortName = (slash > 0 ? an.substring(0, slash) : an);
-                if (shortName != null && message.accountColor != null) {
-                    // En el color elegido para la cuenta
-                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(shortName);
-                    ssb.setSpan(new ForegroundColorSpan(message.accountColor), 0, ssb.length(), 0);
-                    tvFolder.setText(ssb);
-                } else
-                    tvFolder.setText(shortName);
+                tvFolder.setText(shortName);
+
+                // Etiqueta redondeada: fondo del color de la cuenta y texto legible encima
+                int chip = (message.accountColor == null ? colorSeparator : message.accountColor);
+                if (!Objects.equals(tvFolder.getTag(), chip)) {
+                    tvFolder.setTag(chip);
+                    GradientDrawable bg = new GradientDrawable();
+                    bg.setShape(GradientDrawable.RECTANGLE);
+                    bg.setCornerRadius(Helper.dp2pixels(context, 9));
+                    bg.setColor(chip);
+                    tvFolder.setBackground(bg);
+                    int h = Helper.dp2pixels(context, 8);
+                    tvFolder.setPadding(h, 0, h, 0);
+                    if (message.accountColor == null)
+                        tvFolder.setTextColor(textColorSecondary);
+                    else
+                        tvFolder.setTextColor(ColorUtils.calculateLuminance(chip) > 0.6 ? Color.BLACK : Color.WHITE);
+                }
             }
 
             tvFolder.setVisibility(compact && viewType != ViewType.THREAD ? View.GONE : View.VISIBLE);
@@ -1679,14 +1691,22 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvPreview.setTextColor(textColor);
                 if (preview_lines == 1)
                     tvPreview.setSingleLine(true);
-                else
+                else {
                     tvPreview.setMaxLines(preview_lines);
+                    // ModernMail: en la lista todas las filas miden lo mismo
+                    if (viewType != ViewType.THREAD)
+                        tvPreview.setMinLines(preview_lines);
+                }
             }
             tvPreview.setTypeface(
                     StyleHelper.getTypeface(display_font, context),
                     preview_italic ? Typeface.ITALIC : Typeface.NORMAL);
             tvPreview.setText(message.preview);
-            tvPreview.setVisibility(preview && !TextUtils.isEmpty(message.preview) ? View.VISIBLE : View.GONE);
+            if (preview && !TextUtils.isEmpty(message.preview))
+                tvPreview.setVisibility(View.VISIBLE);
+            else
+                // Sin texto: en la lista se reserva el hueco para mantener el alto de la fila
+                tvPreview.setVisibility(preview && viewType != ViewType.THREAD ? View.INVISIBLE : View.GONE);
 
             tvNotes.setText(message.notes);
             tvNotes.setTextColor(message.notes_color == null ? textColorSecondary : message.notes_color);
