@@ -457,7 +457,8 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
 
             // Default enable compact mode for smaller screens
             if (!config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)) {
-                editor.putBoolean("compact", true);
+                // ModernMail: el modo compacto ya no se activa solo; se elige en el menú
+                //editor.putBoolean("compact", true);
                 //editor.putBoolean("compact_folders", true);
             }
 

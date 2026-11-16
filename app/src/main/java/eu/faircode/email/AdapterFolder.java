@@ -1495,7 +1495,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean compact = prefs.getBoolean("compact", false);
-        int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+        int zoom = prefs.getInt("view_zoom", 0);
         if (zoom == 0)
             zoom = 1;
 

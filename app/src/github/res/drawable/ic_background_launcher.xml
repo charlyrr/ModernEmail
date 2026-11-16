@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ModernMail: fondo del icono, azul de acento con un degradado suave -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="315"
+        android:endColor="#0A57C2"
+        android:startColor="#2B82F6"
+        android:type="linear" />
+</shape>

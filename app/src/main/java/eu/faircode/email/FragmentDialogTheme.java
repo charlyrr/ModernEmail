@@ -754,7 +754,6 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         editor.putBoolean("date_fixed", false);
         editor.putBoolean("date_week", false);
         editor.putBoolean("dividers", true);
-        editor.putBoolean("compact", false);
         editor.putBoolean("beige", false);
 
         // Fila de mensaje
@@ -768,6 +767,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         editor.putBoolean("highlight_unread", false);
         editor.putBoolean("highlight_subject", false);
         editor.putString("subject_ellipsize", "end");
+        editor.putString("sender_ellipsize", "end");
+        editor.putInt("view_zoom", 0);
         editor.putBoolean("authentication_indicator", false);
         editor.putInt("account_color", 0);
         editor.putBoolean("color_stripe", false);
@@ -777,10 +778,13 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         editor.putBoolean("reformatted_hint", false);
         editor.putBoolean("quick_scroll", false);
         editor.putBoolean("actionbar_color", false);
+
+        // Redactar: la barra de envío mantiene la forma redondeada (sin color de identidad)
+        editor.putBoolean("send_nav_color", false);
     }
 
     // Versión de los ajustes de diseño: al subirla se vuelven a aplicar una vez
-    private static final int PRESET_VERSION = 4;
+    private static final int PRESET_VERSION = 5;
 
     // Aplica los ajustes del tema propio en uso (o del tema Aire si no hay ninguno)
     static void applyCurrentPreset(SharedPreferences prefs, SharedPreferences.Editor editor) {

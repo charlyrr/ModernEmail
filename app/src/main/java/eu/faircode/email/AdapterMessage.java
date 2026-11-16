@@ -376,6 +376,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private ImageView ivBadge;
         private View vwUnread;
+        private View vwPaddingTop;
+        private View vwPaddingBottom;
         private View vwColor;
         private ImageButton ibExpander;
         private ImageView ibFlagged;
@@ -769,6 +771,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ivBadge = itemView.findViewById(R.id.ivBadge);
             vwUnread = itemView.findViewById(R.id.vwUnread);
+            vwPaddingTop = itemView.findViewById(R.id.paddingTop);
+            vwPaddingBottom = itemView.findViewById(R.id.paddingBottom);
             vwColor = itemView.findViewById(R.id.vwColor);
             ibExpander = itemView.findViewById(R.id.ibExpander);
             ibFlagged = itemView.findViewById(R.id.ibFlagged);
@@ -2029,6 +2033,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         void bindSeen(TupleMessageEx message) {
             boolean opened = (viewType == ViewType.THREAD && properties.getValue("expanded", message.id));
+
+            // ModernMail: relleno vertical de la fila según el modo (normal o compacto)
+            if (vwPaddingTop != null && vwPaddingBottom != null) {
+                int pad = Helper.dp2pixels(context, compact ? 6 : 11);
+                if (vwPaddingTop.getLayoutParams().height != pad) {
+                    vwPaddingTop.getLayoutParams().height = pad;
+                    vwPaddingBottom.getLayoutParams().height = pad;
+                    vwPaddingTop.requestLayout();
+                    vwPaddingBottom.requestLayout();
+                }
+            }
             // ModernMail: punto de "no leído" (sólo existe en la fila normal)
             if (vwUnread != null)
                 vwUnread.setVisibility(message.unseen > 0 ? View.VISIBLE : View.INVISIBLE);
@@ -9427,7 +9442,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !all(EntityFolder.TRASH))
             return R.layout.item_message_duplicate;
 
-        return (compact ? R.layout.item_message_compact : R.layout.item_message_normal);
+        // ModernMail: el modo compacto usa la misma fila, con menos relleno (ver bindSeen)
+        return R.layout.item_message_normal;
     }
 
     @Override

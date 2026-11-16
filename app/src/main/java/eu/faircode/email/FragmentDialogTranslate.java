@@ -78,7 +78,7 @@ public class FragmentDialogTranslate extends FragmentDialogBase {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean compact = prefs.getBoolean("compact", false);
-        int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+        int zoom = prefs.getInt("view_zoom", 0);
         int message_zoom = prefs.getInt("message_zoom", 100);
 
         float textSize = Helper.getTextSize(context, zoom) * message_zoom / 100f;

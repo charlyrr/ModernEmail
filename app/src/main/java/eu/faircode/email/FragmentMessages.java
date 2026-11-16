@@ -575,8 +575,8 @@ public class FragmentMessages extends FragmentBase
                         threading ? R.plurals.page_conversation : R.plurals.page_message, 10));
             } else {
                 viewType = AdapterMessage.ViewType.THREAD;
-                setTitle(getResources().getQuantityString(
-                        threading ? R.plurals.page_conversation : R.plurals.page_message, 1));
+                // ModernMail: el título es la cuenta del correo (se fija al cargar la conversación)
+                setTitle("");
             }
         else {
             viewType = AdapterMessage.ViewType.SEARCH;
@@ -1387,7 +1387,7 @@ public class FragmentMessages extends FragmentBase
         });
 
         boolean compact = prefs.getBoolean("compact", false);
-        int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+        int zoom = prefs.getInt("view_zoom", 0);
         boolean large_buttons = prefs.getBoolean("large_buttons", false);
         boolean outbox = EntityFolder.OUTBOX.equals(type);
         boolean ascending = prefs.getBoolean(getSortOrder(getContext(), viewType, type), outbox);
@@ -5884,10 +5884,8 @@ public class FragmentMessages extends FragmentBase
                         int slash = (an == null ? -1 : an.indexOf('/'));
                         if (slash > 0)
                             an = an.substring(0, slash);
-                        if (unseen == 0)
-                            setSubtitle(an);
-                        else
-                            setSubtitle(getString(R.string.title_name_count, an, NF.format(unseen)));
+                        setTitle(an == null ? "" : an);
+                        setSubtitle(unseen == 0 ? null : getString(R.string.mm_unread_count, NF.format(unseen)));
                     }
                 });
                 db.message().liveHiddenThread(account, thread).observe(getViewLifecycleOwner(), new Observer<List<Long>>() {
@@ -5996,7 +5994,7 @@ public class FragmentMessages extends FragmentBase
                 !isIgnoring && enabled && reminder && !was_ignoring && targeting ? View.VISIBLE : View.GONE);
 
         boolean compact = prefs.getBoolean("compact", false);
-        int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+        int zoom = prefs.getInt("view_zoom", 0);
         adapter.setCompact(compact);
         adapter.setZoom(zoom);
 
@@ -6743,7 +6741,7 @@ public class FragmentMessages extends FragmentBase
             boolean large_buttons = prefs.getBoolean("large_buttons", false);
             boolean compact = prefs.getBoolean("compact", false);
             boolean confirm_links = prefs.getBoolean("confirm_links", true);
-            int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+            int zoom = prefs.getInt("view_zoom", 0);
             int padding = prefs.getInt("view_padding", compact || !cards ? 0 : 1);
             boolean quick_filter = prefs.getBoolean("quick_filter", false);
             boolean all_read_asked = prefs.getBoolean("all_read_asked", false);
@@ -7496,7 +7494,7 @@ public class FragmentMessages extends FragmentBase
     private void onMenuZoom() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean compact = prefs.getBoolean("compact", false);
-        int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
+        int zoom = prefs.getInt("view_zoom", 0);
         zoom = ++zoom % 3;
         prefs.edit().putInt("view_zoom", zoom).apply();
         clearMeasurements();
@@ -7527,11 +7525,12 @@ public class FragmentMessages extends FragmentBase
         boolean compact = !prefs.getBoolean("compact", false);
         prefs.edit()
                 .putBoolean("compact", compact)
-                .putString("sender_ellipsize", compact ? "end" : "full")
-                .putString("subject_ellipsize", "full")
+                .putString("sender_ellipsize", "end")
+                .putString("subject_ellipsize", "end")
                 .apply();
 
-        int zoom = (compact ? 0 : 1);
+        // ModernMail: mismo tamaño de letra en los dos modos; el compacto sólo aprieta la fila
+        int zoom = prefs.getInt("view_zoom", 0);
         int padding = (compact || !cards ? 0 : 1);
         prefs.edit()
                 .putInt("view_zoom", zoom)
