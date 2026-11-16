@@ -2,16 +2,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="3dp">
 
+    <!-- ModernMail: cada adjunto es una tarjeta redondeada -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/activatableItemBackground"
+        android:background="@drawable/aire_field_bg"
         android:foreground="?attr/selectableItemBackground"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp">
+        android:paddingHorizontal="6dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <ImageButton
             android:id="@+id/ibDelete"
