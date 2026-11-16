@@ -30,25 +30,25 @@ jobs:
           cache: gradle
 
       # Firma del APK:
-      # - Si existen los secretos MODERN_KEYSTORE_BASE64 y MODERN_KEYSTORE_PASSWORD se usa
-      #   siempre la misma clave, y cada APK nuevo se instala encima del anterior.
-      # - Si no existen, se genera una clave temporal: el APK funciona, pero para
-      #   actualizar habría que desinstalar la versión anterior.
+      # - Con el secreto MODERN_KEYSTORE_PASSWORD se descifra la clave permanente del
+      #   repositorio (app/modern.keystore.gpg): cada APK se instala encima del anterior.
+      # - Sin el secreto se genera una clave temporal: el APK funciona, pero para
+      #   actualizar hay que desinstalar la versión anterior.
       - name: Preparar la firma
         env:
-          KEYSTORE_BASE64: ${{ secrets.MODERN_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.MODERN_KEYSTORE_PASSWORD }}
         run: |
-          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ]; then
-            echo "$KEYSTORE_BASE64" | base64 -d > app/modern.keystore
+          if [ -n "$KEYSTORE_PASSWORD" ] && [ -f app/modern.keystore.gpg ]; then
+            gpg --batch --yes --pinentry-mode loopback --passphrase "$KEYSTORE_PASSWORD" \
+              -o app/modern.keystore -d app/modern.keystore.gpg
             PASS="$KEYSTORE_PASSWORD"
-            echo "Usando la clave de firma permanente."
+            echo "::notice::APK firmado con la clave permanente."
           else
             PASS="$(openssl rand -hex 16)"
             keytool -genkeypair -noprompt -keystore app/modern.keystore \
               -alias modern -keyalg RSA -keysize 4096 -validity 10000 \
               -storepass "$PASS" -keypass "$PASS" -dname "CN=ModernMail"
-            echo "::warning::Firmado con una clave temporal. Para poder actualizar sin desinstalar, configura los secretos MODERN_KEYSTORE_BASE64 y MODERN_KEYSTORE_PASSWORD."
+            echo "::warning::Firmado con una clave temporal. Falta el secreto MODERN_KEYSTORE_PASSWORD."
           fi
           echo "::add-mask::$PASS"
           {

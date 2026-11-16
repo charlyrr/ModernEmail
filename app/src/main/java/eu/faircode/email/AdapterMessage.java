@@ -1626,10 +1626,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             else
             {
                 // ModernMail: en la bandeja unificada basta el nombre corto de la cuenta
-                // ("Gmail/usuario" -> "Gmail"), sin colores
+                // ("Gmail/usuario" -> "Gmail")
                 String an = message.accountName;
                 int slash = (an == null ? -1 : an.indexOf('/'));
-                tvFolder.setText(slash > 0 ? an.substring(0, slash) : an);
+                String shortName = (slash > 0 ? an.substring(0, slash) : an);
+                if (shortName != null && message.accountColor != null) {
+                    // En el color elegido para la cuenta
+                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(shortName);
+                    ssb.setSpan(new ForegroundColorSpan(message.accountColor), 0, ssb.length(), 0);
+                    tvFolder.setText(ssb);
+                } else
+                    tvFolder.setText(shortName);
             }
 
             tvFolder.setVisibility(compact && viewType != ViewType.THREAD ? View.GONE : View.VISIBLE);
