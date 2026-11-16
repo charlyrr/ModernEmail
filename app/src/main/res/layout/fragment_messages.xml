@@ -511,13 +511,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_margin="@dimen/fab_padding"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="14dp"
                 android:contentDescription="@string/title_reply"
-                app:backgroundTint="?attr/colorFabBackground"
-                app:layout_constraintBottom_toTopOf="@+id/sbThread"
+                app:backgroundTint="?attr/colorAccent"
+                app:elevation="4dp"
+                app:fabCustomSize="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:shapeAppearanceOverlay="@style/ModernFabCircle"
                 app:srcCompat="@drawable/twotone_reply_24_options"
-                app:tint="?attr/colorFabForeground" />
+                app:tint="@color/white" />
 
             <ImageButton
                 android:id="@+id/ibDown"
@@ -651,17 +655,22 @@
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:maxLines="1"
+                android:layout_marginBottom="82dp"
                 android:padding="6dp"
                 app:end_drawable="@drawable/twotone_fast_forward_24"
-                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="?attr/colorPrimary"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="86dp"
+                android:layout_marginBottom="14dp"
+                android:background="@drawable/aire_bar_bg"
+                app:elevation="4dp"
                 app:itemIconTint="@color/action_foreground"
                 app:itemTextColor="@color/action_foreground"
                 app:labelVisibilityMode="unlabeled"

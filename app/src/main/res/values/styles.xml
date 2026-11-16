@@ -964,6 +964,11 @@
         <item name="pressedTranslationZ">4dp</item>
     </style>
 
+    <style name="ModernFabCircle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="ModernFabShape" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/fab_corner_radius</item>

@@ -5873,10 +5873,15 @@ public class FragmentMessages extends FragmentBase
                             return;
 
                         int unseen = stats.count - stats.seen;
+                        // ModernMail: nombre corto de la cuenta ("Outlook/usuario" -> "Outlook")
+                        String an = stats.accountName;
+                        int slash = (an == null ? -1 : an.indexOf('/'));
+                        if (slash > 0)
+                            an = an.substring(0, slash);
                         if (unseen == 0)
-                            setSubtitle(stats.accountName);
+                            setSubtitle(an);
                         else
-                            setSubtitle(getString(R.string.title_name_count, stats.accountName, NF.format(unseen)));
+                            setSubtitle(getString(R.string.title_name_count, an, NF.format(unseen)));
                     }
                 });
                 db.message().liveHiddenThread(account, thread).observe(getViewLifecycleOwner(), new Observer<List<Long>>() {

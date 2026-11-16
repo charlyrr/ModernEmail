@@ -773,10 +773,15 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         editor.putInt("account_color", 0);
         editor.putBoolean("color_stripe", false);
         editor.putBoolean("quick_filter", false);
+
+        // Lectura de un correo
+        editor.putBoolean("reformatted_hint", false);
+        editor.putBoolean("quick_scroll", false);
+        editor.putBoolean("actionbar_color", false);
     }
 
     // Versión de los ajustes de diseño: al subirla se vuelven a aplicar una vez
-    private static final int PRESET_VERSION = 2;
+    private static final int PRESET_VERSION = 3;
 
     // Garantiza que la app usa uno de los temas propios con sus ajustes
     static void ensurePreset(Context context) {

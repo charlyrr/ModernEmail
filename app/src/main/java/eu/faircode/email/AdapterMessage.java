@@ -2008,6 +2008,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         void bindSeen(TupleMessageEx message) {
+            boolean opened = (viewType == ViewType.THREAD && properties.getValue("expanded", message.id));
             // ModernMail: punto de "no leído" (sólo existe en la fila normal)
             if (vwUnread != null)
                 vwUnread.setVisibility(message.unseen > 0 ? View.VISIBLE : View.INVISIBLE);
@@ -2031,7 +2032,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (textSize != 0) {
                 float fz_sender = (font_size_sender == null ? textSize : font_size_sender) * (message.unseen > 0 ? 1.1f : 1f);
-                float fz_subject = (font_size_subject == null ? textSize : font_size_subject) * 0.9f;
+                // ModernMail: al abrir un correo el asunto es el protagonista
+                float fz_subject = (font_size_subject == null ? textSize : font_size_subject) * (opened ? 1.2f : 0.9f);
                 tvFrom.setTextSize(TypedValue.COMPLEX_UNIT_PX, fz_sender);
                 tvSubject.setTextSize(TypedValue.COMPLEX_UNIT_PX, fz_subject);
 
@@ -2056,7 +2058,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 else
                     tvSubject.setTypeface(null, Typeface.ITALIC);
             else
-                tvSubject.setTypeface(typeface);
+                tvSubject.setTypeface(opened ? Typeface.DEFAULT_BOLD : typeface);
+            if (viewType == ViewType.THREAD)
+                tvSubject.setSingleLine(!opened && !"full".equals(subject_ellipsize));
             tvCount.setTypeface(typeface);
 
             int colorUnseen = (message.unseen > 0 ? colorUnread : colorRead);
