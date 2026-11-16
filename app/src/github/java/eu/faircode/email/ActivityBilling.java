@@ -225,7 +225,10 @@ public class ActivityBilling extends ActivityBase implements
     }
 
     private static String getResponse(Context context) throws NoSuchAlgorithmException {
-        return Helper.sha256(BuildConfig.APPLICATION_ID.replace(".debug", "") + getChallenge(context));
+        // ModernMail: la respuesta se calcula como en la aplicación oficial (sin el sufijo
+        // ".modern"), de modo que valen las activaciones emitidas por el autor de FairEmail
+        // para el código de dispositivo de esta instalación
+        return Helper.sha256(BuildConfig.APPLICATION_ID.replace(".debug", "").replace(".modern", "") + getChallenge(context));
     }
 
     static boolean activatePro(Context context, Uri data) throws NoSuchAlgorithmException {
