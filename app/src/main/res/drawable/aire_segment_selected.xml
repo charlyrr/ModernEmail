@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Opción activa del filtro segmentado -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="8dp" />
+    <solid android:color="?attr/colorCardBackground" />
+    <stroke android:width="1px" android:color="?attr/colorSeparator" />
+</shape>

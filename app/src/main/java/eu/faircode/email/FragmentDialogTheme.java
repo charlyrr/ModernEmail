@@ -436,6 +436,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
     }
 
     static int getTheme(Context context) {
+        ensurePreset(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String theme = prefs.getString("theme", "minimal_system");
         boolean composer_light = prefs.getBoolean("composer_light", false);
@@ -765,8 +766,42 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         editor.putInt("preview_lines", azure ? 1 : 2);
         editor.putBoolean("preview_italic", false);
         editor.putBoolean("subject_italic", false);
-        editor.putBoolean("highlight_unread", !aire);
-        editor.putBoolean("color_stripe", !aire);
+        editor.putBoolean("highlight_unread", false);
+        editor.putBoolean("highlight_subject", false);
+        editor.putString("subject_ellipsize", "end");
+        editor.putBoolean("authentication_indicator", false);
+        editor.putInt("account_color", 0);
+        editor.putBoolean("color_stripe", false);
+        editor.putBoolean("quick_filter", false);
+    }
+
+    // Versión de los ajustes de diseño: al subirla se vuelven a aplicar una vez
+    private static final int PRESET_VERSION = 2;
+
+    // Garantiza que la app usa uno de los temas propios con sus ajustes
+    static void ensurePreset(Context context) {
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            if (prefs.getInt("mm_preset", 0) >= PRESET_VERSION)
+                return;
+
+            String theme = prefs.getString("theme", "minimal_system");
+            String family = null;
+            for (String f : FAMILIES)
+                if (theme.startsWith(f + "_") && !"modern".equals(f))
+                    family = f;
+
+            SharedPreferences.Editor editor = prefs.edit();
+            if (family == null) {
+                family = "minimal";
+                editor.putString("theme", "minimal_system");
+            }
+            applyPreset(editor, family);
+            editor.putInt("mm_preset", PRESET_VERSION);
+            editor.apply();
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
     }
 
     // {claro, oscuro, negro}

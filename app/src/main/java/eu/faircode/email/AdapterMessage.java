@@ -361,6 +361,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private static final int MAX_RECIPIENTS_COMPACT = 3;
     private static final int MAX_RECIPIENTS_NORMAL = 7;
 
+    // ModernMail: remitente en seminegrita
+    private static final Typeface TYPEFACE_MEDIUM = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener,
             View.OnLongClickListener,
@@ -1620,18 +1623,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvFolder.setText(outbox ? message.identityEmail : message.accountName);
             else if (viewType == ViewType.THREAD || viewType == ViewType.SEARCH)
                 tvFolder.setText(message.getFolderName(context));
-            else {
-                SpannableStringBuilder ssb = new SpannableStringBuilderEx();
-                ssb.append(message.accountName);
-                if (message.accountColor != null)
-                    ssb.setSpan(new ForegroundColorSpan(message.accountColor), 0, ssb.length(), 0);
-                ssb.append('/');
-                int s = ssb.length();
-                ssb.append(message.getFolderName(context));
-                if (message.folderColor != null)
-                    ssb.setSpan(new ForegroundColorSpan(message.folderColor), s, ssb.length(), 0);
-                tvFolder.setText(ssb);
-            }
+            else
+                // ModernMail: en la bandeja unificada basta el nombre de la cuenta, sin colores
+                tvFolder.setText(message.accountName);
 
             tvFolder.setVisibility(compact && viewType != ViewType.THREAD ? View.GONE : View.VISIBLE);
 
@@ -2041,7 +2035,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             Typeface typeface = (message.unseen > 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
-            tvFrom.setTypeface(typeface);
+            tvFrom.setTypeface(message.unseen > 0 ? Typeface.DEFAULT_BOLD : TYPEFACE_MEDIUM);
             tvSize.setTypeface(typeface);
             tvTime.setTypeface(typeface);
             if (subject_italic)
@@ -2056,9 +2050,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             int colorUnseen = (message.unseen > 0 ? colorUnread : colorRead);
             if (!Objects.equals(tvFrom.getTag(), colorUnseen)) {
                 tvFrom.setTag(colorUnseen);
-                tvFrom.setTextColor(colorUnseen);
-                tvSize.setTextColor(colorUnseen);
-                tvTime.setTextColor(colorUnseen);
+                // ModernMail: remitente en color principal; hora y tamaño en secundario
+                tvFrom.setTextColor(message.unseen > 0 ? colorUnseen : textColorPrimary);
+                tvSize.setTextColor(textColorSecondary);
+                tvTime.setTextColor(textColorSecondary);
             }
         }
 
@@ -8533,7 +8528,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         this.colorUnread = (highlight_unread ? colorUnreadHighlight : Helper.resolveColor(context, R.attr.colorUnread));
         this.colorRead = Helper.resolveColor(context, R.attr.colorRead);
-        this.colorSubject = Helper.resolveColor(context, highlight_subject ? R.attr.colorUnreadHighlight : R.attr.colorRead);
+        this.colorSubject = (highlight_subject ? Helper.resolveColor(context, R.attr.colorUnreadHighlight) : this.textColorPrimary);
         this.colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
         this.colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
         this.colorSeparator = Helper.resolveColor(context, R.attr.colorSeparator);

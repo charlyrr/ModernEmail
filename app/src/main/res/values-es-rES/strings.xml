@@ -315,6 +315,13 @@
     <string name="title_setup_biometrics_disable">Desactivar</string>
     <string name="title_setup_biometrics_unlock">Desbloquear</string>
     <string name="title_setup_theme">Seleccionar tema</string>
+    <string name="mm_search">Buscar</string>
+    <string name="mm_filter_all">Todos</string>
+    <string name="mm_filter_unread">No leídos</string>
+    <string name="mm_filter_flagged">Destacados</string>
+    <string name="mm_tab_inbox">Entrada</string>
+    <string name="mm_tab_mailboxes">Buzones</string>
+    <string name="mm_unread_count">%1$s sin leer</string>
     <string name="title_setup_theme_modern">Moderno</string>
     <string name="title_setup_theme_minimal">Aire</string>
     <string name="title_setup_theme_violet">Violeta</string>

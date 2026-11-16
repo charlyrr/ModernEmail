@@ -371,6 +371,13 @@
 
     <string name="title_setup_theme">Select theme</string>
 
+    <string name="mm_search">Search</string>
+    <string name="mm_filter_all">All</string>
+    <string name="mm_filter_unread">Unread</string>
+    <string name="mm_filter_flagged">Starred</string>
+    <string name="mm_tab_inbox">Inbox</string>
+    <string name="mm_tab_mailboxes">Mailboxes</string>
+    <string name="mm_unread_count">%1$s unread</string>
     <string name="title_setup_theme_modern">Modern</string>
     <string name="title_setup_theme_minimal">Air</string>
     <string name="title_setup_theme_violet">Violet</string>

@@ -288,6 +288,11 @@ public class FragmentMessages extends FragmentBase
     private TextView tvNoEmailHint;
     private FixedRecyclerView rvMessage;
     private View vwAnchor;
+    private View llAireHeader;
+    private View llAireBar;
+    private TextView tvAireAll;
+    private TextView tvAireUnread;
+    private TextView tvAireFlagged;
     private SeekBar sbThread;
     private ImageButton ibDown;
     private ImageButton ibUp;
@@ -659,6 +664,11 @@ public class FragmentMessages extends FragmentBase
         tvNoEmailHint = view.findViewById(R.id.tvNoEmailHint);
         rvMessage = view.findViewById(R.id.rvMessage);
         vwAnchor = view.findViewById(R.id.vwAnchor);
+        llAireHeader = view.findViewById(R.id.llAireHeader);
+        llAireBar = view.findViewById(R.id.llAireBar);
+        tvAireAll = view.findViewById(R.id.tvAireAll);
+        tvAireUnread = view.findViewById(R.id.tvAireUnread);
+        tvAireFlagged = view.findViewById(R.id.tvAireFlagged);
         sbThread = view.findViewById(R.id.sbThread);
         ibDown = view.findViewById(R.id.ibDown);
         ibUp = view.findViewById(R.id.ibUp);
@@ -1482,6 +1492,8 @@ public class FragmentMessages extends FragmentBase
                 return true;
             }
         });
+
+        setupAire(view);
 
         ibSeen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -6916,6 +6928,8 @@ public class FragmentMessages extends FragmentBase
             ibUnflagged.setVisibility(quick_filter && folder ? View.VISIBLE : View.GONE);
             ibSnoozed.setVisibility(quick_filter && folder && !drafts ? View.VISIBLE : View.GONE);
 
+            updateAireFilter(filter_seen, filter_unflagged);
+
             super.onPrepareOptionsMenu(menu);
         } catch (Throwable ex) {
             Log.e(ex);
@@ -7198,6 +7212,135 @@ public class FragmentMessages extends FragmentBase
         adapter.setAscending(ascending);
         invalidateOptionsMenu();
         loadMessages(true);
+    }
+
+    // ---------- ModernMail (Aire): cabecera y barra inferior ----------
+
+    private boolean isAireList() {
+        return (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER);
+    }
+
+    private void setupAire(View view) {
+        if (llAireHeader == null || llAireBar == null)
+            return;
+
+        boolean show = isAireList();
+        llAireHeader.setVisibility(show ? View.VISIBLE : View.GONE);
+        llAireBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (!show)
+            return;
+
+        view.findViewById(R.id.tvAireSearch).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMenuSearch();
+            }
+        });
+
+        tvAireAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAireFilter(false, false);
+            }
+        });
+
+        tvAireUnread.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAireFilter(true, false);
+            }
+        });
+
+        tvAireFlagged.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAireFilter(false, true);
+            }
+        });
+
+        view.findViewById(R.id.llAireInbox).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewType == AdapterMessage.ViewType.UNIFIED)
+                    rvMessage.scrollToPosition(0);
+                else
+                    getParentFragmentManager().popBackStack("unified", 0);
+            }
+        });
+
+        view.findViewById(R.id.llAireFolders).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() instanceof ActivityView)
+                    ((ActivityView) getActivity()).openDrawer();
+            }
+        });
+
+        view.findViewById(R.id.llAireStarred).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() instanceof ActivityView)
+                    ((ActivityView) getActivity()).searchFlagged();
+            }
+        });
+
+        view.findViewById(R.id.llAireSettings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() instanceof ActivityView)
+                    ((ActivityView) getActivity()).openSetup();
+            }
+        });
+
+        View ibAireCompose = view.findViewById(R.id.ibAireCompose);
+        ibAireCompose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabCompose.performClick();
+            }
+        });
+        ibAireCompose.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return fabCompose.performLongClick();
+            }
+        });
+    }
+
+    // unread: sólo no leídos; flagged: sólo destacados; ambos false: todos
+    private void setAireFilter(boolean unread, boolean flagged) {
+        Context context = getContext();
+        if (context == null)
+            return;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit()
+                .putBoolean(getFilter(context, "seen", viewType, type), unread)
+                .putBoolean(getFilter(context, "unseen", viewType, type), false)
+                .putBoolean(getFilter(context, "unflagged", viewType, type), flagged)
+                .putBoolean(getFilter(context, "flagged", viewType, type), false)
+                .apply();
+        invalidateOptionsMenu();
+        if (selectionTracker != null)
+            selectionTracker.clearSelection();
+        loadMessages(true);
+    }
+
+    private void updateAireFilter(boolean filter_seen, boolean filter_unflagged) {
+        if (tvAireAll == null)
+            return;
+        boolean unread = (filter_seen && !filter_unflagged);
+        boolean flagged = filter_unflagged;
+        styleAireSegment(tvAireAll, !filter_seen && !filter_unflagged);
+        styleAireSegment(tvAireUnread, unread);
+        styleAireSegment(tvAireFlagged, flagged);
+    }
+
+    private void styleAireSegment(TextView tv, boolean selected) {
+        if (selected)
+            tv.setBackgroundResource(R.drawable.aire_segment_selected);
+        else
+            tv.setBackground(null);
+        tv.setTypeface(null, selected ? Typeface.BOLD : Typeface.NORMAL);
     }
 
     private void onMenuFilter(String name, AdapterMessage.ViewType viewType, String type, boolean filter) {
@@ -7748,7 +7891,12 @@ public class FragmentMessages extends FragmentBase
         }
 
         // Show name/unread
-        if (unseen > 0)
+        if (viewType == AdapterMessage.ViewType.UNIFIED && type == null) {
+            // ModernMail: título "Entrada" y, debajo, los correos sin leer
+            setTitle(R.string.mm_tab_inbox);
+            if (unseen > 0)
+                name = getString(R.string.mm_unread_count, NF.format(unseen));
+        } else if (unseen > 0)
             name = getString(R.string.title_name_count, name, NF.format(unseen));
         setSubtitle(name);
 

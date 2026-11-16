@@ -2407,6 +2407,29 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         fragmentTransaction.commit();
     }
 
+    // ModernMail: lo usa la barra inferior ("Buzones")
+    void openDrawer() {
+        try {
+            drawerLayout.openDrawer(drawerContainer);
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
+    }
+
+    void searchFlagged() {
+        BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
+        criteria.with_flagged = true;
+        FragmentMessages.search(
+                this, this, getSupportFragmentManager(),
+                -1L, -1L,
+                false,
+                criteria);
+    }
+
+    void openSetup() {
+        onMenuSetup();
+    }
+
     private void onMenuSetup() {
         startActivity(new Intent(ActivityView.this, ActivitySetup.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));

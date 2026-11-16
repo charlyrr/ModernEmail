@@ -33,6 +33,8 @@
                     android:singleLine="true"
                     android:text="Title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/count"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +57,7 @@
                     android:id="@+id/subtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="start"
+                    android:ellipsize="end"
                     android:singleLine="true"
                     android:text="Subtitle"
                     android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
