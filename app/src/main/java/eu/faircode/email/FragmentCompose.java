@@ -451,6 +451,18 @@ public class FragmentCompose extends FragmentBase {
         ibAnswer = view.findViewById(R.id.menu_style_insert_answer);
         media_bar = view.findViewById(R.id.media_bar);
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
+        // ModernMail: "Enviar" es la acción principal y va en el color de acento
+        try {
+            View send = bottom_navigation.findViewById(R.id.action_send);
+            if (send instanceof com.google.android.material.navigation.NavigationBarItemView) {
+                ColorStateList accent = ColorStateList.valueOf(
+                        Helper.resolveColor(view.getContext(), androidx.appcompat.R.attr.colorAccent));
+                ((com.google.android.material.navigation.NavigationBarItemView) send).setIconTintList(accent);
+                ((com.google.android.material.navigation.NavigationBarItemView) send).setTextColor(accent);
+            }
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
 
         pbWait = view.findViewById(R.id.pbWait);
         grpHeader = view.findViewById(R.id.grpHeader);

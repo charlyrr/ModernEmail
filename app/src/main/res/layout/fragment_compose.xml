@@ -241,7 +241,6 @@
                     android:imeOptions="actionNext"
                     android:inputType="textEmailSubject|textCapSentences|textAutoCorrect"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/etBcc" />
@@ -667,6 +666,7 @@
             android:background="@drawable/aire_bar_bg"
             app:elevation="4dp"
             app:itemIconTint="@color/action_foreground"
+            app:itemTextAppearanceActiveBoldEnabled="false"
             app:itemTextColor="@color/action_foreground"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"

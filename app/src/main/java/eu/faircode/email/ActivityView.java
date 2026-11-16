@@ -396,9 +396,20 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         rvMenuExtra = drawerContainer.findViewById(R.id.rvMenuExtra);
 
         // ModernMail: cada sección del panel es un bloque redondeado que recorta su contenido
+        final int blockRadius = Helper.dp2pixels(this, 14);
+        final int blockTrim = Helper.dp2pixels(this, 1);
         for (View block : new View[]{rvAccount, rvUnified, rvSearch, rvMenu, rvMenuExtra})
-            if (block != null)
+            if (block != null) {
+                // El contorno termina 1dp antes: así no asoma el separador del último elemento
+                block.setOutlineProvider(new android.view.ViewOutlineProvider() {
+                    @Override
+                    public void getOutline(View view, android.graphics.Outline outline) {
+                        outline.setRoundRect(0, 0, view.getWidth(),
+                                Math.max(0, view.getHeight() - blockTrim), blockRadius);
+                    }
+                });
                 block.setClipToOutline(true);
+            }
 
         ViewGroup.LayoutParams lparam = drawerContainer.getLayoutParams();
         lparam.width = getDrawerWidth();

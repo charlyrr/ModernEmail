@@ -159,6 +159,10 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
                 ivItem.setColorFilter(color);
 
             String name = account.getName(context);
+            // ModernMail: nombre corto de la cuenta ("Gmail/usuario" -> "Gmail")
+            int slash = (name == null ? -1 : name.indexOf('/'));
+            if (slash > 0)
+                name = name.substring(0, slash);
             int unexposed = (show_unexposed ? account.unexposed : 0);
             if (count == 0 && unexposed == 0)
                 tvItem.setText(name);
