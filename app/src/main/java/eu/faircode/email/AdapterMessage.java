@@ -1624,8 +1624,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             else if (viewType == ViewType.THREAD || viewType == ViewType.SEARCH)
                 tvFolder.setText(message.getFolderName(context));
             else
-                // ModernMail: en la bandeja unificada basta el nombre de la cuenta, sin colores
-                tvFolder.setText(message.accountName);
+            {
+                // ModernMail: en la bandeja unificada basta el nombre corto de la cuenta
+                // ("Gmail/usuario" -> "Gmail"), sin colores
+                String an = message.accountName;
+                int slash = (an == null ? -1 : an.indexOf('/'));
+                tvFolder.setText(slash > 0 ? an.substring(0, slash) : an);
+            }
 
             tvFolder.setVisibility(compact && viewType != ViewType.THREAD ? View.GONE : View.VISIBLE);
 

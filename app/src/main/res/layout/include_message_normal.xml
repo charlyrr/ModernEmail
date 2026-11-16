@@ -3,7 +3,7 @@
     ModernMail: fila de mensaje rediseñada desde cero.
 
     Estructura:
-      [franja] [avatar]  Remitente ............ [adjunto] [no leído] Hora
+      [franja] [avatar]  Remitente [insignias] ........... [adjunto] Hora
                          Asunto ...............................  [estrella]
                          Palabras clave
                          Vista previa (1-2 líneas)
@@ -96,11 +96,12 @@
         android:id="@+id/ibVerified"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:layout_marginStart="@dimen/message_row_gap"
+        android:layout_marginStart="6dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintStart_toEndOf="@id/ibAvatar"
+        app:layout_constraintEnd_toStartOf="@+id/ibAuth"
+        app:layout_constraintStart_toEndOf="@+id/tvFrom"
         app:layout_constraintTop_toTopOf="@+id/tvFrom"
         app:srcCompat="@drawable/verified"
         app:tint="?attr/colorAccent" />
@@ -113,7 +114,8 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintStart_toEndOf="@id/ibVerified"
+        app:layout_constraintEnd_toStartOf="@+id/ibPriority"
+        app:layout_constraintStart_toEndOf="@+id/ibVerified"
         app:layout_constraintTop_toTopOf="@+id/tvFrom"
         app:srcCompat="@drawable/authenticated"
         app:tint="?attr/colorWarning" />
@@ -126,7 +128,8 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintStart_toEndOf="@id/ibAuth"
+        app:layout_constraintEnd_toStartOf="@+id/ibSensitivity"
+        app:layout_constraintStart_toEndOf="@+id/ibAuth"
         app:layout_constraintTop_toTopOf="@+id/tvFrom"
         app:srcCompat="@drawable/priority"
         app:tint="?attr/colorAccent" />
@@ -139,7 +142,8 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintStart_toEndOf="@id/ibPriority"
+        app:layout_constraintEnd_toStartOf="@+id/ivImportance"
+        app:layout_constraintStart_toEndOf="@+id/ibPriority"
         app:layout_constraintTop_toTopOf="@+id/tvFrom"
         app:srcCompat="@drawable/sensitivity"
         app:tint="?attr/colorWarning" />
@@ -151,7 +155,8 @@
         android:layout_marginStart="4dp"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintStart_toEndOf="@id/ibSensitivity"
+        app:layout_constraintEnd_toStartOf="@+id/ibSigned"
+        app:layout_constraintStart_toEndOf="@+id/ibSensitivity"
         app:layout_constraintTop_toTopOf="@+id/tvFrom"
         app:srcCompat="@drawable/importance"
         app:tint="?attr/colorAccent" />
@@ -164,7 +169,8 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintStart_toEndOf="@id/ivImportance"
+        app:layout_constraintEnd_toStartOf="@+id/ibEncrypted"
+        app:layout_constraintStart_toEndOf="@+id/ivImportance"
         app:layout_constraintTop_toTopOf="@+id/tvFrom"
         app:srcCompat="@drawable/twotone_gesture_24" />
 
@@ -176,31 +182,36 @@
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
-        app:layout_constraintStart_toEndOf="@id/ibSigned"
+        app:layout_constraintEnd_toStartOf="@+id/ivAttachments"
+        app:layout_constraintStart_toEndOf="@+id/ibSigned"
         app:layout_constraintTop_toTopOf="@+id/tvFrom"
         app:srcCompat="@drawable/twotone_lock_24" />
 
-    <!-- Línea 1: remitente · adjunto · no leído · hora -->
+    <!-- Línea 1: remitente · insignias · adjunto · hora -->
     <TextView
         android:id="@+id/tvFrom"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/message_row_gap"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:drawablePadding="6dp"
         android:gravity="center_vertical"
         android:minHeight="22dp"
         android:text="From"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toStartOf="@+id/ivAttachments"
-        app:layout_constraintStart_toEndOf="@id/ibEncrypted"
-        app:layout_constraintTop_toBottomOf="@id/paddingTop"
-        app:layout_goneMarginStart="@dimen/message_row_gap" />
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/ibVerified"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/ibAvatar"
+        app:layout_constraintTop_toBottomOf="@id/paddingTop" />
 
     <ImageView
         android:id="@+id/ivAttachments"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="6dp"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/tvFrom"
