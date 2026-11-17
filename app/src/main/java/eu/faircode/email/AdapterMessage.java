@@ -2074,8 +2074,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (textSize != 0) {
                 float fz_sender = (font_size_sender == null ? textSize : font_size_sender) * (message.unseen > 0 ? 1.1f : 1f);
-                // ModernMail: al abrir un correo el asunto es el protagonista
-                float fz_subject = (font_size_subject == null ? textSize : font_size_subject) * (opened ? 1.2f : 0.9f);
+                // ModernMail: al abrir un correo el asunto destaca, pero sin dominar la pantalla
+                float fz_subject = (font_size_subject == null ? textSize : font_size_subject) * (opened ? 1.05f : 0.9f);
                 tvFrom.setTextSize(TypedValue.COMPLEX_UNIT_PX, fz_sender);
                 tvSubject.setTextSize(TypedValue.COMPLEX_UNIT_PX, fz_subject);
 
@@ -2101,8 +2101,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvSubject.setTypeface(null, Typeface.ITALIC);
             else
                 tvSubject.setTypeface(opened ? Typeface.DEFAULT_BOLD : typeface);
-            if (viewType == ViewType.THREAD)
+            if (viewType == ViewType.THREAD) {
+                // Abierto: hasta 3 líneas, terminando en "…" si el asunto es más largo
                 tvSubject.setSingleLine(!opened && !"full".equals(subject_ellipsize));
+                if (opened) {
+                    tvSubject.setMaxLines(3);
+                    tvSubject.setEllipsize(TextUtils.TruncateAt.END);
+                }
+            }
             tvCount.setTypeface(typeface);
 
             int colorUnseen = (message.unseen > 0 ? colorUnread : colorRead);
