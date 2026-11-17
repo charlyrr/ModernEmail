@@ -816,7 +816,7 @@ class NotificationHelper {
                 builder.setWhen(latest).setShowWhen(true);
 
             if (group != 0 && messages.size() > 0)
-                builder.setSubText(messages.get(0).accountName);
+                builder.setSubText(shortAccount(messages.get(0).accountName));
 
             if (notify_summary) {
                 builder.setOnlyAlertOnce(new_messages <= 0);
@@ -1030,9 +1030,9 @@ class NotificationHelper {
             mbuilder.setContentTitle(from);
             if (notify_subtext)
                 if (message.folderUnified && EntityFolder.INBOX.equals(message.folderType))
-                    mbuilder.setSubText(message.accountName);
+                    mbuilder.setSubText(shortAccount(message.accountName));
                 else
-                    mbuilder.setSubText(message.accountName + " - " + message.getFolderName(context));
+                    mbuilder.setSubText(shortAccount(message.accountName) + " - " + message.getFolderName(context));
 
             DB db = DB.getInstance(context);
 
@@ -1074,19 +1074,34 @@ class NotificationHelper {
                             if (keyword.startsWith("!"))
                                 sbm.append(Html.escapeHtml(keyword)).append(": ");
 
-                    // ModernMail: asunto en negrita en su propia línea y, debajo, la vista previa
-                    if (!TextUtils.isEmpty(message.subject) && notify_subject)
-                        sbm.append("<b>").append(Html.escapeHtml(message.subject.trim())).append("</b>").append("<br>");
+                    // ModernMail: remitente (título), asunto en negrita y, tras un pequeño
+                    // espacio, la vista previa algo más pequeña
+                    android.text.SpannableStringBuilder ssb = new android.text.SpannableStringBuilder(sbm.toString());
+                    if (!TextUtils.isEmpty(message.subject) && notify_subject) {
+                        int start = ssb.length();
+                        ssb.append(TextHelper.normalizeNotification(context, message.subject.trim()));
+                        ssb.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+                                start, ssb.length(), android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
 
-                    if (!TextUtils.isEmpty(preview))
-                        sbm.append(Html.escapeHtml(preview));
+                    if (!TextUtils.isEmpty(preview)) {
+                        if (ssb.length() > 0) {
+                            ssb.append('\n');
+                            int gap = ssb.length();
+                            ssb.append('\n');
+                            // Medio renglón de separación entre asunto y texto
+                            ssb.setSpan(new android.text.style.RelativeSizeSpan(0.45f),
+                                    gap, ssb.length(), android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        int start = ssb.length();
+                        ssb.append(TextHelper.normalizeNotification(context, preview));
+                        ssb.setSpan(new android.text.style.RelativeSizeSpan(0.95f),
+                                start, ssb.length(), android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
 
-                    if (sbm.length() > 0) {
+                    if (ssb.length() > 0) {
                         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle()
-                                .bigText(HtmlHelper.fromHtml(sbm.toString(), context));
-                        if (!TextUtils.isEmpty(message.subject) && notify_subject)
-                            bigText.setSummaryText(message.subject);
-
+                                .bigText(ssb);
                         mbuilder.setStyle(bigText);
                     }
                 }
@@ -1384,6 +1399,12 @@ class NotificationHelper {
         }
 
         return notifications;
+    }
+
+    // ModernMail: nombre corto de la cuenta ("Gmail/usuario" -> "Gmail")
+    private static String shortAccount(String name) {
+        int slash = (name == null ? -1 : name.indexOf('/'));
+        return (slash > 0 ? name.substring(0, slash) : name);
     }
 
     private static Integer getColor(TupleMessageEx message) {
