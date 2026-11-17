@@ -7235,8 +7235,15 @@ public class FragmentMessages extends FragmentBase
             return;
         if (selectionTracker != null && selectionTracker.hasSelection())
             return;
+        // dy == 0: la lista se ha recolocado sin que el usuario deslice
+        if (dy == 0)
+            return;
+        // Mientras dura la animación, la lista se recoloca: no cuenta como desplazamiento
+        if (SystemClock.elapsedRealtime() < aireAnimatingUntil)
+            return;
 
-        if (!rv.canScrollVertically(-1)) {
+        // Al volver arriba del todo deslizando hacia arriba, reaparecen
+        if (dy < 0 && !rv.canScrollVertically(-1)) {
             setAireBarsHidden(false);
             aireScrollAccum = 0;
             return;
@@ -7253,35 +7260,79 @@ public class FragmentMessages extends FragmentBase
             setAireBarsHidden(false);
     }
 
+    private long aireAnimatingUntil = 0;
+    private int aireHeaderHeight = 0;
+
     private void setAireBarsHidden(boolean hidden) {
         if (aireBarsHidden == hidden || llAireHeader == null || llAireBar == null)
             return;
         aireBarsHidden = hidden;
+        aireScrollAccum = 0;
+        final int duration = 200;
+        aireAnimatingUntil = SystemClock.elapsedRealtime() + duration + 120;
         try {
-            // Filtro superior: se pliega con una transición suave
-            android.transition.AutoTransition t = new android.transition.AutoTransition();
-            t.setDuration(180);
-            android.transition.TransitionManager.beginDelayedTransition(
-                    (ViewGroup) llAireHeader.getParent(), t);
-            llAireHeader.setVisibility(hidden ? View.GONE : View.VISIBLE);
+            // Filtro superior: su altura se anima hasta cero (y de vuelta)
+            if (aireHeaderHeight == 0 || llAireHeader.getHeight() > 0)
+                aireHeaderHeight = Math.max(aireHeaderHeight, llAireHeader.getHeight());
+            if (aireHeaderHeight == 0) {
+                llAireHeader.measure(
+                        View.MeasureSpec.makeMeasureSpec(((View) llAireHeader.getParent()).getWidth(), View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                aireHeaderHeight = llAireHeader.getMeasuredHeight();
+            }
+            final int from = (hidden ? aireHeaderHeight : 0);
+            final int to = (hidden ? 0 : aireHeaderHeight);
+
+            Object prev = llAireHeader.getTag(R.id.llAireHeader);
+            if (prev instanceof android.animation.ValueAnimator)
+                ((android.animation.ValueAnimator) prev).cancel();
+
+            llAireHeader.setVisibility(View.VISIBLE);
+            android.animation.ValueAnimator anim = android.animation.ValueAnimator.ofInt(from, to);
+            anim.setDuration(duration);
+            anim.setInterpolator(new android.view.animation.DecelerateInterpolator());
+            anim.addUpdateListener(new android.animation.ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(@NonNull android.animation.ValueAnimator va) {
+                    ViewGroup.LayoutParams lp = llAireHeader.getLayoutParams();
+                    lp.height = (int) va.getAnimatedValue();
+                    llAireHeader.setLayoutParams(lp);
+                    llAireHeader.setAlpha(aireHeaderHeight == 0 ? 1f : lp.height / (float) aireHeaderHeight);
+                }
+            });
+            anim.addListener(new android.animation.AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(android.animation.Animator animation) {
+                    ViewGroup.LayoutParams lp = llAireHeader.getLayoutParams();
+                    if (aireBarsHidden) {
+                        llAireHeader.setVisibility(View.GONE);
+                        lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    } else
+                        lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    llAireHeader.setLayoutParams(lp);
+                    llAireHeader.setAlpha(1f);
+                }
+            });
+            llAireHeader.setTag(R.id.llAireHeader, anim);
+            anim.start();
 
             // Barra inferior: se desliza fuera de la pantalla
             float off = llAireBar.getHeight() + Helper.dp2pixels(llAireBar.getContext(), 24);
             llAireBar.animate().cancel();
             llAireBar.animate()
                     .translationY(hidden ? off : 0f)
-                    .setDuration(200)
+                    .setDuration(duration)
                     .setInterpolator(new android.view.animation.DecelerateInterpolator())
                     .start();
         } catch (Throwable ex) {
             Log.w(ex);
+            ViewGroup.LayoutParams lp = llAireHeader.getLayoutParams();
+            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            llAireHeader.setLayoutParams(lp);
             llAireHeader.setVisibility(View.VISIBLE);
+            llAireHeader.setAlpha(1f);
             llAireBar.setTranslationY(0f);
         }
-    }
-
-    private boolean isAireList() {
-        return (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER);
     }
 
     private void setupAire(View view) {
