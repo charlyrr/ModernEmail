@@ -106,7 +106,6 @@
         <item name="autoCompleteTextViewStyle">@style/ModernAutoComplete</item>
         <item name="textAppearanceLargePopupMenu">@style/ModernPopupText</item>
         <item name="textAppearanceSmallPopupMenu">@style/ModernPopupText</item>
-        <item name="dividerHorizontal">@drawable/mm_menu_divider</item>
         <item name="floatingActionButtonStyle">@style/ModernFab</item>
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="buttonStyleSmall">@style/buttonStyleSmall</item>
@@ -197,7 +196,6 @@
         <item name="autoCompleteTextViewStyle">@style/ModernAutoComplete</item>
         <item name="textAppearanceLargePopupMenu">@style/ModernPopupText</item>
         <item name="textAppearanceSmallPopupMenu">@style/ModernPopupText</item>
-        <item name="dividerHorizontal">@drawable/mm_menu_divider</item>
         <item name="floatingActionButtonStyle">@style/ModernFab</item>
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="buttonStyleSmall">@style/buttonStyleSmall</item>

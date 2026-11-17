@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- ModernMail: separador fino y con margen entre grupos de un menú -->
+<!-- ModernMail: sustituye la línea entre grupos de los menús de la librería AppCompat
+     por una fina y con margen, como el resto de separadores de la app -->
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:insetLeft="16dp"
     android:insetRight="16dp">
