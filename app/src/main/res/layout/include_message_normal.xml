@@ -65,32 +65,32 @@
         app:layout_constraintStart_toEndOf="@+id/ibExpander"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Punto de "no leído": en el margen izquierdo, a la altura del avatar -->
-    <View
-        android:id="@+id/vwUnread"
-        android:layout_width="9dp"
-        android:layout_height="9dp"
-        android:background="@drawable/unread_dot"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/ibAvatar"
-        app:layout_constraintStart_toEndOf="@id/paddingStart"
-        app:layout_constraintTop_toTopOf="@id/ibAvatar" />
-
-    <!-- Avatar: arriba a la izquierda, tamaño fijo (el adaptador lo ajusta al tamaño de letra) -->
+    <!-- Avatar: centrado en la altura de la fila (el adaptador ajusta su tamaño al de la letra) -->
     <ImageButton
         android:id="@+id/ibAvatar"
         android:layout_width="@dimen/message_row_avatar"
         android:layout_height="@dimen/message_row_avatar"
-        android:layout_marginTop="2dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
         android:padding="0dp"
-        android:layout_marginStart="6dp"
         android:scaleType="centerCrop"
-        app:layout_constraintStart_toEndOf="@id/vwUnread"
+        app:layout_constraintBottom_toBottomOf="@id/barrierRowBottom"
+        app:layout_constraintStart_toEndOf="@id/paddingStart"
         app:layout_constraintTop_toBottomOf="@id/paddingTop"
-        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_bias="0.5"
         app:srcCompat="@drawable/twotone_person_24" />
+
+    <!-- Punto de "no leído": insignia en la esquina superior del avatar (va después para quedar encima) -->
+    <View
+        android:id="@+id/vwUnread"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="-2dp"
+        android:background="@drawable/unread_dot"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@id/ibAvatar"
+        app:layout_constraintTop_toTopOf="@id/ibAvatar" />
 
     <ImageButton
         android:id="@+id/ibVerified"
@@ -500,13 +500,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- El final de la fila es lo que quede más abajo: el texto o el avatar -->
+    <!-- El final de la fila lo marca el texto; el avatar se centra respecto a él -->
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierRowBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="ibAvatar,tvError" />
+        app:constraint_referenced_ids="tvError" />
 
     <View
         android:id="@+id/paddingBottom"

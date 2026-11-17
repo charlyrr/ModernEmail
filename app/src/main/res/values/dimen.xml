@@ -25,7 +25,7 @@
 
     <!-- Fila de mensaje (ModernMail) -->
     <dimen name="message_row_padding_vertical">11dp</dimen>
-    <dimen name="message_row_padding_start">7dp</dimen>
+    <dimen name="message_row_padding_start">14dp</dimen>
     <dimen name="message_row_padding_end">14dp</dimen>
     <dimen name="message_row_avatar">40dp</dimen>
     <dimen name="message_row_gap">12dp</dimen>
