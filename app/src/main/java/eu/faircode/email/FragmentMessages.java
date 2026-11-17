@@ -7335,6 +7335,10 @@ public class FragmentMessages extends FragmentBase
         }
     }
 
+    private boolean isAireList() {
+        return (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER);
+    }
+
     private void setupAire(View view) {
         if (llAireHeader == null || llAireBar == null)
             return;
