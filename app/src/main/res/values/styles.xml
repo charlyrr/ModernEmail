@@ -99,6 +99,14 @@
         <!-- Estética moderna (común a todos los temas) -->
         <item name="alertDialogTheme">@style/ModernAlertDialog</item>
         <item name="popupMenuStyle">@style/ModernPopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/ModernPopupMenuOverflow</item>
+        <item name="listPopupWindowStyle">@style/ModernListPopup</item>
+        <item name="android:listPopupWindowStyle">@style/ModernListPopup</item>
+        <item name="spinnerStyle">@style/ModernSpinner</item>
+        <item name="autoCompleteTextViewStyle">@style/ModernAutoComplete</item>
+        <item name="textAppearanceLargePopupMenu">@style/ModernPopupText</item>
+        <item name="textAppearanceSmallPopupMenu">@style/ModernPopupText</item>
+        <item name="dividerHorizontal">@drawable/mm_menu_divider</item>
         <item name="floatingActionButtonStyle">@style/ModernFab</item>
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="buttonStyleSmall">@style/buttonStyleSmall</item>
@@ -182,6 +190,14 @@
         <!-- Estética moderna (común a todos los temas) -->
         <item name="alertDialogTheme">@style/ModernAlertDialog</item>
         <item name="popupMenuStyle">@style/ModernPopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/ModernPopupMenuOverflow</item>
+        <item name="listPopupWindowStyle">@style/ModernListPopup</item>
+        <item name="android:listPopupWindowStyle">@style/ModernListPopup</item>
+        <item name="spinnerStyle">@style/ModernSpinner</item>
+        <item name="autoCompleteTextViewStyle">@style/ModernAutoComplete</item>
+        <item name="textAppearanceLargePopupMenu">@style/ModernPopupText</item>
+        <item name="textAppearanceSmallPopupMenu">@style/ModernPopupText</item>
+        <item name="dividerHorizontal">@drawable/mm_menu_divider</item>
         <item name="floatingActionButtonStyle">@style/ModernFab</item>
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="buttonStyleSmall">@style/buttonStyleSmall</item>
@@ -955,6 +971,37 @@
         <item name="android:popupBackground">@drawable/popup_background_modern</item>
         <item name="android:popupElevation">6dp</item>
         <item name="overlapAnchor">false</item>
+    </style>
+
+    <!-- Menú de los tres puntos: redondeado y desplegado bajo la barra, sin taparla -->
+    <style name="ModernPopupMenuOverflow" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/popup_background_modern</item>
+        <item name="android:popupElevation">6dp</item>
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+        <item name="android:dropDownHorizontalOffset">-8dp</item>
+    </style>
+
+    <!-- Listas desplegables (autocompletado, selectores) -->
+    <style name="ModernListPopup" parent="Widget.AppCompat.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/popup_background_modern</item>
+        <item name="android:popupElevation">6dp</item>
+    </style>
+
+    <style name="ModernSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:popupBackground">@drawable/popup_background_modern</item>
+        <item name="android:popupElevation">6dp</item>
+    </style>
+
+    <style name="ModernAutoComplete" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:popupBackground">@drawable/popup_background_modern</item>
+        <item name="android:popupElevation">6dp</item>
+    </style>
+
+    <!-- Texto de los menús: algo más pequeño y sereno -->
+    <style name="ModernPopupText" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <!-- Botón flotante con forma "squircle" (Material 3) -->

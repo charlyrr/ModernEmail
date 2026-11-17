@@ -123,7 +123,8 @@ public class PopupMenuLifecycle extends PopupMenu {
             icon = new ColorDrawable(Color.TRANSPARENT);
         else {
             icon = icon.getConstantState().newDrawable().mutate();
-            int color = Helper.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
+            // ModernMail: iconos en gris; el color de acento queda para lo activo
+            int color = Helper.resolveColor(context, android.R.attr.textColorSecondary);
             icon.setTint(color);
             if (!menuItem.isEnabled())
                 icon.setAlpha(Math.round(Helper.LOW_LIGHT * 255));
@@ -134,7 +135,7 @@ public class PopupMenuLifecycle extends PopupMenu {
         ImageSpan imageSpan = new CenteredImageSpan(icon);
 
         SpannableStringBuilder ssb = new SpannableStringBuilderEx(menuItem.getTitle());
-        ssb.insert(0, "\uFFFC\u2002"); // object replacement character, en space
+        ssb.insert(0, "\uFFFC\u2003"); // object replacement character, em space (ModernMail: más aire)
         ssb.setSpan(imageSpan, 0, 1, 0);
         menuItem.setTitle(ssb);
         if (submenu)
