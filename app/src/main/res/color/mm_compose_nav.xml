@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ModernMail: la acción marcada (Enviar) va en el color de acento -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="?attr/colorActionForegroundDisabled" android:state_enabled="false" />
+    <item android:color="?attr/colorAccent" android:state_checked="true" />
+    <item android:color="?attr/colorActionForeground" />
+</selector>

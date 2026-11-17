@@ -53,7 +53,12 @@ public class AdapterIdentitySelect extends ArrayAdapter<TupleIdentityEx> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return getLayout(position, convertView, parent, R.layout.spinner_identity);
+        View view = getLayout(position, convertView, parent, R.layout.spinner_identity);
+        // ModernMail: en la cabecera de redactar, sin franja de color y sólo con la dirección
+        view.findViewById(R.id.vwColor).setVisibility(View.GONE);
+        TupleIdentityEx identity = identities.get(position);
+        ((TextView) view.findViewById(android.R.id.text2)).setText(identity.email);
+        return view;
     }
 
     @Override
