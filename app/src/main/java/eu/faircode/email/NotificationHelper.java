@@ -855,7 +855,7 @@ class NotificationHelper {
 
                 if (color != null) {
                     builder.setColor(color);
-                    builder.setColorized(true);
+                    builder.setColorized(false); // ModernMail: color sólo como acento, sin rellenar
                 }
             }
 
@@ -1049,6 +1049,10 @@ class NotificationHelper {
                         Log.e(ex);
                     }
 
+                // ModernMail: sin saltos de línea ni espacios sobrantes del correo original
+                if (preview != null)
+                    preview = preview.replaceAll("\\s+", " ").trim();
+
                 // Wearables
                 StringBuilder sb = new StringBuilder();
                 if (!TextUtils.isEmpty(message.subject) && notify_subject)
@@ -1070,8 +1074,9 @@ class NotificationHelper {
                             if (keyword.startsWith("!"))
                                 sbm.append(Html.escapeHtml(keyword)).append(": ");
 
+                    // ModernMail: asunto en negrita en su propia línea y, debajo, la vista previa
                     if (!TextUtils.isEmpty(message.subject) && notify_subject)
-                        sbm.append("<em>").append(Html.escapeHtml(message.subject)).append("</em>").append("<br>");
+                        sbm.append("<b>").append(Html.escapeHtml(message.subject.trim())).append("</b>").append("<br>");
 
                     if (!TextUtils.isEmpty(preview))
                         sbm.append(Html.escapeHtml(preview));
@@ -1103,7 +1108,7 @@ class NotificationHelper {
                 Integer color = getColor(message);
                 if (color != null) {
                     mbuilder.setColor(color);
-                    mbuilder.setColorized(true);
+                    mbuilder.setColorized(false); // ModernMail: color sólo como acento, sin rellenar
                 }
             }
 
