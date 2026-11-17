@@ -390,6 +390,7 @@
                     android:id="@+id/tvAireSearch"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:visibility="gone"
                     android:background="@drawable/aire_field_bg"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
@@ -404,7 +405,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/aire_field_bg"
                     android:orientation="horizontal"
                     android:padding="2dp">

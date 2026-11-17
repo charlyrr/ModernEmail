@@ -156,7 +156,8 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
             if (color == null || !ActivityBilling.isPro(context))
                 ivItem.clearColorFilter();
             else
-                ivItem.setColorFilter(color);
+                // ModernMail: el color de la cuenta, algo apagado para no chillar
+                ivItem.setColorFilter(androidx.core.graphics.ColorUtils.blendARGB(color, textColorSecondary, 0.35f));
 
             String name = account.getName(context);
             // ModernMail: nombre corto de la cuenta ("Gmail/usuario" -> "Gmail")

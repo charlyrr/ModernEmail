@@ -1641,17 +1641,24 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 int chip = (message.accountColor == null ? colorSeparator : message.accountColor);
                 if (!Objects.equals(tvFolder.getTag(), chip)) {
                     tvFolder.setTag(chip);
+                    // Tono pastel: fondo muy suave del color de la cuenta y texto en su tono
+                    boolean darkCard = (ColorUtils.calculateLuminance(colorCardBackground) < 0.5);
+                    int fill = (message.accountColor == null
+                            ? colorSeparator
+                            : ColorUtils.blendARGB(colorCardBackground, chip, darkCard ? 0.28f : 0.16f));
                     GradientDrawable bg = new GradientDrawable();
                     bg.setShape(GradientDrawable.RECTANGLE);
                     bg.setCornerRadius(Helper.dp2pixels(context, 9));
-                    bg.setColor(chip);
+                    bg.setColor(fill);
                     tvFolder.setBackground(bg);
                     int h = Helper.dp2pixels(context, 8);
                     tvFolder.setPadding(h, 0, h, 0);
                     if (message.accountColor == null)
                         tvFolder.setTextColor(textColorSecondary);
                     else
-                        tvFolder.setTextColor(ColorUtils.calculateLuminance(chip) > 0.6 ? Color.BLACK : Color.WHITE);
+                        tvFolder.setTextColor(darkCard
+                                ? ColorUtils.blendARGB(chip, Color.WHITE, 0.45f)
+                                : ColorUtils.blendARGB(chip, Color.BLACK, 0.30f));
                 }
             }
 
