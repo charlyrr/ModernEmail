@@ -2,4 +2,18 @@
 <resources>
     <!-- Nombre visible de esta versión (variante "github") -->
     <string name="app_name" translatable="false">ModernMail</string>
+
+    <!-- Textos de FairEmail que se refieren a la propia app, con el nombre de ModernMail.
+         Los que hablan del trabajo del autor (funciones Pro, valoraciones, soporte) se mantienen. -->
+    <string name="app_search">ModernMail search</string>
+    <string name="app_answer" translatable="false">ModernMail template</string>
+    <string name="app_welcome">ModernMail is an open source email app focused on privacy and security. For this reason some features might work differently from what you are used to.</string>
+    <string name="title_setup_analytics">ModernMail does not display ads and does not track or analyze your behavior.</string>
+    <string name="title_setup_quick_support">Some providers make it difficult to add an account. Please do not blame ModernMail for this, but ask for support instead.</string>
+    <string name="title_setup_gmail_permissions">Google will ask for permissions to read (to show messages to you), compose (to save draft messages), send and permanently delete all your email. ModernMail will never delete your messages without your explicit consent. Only you and no one else has access to your messages.</string>
+    <string name="title_advanced_external_search">Add \'ModernMail search\' to Android text selection menu</string>
+    <string name="title_advanced_watchdog">Periodically check if ModernMail is still active</string>
+    <string name="title_no_stream">ModernMail does not have permission to read this file directly</string>
+    <string name="title_hint_battery">Since ModernMail by default always receives messages, Android will report ModernMail as always being active. Therefore it might look as if ModernMail is always consuming battery power although this is in fact not the case.</string>
+    <string name="title_hint_reformat">By default, ModernMail reformats messages for privacy and security reasons. To view the original message, tap the \'full screen\' icon above the message text.</string>
 </resources>

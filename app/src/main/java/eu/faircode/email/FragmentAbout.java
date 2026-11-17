@@ -60,9 +60,9 @@ public class FragmentAbout extends FragmentBase {
         TextView tvGplV3 = view.findViewById(R.id.tvGplV3);
         LinearLayout llContributors = view.findViewById(R.id.llContributors);
 
-        String version = BuildConfig.VERSION_NAME + BuildConfig.REVISION;
-        tvVersion.setText(getString(R.string.title_version, version));
-        tvRelease.setText(BuildConfig.RELEASE_NAME);
+        // ModernMail: nombre y versión propios, y crédito a la aplicación original
+        tvVersion.setText(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
+        tvRelease.setText(getString(R.string.mm_based_on, "1." + BuildConfig.VERSION_CODE));
 
         String type = Log.getReleaseType(context) + (BuildConfig.DEBUG ? " (Debug)" : "");
         tvDownloaded.setText(getString(R.string.app_download, type));

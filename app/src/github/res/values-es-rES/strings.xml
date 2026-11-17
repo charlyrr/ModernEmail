@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Textos de FairEmail que se refieren a la propia app, con el nombre de ModernMail -->
+    <string name="app_search">Buscar en ModernMail</string>
+    <string name="app_welcome">ModernMail es una aplicación de correo electrónico de código abierto centrada en la privacidad y la seguridad. Por esta razón, algunas funciones pueden comportarse de manera diferente a lo que esté acostumbrado.</string>
+    <string name="title_setup_analytics">ModernMail no muestra anuncios y no rastrea ni analiza su comportamiento.</string>
+    <string name="title_setup_quick_support">Algunos proveedores hacen difícil añadir una cuenta. Por favor, no culpe a ModernMail por esto, en su lugar pida ayuda.</string>
+    <string name="title_setup_gmail_permissions">Google solicitará permisos para leer (para mostrarle mensajes), redactar (para guardar borradores), enviar y eliminar permanentemente todo su correo electrónico. ModernMail nunca eliminará sus mensajes sin su consentimiento explícito. Sólo usted y nadie más tienen acceso a sus mensajes.</string>
+    <string name="title_advanced_external_search">Añadir \'Buscar en Fairemail\' al menú de selección de texto de Android</string>
+    <string name="title_advanced_watchdog">Comprobar periódicamente si ModernMail sigue activo</string>
+    <string name="title_no_stream">ModernMail no tiene permiso para leer este archivo directamente</string>
+    <string name="title_hint_battery">Dado que por defecto ModernMail recibe mensajes permanentemente, Android reportará a ModernMail como siempre activo. Por lo tanto, puede parecer que ModernMail siempre está usando la batería, pero de hecho no es así.</string>
+    <string name="title_hint_reformat">Por defecto, ModernMail reformatea los mensajes por razones de privacidad y seguridad. Para ver el mensaje original, pulse el icono \'pantalla completa\' sobre el texto del mensaje.</string>
+</resources>
