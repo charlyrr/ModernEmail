@@ -1375,6 +1375,7 @@ public class FragmentMessages extends FragmentBase
         rvMessage.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
+                updateAireBars(rv, dy);
                 if (dy != 0) {
                     boolean down = (dy > 0 && rv.canScrollVertically(1));
                     if (scrolling != down) {
@@ -7225,6 +7226,60 @@ public class FragmentMessages extends FragmentBase
 
     // ---------- ModernMail (Aire): cabecera y barra inferior ----------
 
+    // Al deslizar hacia abajo se ocultan el filtro y la barra flotante; al subir, vuelven
+    private boolean aireBarsHidden = false;
+    private int aireScrollAccum = 0;
+
+    private void updateAireBars(RecyclerView rv, int dy) {
+        if (!isAireList() || llAireHeader == null || llAireBar == null)
+            return;
+        if (selectionTracker != null && selectionTracker.hasSelection())
+            return;
+
+        if (!rv.canScrollVertically(-1)) {
+            setAireBarsHidden(false);
+            aireScrollAccum = 0;
+            return;
+        }
+
+        // Un pequeño umbral evita que las barras parpadeen con movimientos mínimos
+        if ((dy > 0) != (aireScrollAccum > 0))
+            aireScrollAccum = 0;
+        aireScrollAccum += dy;
+        int threshold = Helper.dp2pixels(rv.getContext(), 24);
+        if (aireScrollAccum > threshold)
+            setAireBarsHidden(true);
+        else if (aireScrollAccum < -threshold)
+            setAireBarsHidden(false);
+    }
+
+    private void setAireBarsHidden(boolean hidden) {
+        if (aireBarsHidden == hidden || llAireHeader == null || llAireBar == null)
+            return;
+        aireBarsHidden = hidden;
+        try {
+            // Filtro superior: se pliega con una transición suave
+            android.transition.AutoTransition t = new android.transition.AutoTransition();
+            t.setDuration(180);
+            android.transition.TransitionManager.beginDelayedTransition(
+                    (ViewGroup) llAireHeader.getParent(), t);
+            llAireHeader.setVisibility(hidden ? View.GONE : View.VISIBLE);
+
+            // Barra inferior: se desliza fuera de la pantalla
+            float off = llAireBar.getHeight() + Helper.dp2pixels(llAireBar.getContext(), 24);
+            llAireBar.animate().cancel();
+            llAireBar.animate()
+                    .translationY(hidden ? off : 0f)
+                    .setDuration(200)
+                    .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                    .start();
+        } catch (Throwable ex) {
+            Log.w(ex);
+            llAireHeader.setVisibility(View.VISIBLE);
+            llAireBar.setTranslationY(0f);
+        }
+    }
+
     private boolean isAireList() {
         return (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER);
     }
@@ -8104,8 +8159,10 @@ public class FragmentMessages extends FragmentBase
             tvSelectedCount.setVisibility(View.GONE);
             cardMore.setVisibility(View.GONE);
             cardMore.setTag(null);
-            if (llAireBar != null)
+            if (llAireBar != null) {
                 llAireBar.setVisibility(isAireList() ? View.VISIBLE : View.GONE);
+                setAireBarsHidden(false);
+            }
         }
     }
 

@@ -52,7 +52,7 @@
             android:layout_marginEnd="3dp"
             app:constraint_referenced_ids="vwEmpty,ibMore,ibInbox,ibJunk,ibTrash,ibArchive,ibMove,ibCopy,ibKeywords,ibLabels,ibNotes,ibSeen,ibHide,ibImportance,ibTranslate,ibTts,ibSummarize,ibFullScreen,ibForceLight,ibSearch,ibSearchText,ibEvent,ibShare,ibPin,ibPrint,ibHeaders,ibHtml,ibRaw,ibUnsubscribe,ibRule,ibAnswer,ibUndo"
             app:flow_horizontalBias="0"
-            app:flow_horizontalGap="3dp"
+            app:flow_horizontalGap="0dp"
             app:flow_horizontalStyle="packed"
             app:flow_wrapMode="chain"
             app:layout_constraintEnd_toStartOf="@+id/ibImages"
@@ -61,13 +61,13 @@
 
         <View
             android:id="@+id/vwEmpty"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             tools:ignore="MissingConstraints" />
 
         <ImageButton
             android:id="@+id/ibMore"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_advanced_more"
@@ -79,7 +79,7 @@
 
         <ImageButton
             android:id="@+id/ibInbox"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_folder_inbox"
@@ -91,7 +91,7 @@
 
         <ImageButton
             android:id="@+id/ibJunk"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_spam"
@@ -103,7 +103,7 @@
 
         <ImageButton
             android:id="@+id/ibTrash"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_delete"
@@ -115,7 +115,7 @@
 
         <ImageButton
             android:id="@+id/ibArchive"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_archive"
@@ -127,7 +127,7 @@
 
         <ImageButton
             android:id="@+id/ibMove"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_move"
@@ -139,7 +139,7 @@
 
         <ImageButton
             android:id="@+id/ibCopy"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_copy"
@@ -151,7 +151,7 @@
 
         <ImageButton
             android:id="@+id/ibNotes"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_rule_notes"
@@ -163,7 +163,7 @@
 
         <ImageButton
             android:id="@+id/ibRule"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_legend_create_rule"
@@ -175,7 +175,7 @@
 
         <ImageButton
             android:id="@+id/ibKeywords"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_manage_keywords"
@@ -187,7 +187,7 @@
 
         <ImageButton
             android:id="@+id/ibLabels"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_manage_labels"
@@ -199,7 +199,7 @@
 
         <ImageButton
             android:id="@+id/ibSeen"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_toggle_seen"
@@ -211,7 +211,7 @@
 
         <ImageButton
             android:id="@+id/ibHide"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_toggle_hide"
@@ -223,7 +223,7 @@
 
         <ImageButton
             android:id="@+id/ibImportance"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_set_importance"
@@ -235,7 +235,7 @@
 
         <ImageButton
             android:id="@+id/ibSearch"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_button_search_similar"
@@ -247,7 +247,7 @@
 
         <ImageButton
             android:id="@+id/ibSearchText"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_search_in_text"
@@ -259,7 +259,7 @@
 
         <ImageButton
             android:id="@+id/ibTranslate"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_translate"
@@ -271,7 +271,7 @@
 
         <ImageButton
             android:id="@+id/ibTts"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_rule_tts"
@@ -283,7 +283,7 @@
 
         <ImageButton
             android:id="@+id/ibSummarize"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_summarize"
@@ -295,7 +295,7 @@
 
         <ImageButton
             android:id="@+id/ibFullScreen"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_full_screen"
@@ -307,7 +307,7 @@
 
         <ImageButton
             android:id="@+id/ibForceLight"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_force_light"
@@ -319,7 +319,7 @@
 
         <ImageButton
             android:id="@+id/ibEvent"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_event"
@@ -331,7 +331,7 @@
 
         <ImageButton
             android:id="@+id/ibShare"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_share"
@@ -343,7 +343,7 @@
 
         <ImageButton
             android:id="@+id/ibPin"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_pin"
@@ -355,7 +355,7 @@
 
         <ImageButton
             android:id="@+id/ibPrint"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_print"
@@ -367,7 +367,7 @@
 
         <ImageButton
             android:id="@+id/ibHeaders"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_show_headers"
@@ -379,7 +379,7 @@
 
         <ImageButton
             android:id="@+id/ibHtml"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_show_html"
@@ -391,7 +391,7 @@
 
         <ImageButton
             android:id="@+id/ibRaw"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_raw_save"
@@ -403,7 +403,7 @@
 
         <ImageButton
             android:id="@+id/ibUnsubscribe"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_legend_show_unsubscribe"
@@ -416,7 +416,7 @@
 
         <ImageButton
             android:id="@+id/ibAnswer"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_reply"
@@ -428,7 +428,7 @@
 
         <ImageButton
             android:id="@+id/ibUndo"
-            android:layout_width="36dp"
+            android:layout_width="34dp"
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/title_undo"
