@@ -5981,6 +5981,15 @@ public class FragmentMessages extends FragmentBase
     public void onResume() {
         super.onResume();
 
+        // ModernMail: el filtro y la barra inferior siguen a la barra superior al esconderse
+        try {
+            View ab = (getActivity() == null ? null : getActivity().findViewById(R.id.appbar));
+            if (ab instanceof com.google.android.material.appbar.AppBarLayout)
+                ((com.google.android.material.appbar.AppBarLayout) ab).addOnOffsetChangedListener(aireAppBarListener);
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
+
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
         IntentFilter iff = new IntentFilter();
         iff.addAction(ACTION_STORE_RAW);
@@ -6095,6 +6104,14 @@ public class FragmentMessages extends FragmentBase
     @Override
     public void onPause() {
         super.onPause();
+
+        try {
+            View ab = (getActivity() == null ? null : getActivity().findViewById(R.id.appbar));
+            if (ab instanceof com.google.android.material.appbar.AppBarLayout)
+                ((com.google.android.material.appbar.AppBarLayout) ab).removeOnOffsetChangedListener(aireAppBarListener);
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
 
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -7287,6 +7304,30 @@ public class FragmentMessages extends FragmentBase
     }
 
     private long aireAnimatingUntil = 0;
+
+    // Cuando la barra superior termina de esconderse, el filtro y la barra inferior se van con ella;
+    // cuando vuelve del todo, vuelven. Así funciona aunque la lista sea corta y no se desplace
+    private final com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener aireAppBarListener =
+            new com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener() {
+                @Override
+                public void onOffsetChanged(com.google.android.material.appbar.AppBarLayout appBarLayout, int offset) {
+                    try {
+                        if (!isAireList() || llAireHeader == null || llAireBar == null)
+                            return;
+                        if (selectionTracker != null && selectionTracker.hasSelection())
+                            return;
+                        int range = appBarLayout.getTotalScrollRange();
+                        if (range <= 0)
+                            return;
+                        if (offset <= -range)
+                            setAireBarsHidden(true);
+                        else if (offset == 0)
+                            setAireBarsHidden(false);
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                    }
+                }
+            };
     private int aireHeaderHeight = 0;
 
     private void setAireBarsHidden(boolean hidden) {
