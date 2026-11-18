@@ -36,7 +36,7 @@ import androidx.core.content.ContextCompat;
 
 // ModernMail: tema Cristal con desenfoque ("cristal esmerilado").
 //
-// La lista de mensajes graba lo que dibuja en un RenderNode propio. Cada barra flotante
+// La lista de mensajes graba una copia de lo que dibuja en un RenderNode propio. Cada barra flotante
 // vuelve a dibujar ese RenderNode desenfocado detrás de ella y le pone encima un velo
 // casi opaco. La barra queda siempre opaca: debajo del desenfoque se pinta un fondo
 // sólido, así que no aparecen huecos transparentes y la sombra no se ve a través.
@@ -89,7 +89,7 @@ public class GlassBlur {
             panel.getViewTreeObserver().addOnPreDrawListener(listener);
     }
 
-    // Lo que dibuja la lista, grabado para poder reutilizarlo detrás de las barras
+    // Copia de lo que dibuja la lista, para reutilizarla detrás de las barras
     @RequiresApi(api = Build.VERSION_CODES.S)
     static class Source {
         private final FixedRecyclerView view;
@@ -97,25 +97,23 @@ public class GlassBlur {
 
         Source(FixedRecyclerView view) {
             this.view = view;
-            // Igual que sin cristal: lo que sobresale lo recorta la propia lista
             this.node.setClipToBounds(false);
         }
 
-        // Devuelve false si no se puede (dibujo por software): la lista se dibuja como siempre
-        boolean draw(Canvas canvas) {
+        // Se llama justo después de que la lista se dibuje. La copia solo referencia lo que
+        // la lista ya ha dibujado (las filas), así que cuesta muy poco
+        void record(Canvas canvas) {
             int w = view.getWidth();
             int h = view.getHeight();
             if (!canvas.isHardwareAccelerated() || w <= 0 || h <= 0)
-                return false;
+                return;
             node.setPosition(0, 0, w, h);
             RecordingCanvas rc = node.beginRecording(w, h);
             try {
-                view.drawContent(rc);
+                view.drawMirror(rc);
             } finally {
                 node.endRecording();
             }
-            canvas.drawRenderNode(node);
-            return true;
         }
     }
 

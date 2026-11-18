@@ -80,25 +80,32 @@ public class FixedRecyclerView extends RecyclerView {
                 resources.getDimensionPixelOffset(androidx.recyclerview.R.dimen.fastscroll_margin));
     }
 
-    // ModernMail: tema Cristal. La lista graba lo que dibuja para que las barras
-    // flotantes puedan mostrarlo desenfocado (ver GlassBlur)
+    // ModernMail: tema Cristal. Además de dibujarse como siempre, la lista graba una copia
+    // de lo que dibuja para que las barras flotantes puedan mostrarla desenfocada (ver GlassBlur)
     GlassBlur.Source glassSource = null;
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         if (glassSource != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             try {
-                if (glassSource.draw(canvas))
-                    return;
+                glassSource.record(canvas);
             } catch (Throwable ex) {
                 Log.w(ex);
                 glassSource = null;
             }
-        super.draw(canvas);
     }
 
-    void drawContent(Canvas canvas) {
-        super.draw(canvas);
+    // La copia: fondos de los bloques y filas, sin los efectos de borde (el estirado al
+    // llegar arriba o abajo se queda solo en la lista de verdad, que Android sabe soltar)
+    void drawMirror(Canvas canvas) {
+        onDraw(canvas);
+        long time = getDrawingTime();
+        for (int i = 0; i < getChildCount(); i++) {
+            android.view.View child = getChildAt(i);
+            if (child.getVisibility() == VISIBLE || child.getAnimation() != null)
+                drawChild(canvas, child, time);
+        }
     }
 
     @Override
