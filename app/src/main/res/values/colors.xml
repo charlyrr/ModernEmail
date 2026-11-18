@@ -293,8 +293,7 @@
     <color name="glassLightDrawer">#f2f4f7</color>
     <color name="glassLightGradTop">#f7f8fa</color>
     <color name="glassLightGradBottom">#eceff4</color>
-    <color name="glassLightFillTop">#b8f5f7fb</color>
-    <color name="glassLightFillBottom">#8ce4e8f1</color>
+    <color name="glassLightFrost">#d1f7f8fb</color>
     <color name="glassLightEdge">#1f14203c</color>
     <color name="glassLightStroke">#e6ffffff</color>
     <color name="glassDarkSeparator">#2b2f42</color>
@@ -313,8 +312,7 @@
     <color name="glassDarkDrawer">#0d1020</color>
     <color name="glassDarkGradTop">#0f1222</color>
     <color name="glassDarkGradBottom">#141228</color>
-    <color name="glassDarkFillTop">#40ffffff</color>
-    <color name="glassDarkFillBottom">#1fffffff</color>
+    <color name="glassDarkFrost">#c21a1d2e</color>
     <color name="glassDarkEdge">#66000000</color>
     <color name="glassDarkStroke">#33ffffff</color>
 

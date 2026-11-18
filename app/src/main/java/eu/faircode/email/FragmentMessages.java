@@ -7452,7 +7452,7 @@ public class FragmentMessages extends FragmentBase
         }
     }
 
-    // ---------- ModernMail: tema Cristal (cristal transparente, sin desenfoque) ----------
+    // ---------- ModernMail: tema Cristal (cristal esmerilado, ver GlassBlur) ----------
 
     private void setupGlass() {
         try {
@@ -7461,22 +7461,15 @@ public class FragmentMessages extends FragmentBase
                 return;
             boolean dark = Helper.isDarkTheme(context);
 
+            // Lo que pasa por debajo de las barras es la lista (bandeja o conversación)
+            GlassBlur.enableSource(rvMessage);
             if (llAireBar instanceof ViewGroup && ((ViewGroup) llAireBar).getChildCount() > 0)
-                applyGlass(((ViewGroup) llAireBar).getChildAt(0), context, dark);
-            applyGlass(view.findViewById(R.id.ibAireCompose), context, dark);
-            applyGlass(view.findViewById(R.id.bottom_navigation), context, dark);
+                GlassBlur.applyPanel(((ViewGroup) llAireBar).getChildAt(0), rvMessage, dark, 30);
+            GlassBlur.applyPanel(view.findViewById(R.id.ibAireCompose), rvMessage, dark, 30);
+            GlassBlur.applyPanel(view.findViewById(R.id.bottom_navigation), rvMessage, dark, 30);
         } catch (Throwable ex) {
             Log.e(ex);
         }
-    }
-
-    private static void applyGlass(View v, Context context, boolean dark) {
-        if (v == null)
-            return;
-        v.setBackground(FragmentDialogTheme.getGlassPanel(context, dark, 30));
-        // Sin sombra: con un panel translúcido, Android la dejaría ver a través
-        v.setElevation(0f);
-        v.setTranslationZ(0f);
     }
 
     private boolean isAireList() {

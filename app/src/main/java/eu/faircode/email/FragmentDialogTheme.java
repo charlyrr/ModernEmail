@@ -927,31 +927,6 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         return prefs.getString("theme", "minimal_system").startsWith("glass_");
     }
 
-    // Panel de cristal transparente: relleno translúcido con brillo de arriba abajo,
-    // canto exterior fino (para destacar sobre blanco) y reflejo interior
-    static android.graphics.drawable.Drawable getGlassPanel(Context context, boolean dark, int radiusDp) {
-        float r = Helper.dp2pixels(context, radiusDp);
-        int px1 = Math.max(1, Helper.dp2pixels(context, 1));
-
-        android.graphics.drawable.GradientDrawable fill = new android.graphics.drawable.GradientDrawable(
-                android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[]{
-                        ContextCompat.getColor(context, dark ? R.color.glassDarkFillTop : R.color.glassLightFillTop),
-                        ContextCompat.getColor(context, dark ? R.color.glassDarkFillBottom : R.color.glassLightFillBottom)});
-        fill.setCornerRadius(r);
-        fill.setStroke(px1, ContextCompat.getColor(context, dark ? R.color.glassDarkEdge : R.color.glassLightEdge));
-
-        android.graphics.drawable.GradientDrawable shine = new android.graphics.drawable.GradientDrawable();
-        shine.setCornerRadius(Math.max(0, r - px1));
-        shine.setColor(Color.TRANSPARENT);
-        shine.setStroke(px1, ContextCompat.getColor(context, dark ? R.color.glassDarkStroke : R.color.glassLightStroke));
-
-        android.graphics.drawable.LayerDrawable panel =
-                new android.graphics.drawable.LayerDrawable(new android.graphics.drawable.Drawable[]{fill, shine});
-        panel.setLayerInset(1, px1, px1, px1, px1);
-        return panel;
-    }
-
     static android.graphics.drawable.Drawable getGlassBackground(Context context, boolean dark) {
         return new android.graphics.drawable.GradientDrawable(
                 android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,

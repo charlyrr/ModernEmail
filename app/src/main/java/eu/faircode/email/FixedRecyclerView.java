@@ -22,8 +22,10 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
@@ -76,6 +78,27 @@ public class FixedRecyclerView extends RecyclerView {
                 resources.getDimensionPixelSize(R.dimen.fastscroll_default_thickness),
                 resources.getDimensionPixelSize(androidx.recyclerview.R.dimen.fastscroll_minimum_range),
                 resources.getDimensionPixelOffset(androidx.recyclerview.R.dimen.fastscroll_margin));
+    }
+
+    // ModernMail: tema Cristal. La lista graba lo que dibuja para que las barras
+    // flotantes puedan mostrarlo desenfocado (ver GlassBlur)
+    GlassBlur.Source glassSource = null;
+
+    @Override
+    public void draw(Canvas canvas) {
+        if (glassSource != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            try {
+                if (glassSource.draw(canvas))
+                    return;
+            } catch (Throwable ex) {
+                Log.w(ex);
+                glassSource = null;
+            }
+        super.draw(canvas);
+    }
+
+    void drawContent(Canvas canvas) {
+        super.draw(canvas);
     }
 
     @Override
