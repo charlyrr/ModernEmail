@@ -85,6 +85,13 @@ import java.util.List;
 import java.util.Map;
 
 abstract class ActivityBase extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    // ModernMail: altura de la barra de navegación de Android por la que se extiende la lista
+    private int mmNavBottom = 0;
+
+    int getNavInsetBottom() {
+        return mmNavBottom;
+    }
+
     private int themeId;
     private Context originalContext;
     private boolean visible;
@@ -200,6 +207,11 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         View content = (cf == null ? view : cf);
         int cpad = content.getPaddingBottom();
 
+        // ModernMail: en la pantalla principal (una columna) los mensajes se dibujan también
+        // por detrás de la barra de navegación de Android; FragmentMessages sube sus barras
+        final boolean mmUnderNav = (!edge_to_edge && this instanceof ActivityView &&
+                cf != null && cf.getId() == R.id.content_frame);
+
         ViewCompat.setOnApplyWindowInsetsListener(holder, (v, windowInsets) -> {
             try {
                 Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
@@ -218,11 +230,13 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                     changed = true;
                     mlp.rightMargin = insets.right;
                 }
-                if (!edge_to_edge)
-                    if (mlp.bottomMargin != insets.bottom) {
+                if (!edge_to_edge) {
+                    int bottomMargin = (mmUnderNav ? 0 : insets.bottom);
+                    if (mlp.bottomMargin != bottomMargin) {
                         changed = true;
-                        mlp.bottomMargin = insets.bottom;
+                        mlp.bottomMargin = bottomMargin;
                     }
+                }
                 if (changed)
                     v.setLayoutParams(mlp);
 
@@ -235,6 +249,28 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                 } else {
                     if (b != 0)
                         v.setPaddingRelative(0, 0, 0, 0);
+                }
+
+                if (mmUnderNav) {
+                    // El contenido queda por encima de la barra; la lista de mensajes la invade
+                    int pad = cpad + insets.bottom;
+                    if (content.getPaddingBottom() != pad)
+                        content.setPaddingRelative(
+                                content.getPaddingStart(), content.getPaddingTop(),
+                                content.getPaddingEnd(), pad);
+
+                    View navmenu = findViewById(R.id.navmenu);
+                    if (navmenu != null && navmenu.getPaddingBottom() != insets.bottom)
+                        navmenu.setPaddingRelative(
+                                navmenu.getPaddingStart(), navmenu.getPaddingTop(),
+                                navmenu.getPaddingEnd(), insets.bottom);
+
+                    if (mmNavBottom != insets.bottom) {
+                        mmNavBottom = insets.bottom;
+                        for (Fragment f : getSupportFragmentManager().getFragments())
+                            if (f instanceof FragmentMessages)
+                                ((FragmentMessages) f).setNavInset(mmNavBottom);
+                    }
                 }
 
                 if (edge_to_edge) {

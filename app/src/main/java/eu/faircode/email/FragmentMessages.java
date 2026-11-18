@@ -1495,6 +1495,15 @@ public class FragmentMessages extends FragmentBase
         });
 
         setupAire(view);
+        // La vista se crea de nuevo al volver atrás: el ajuste se aplica siempre a la vista nueva
+        navInsetApplied = -1;
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                if (getActivity() instanceof ActivityBase)
+                    setNavInset(((ActivityBase) getActivity()).getNavInsetBottom());
+            }
+        });
 
         ibSeen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -7332,6 +7341,54 @@ public class FragmentMessages extends FragmentBase
             llAireHeader.setVisibility(View.VISIBLE);
             llAireHeader.setAlpha(1f);
             llAireBar.setTranslationY(0f);
+        }
+    }
+
+    // ---------- ModernMail: dibujar por detrás de la barra de navegación de Android ----------
+
+    private int navInsetApplied = -1;
+    private final android.util.SparseIntArray navBase = new android.util.SparseIntArray();
+
+    void setNavInset(int nav) {
+        if (view == null || nav == navInsetApplied)
+            return;
+        try {
+            // La pantalla de mensajes invade el relleno inferior del contenedor
+            ViewGroup.LayoutParams rlp = view.getLayoutParams();
+            if (!(rlp instanceof ViewGroup.MarginLayoutParams))
+                return;
+            ((ViewGroup.MarginLayoutParams) rlp).bottomMargin = -nav;
+            view.setLayoutParams(rlp);
+
+            // Lo que va pegado abajo sube la altura de la barra
+            for (int id : new int[]{R.id.bottom_navigation, R.id.fabReply, R.id.fabMore, R.id.etSearch}) {
+                View v = view.findViewById(id);
+                if (v == null || !(v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams))
+                    continue;
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+                if (navBase.indexOfKey(id) < 0)
+                    navBase.put(id, lp.bottomMargin);
+                lp.bottomMargin = navBase.get(id) + nav;
+                v.setLayoutParams(lp);
+            }
+
+            if (llAireBar != null) {
+                if (navBase.indexOfKey(R.id.llAireBar) < 0)
+                    navBase.put(R.id.llAireBar, llAireBar.getPaddingBottom());
+                llAireBar.setPaddingRelative(llAireBar.getPaddingStart(), llAireBar.getPaddingTop(),
+                        llAireBar.getPaddingEnd(), navBase.get(R.id.llAireBar) + nav);
+            }
+
+            if (rvMessage != null) {
+                if (navBase.indexOfKey(R.id.rvMessage) < 0)
+                    navBase.put(R.id.rvMessage, rvMessage.getPaddingBottom());
+                rvMessage.setPaddingRelative(rvMessage.getPaddingStart(), rvMessage.getPaddingTop(),
+                        rvMessage.getPaddingEnd(), navBase.get(R.id.rvMessage) + nav);
+            }
+
+            navInsetApplied = nav;
+        } catch (Throwable ex) {
+            Log.w(ex);
         }
     }
 
