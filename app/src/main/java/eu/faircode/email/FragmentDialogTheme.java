@@ -717,7 +717,7 @@ public class FragmentDialogTheme extends FragmentDialogBase {
     }
 
     // Temas de ModernEmail: prefijo guardado en la preferencia "theme"
-    static final String[] FAMILIES = new String[]{"modern", "minimal", "violet", "azure"};
+    static final String[] FAMILIES = new String[]{"modern", "minimal", "violet", "azure", "glass"};
 
     private static String getFamily(int buttonId) {
         if (buttonId == R.id.rbThemeModern)
@@ -728,6 +728,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             return "violet";
         if (buttonId == R.id.rbThemeAzure)
             return "azure";
+        if (buttonId == R.id.rbThemeGlass)
+            return "glass";
         return null;
     }
 
@@ -740,6 +742,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
             return R.id.rbThemeViolet;
         if (theme.startsWith("azure_"))
             return R.id.rbThemeAzure;
+        if (theme.startsWith("glass_"))
+            return R.id.rbThemeGlass;
         return null;
     }
 
@@ -826,6 +830,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                 return new int[]{R.style.AppThemeVioletLight, R.style.AppThemeVioletDark, R.style.AppThemeVioletBlack};
             case "azure":
                 return new int[]{R.style.AppThemeAzureLight, R.style.AppThemeAzureDark, R.style.AppThemeAzureBlack};
+            case "glass":
+                return new int[]{R.style.AppThemeGlassLight, R.style.AppThemeGlassDark, R.style.AppThemeGlassBlack};
             case "modern":
             default:
                 return new int[]{R.style.AppThemeModernLight, R.style.AppThemeModernDark, R.style.AppThemeModernBlack};
@@ -841,6 +847,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                 return new int[]{R.color.violetLightBackground, R.color.violetLightCard, R.color.violetDarkBackground, R.color.violetDarkCard};
             case "azure":
                 return new int[]{R.color.azureLightBackground, R.color.azureLightCard, R.color.azureDarkBackground, R.color.azureDarkCard};
+            case "glass":
+                return new int[]{R.color.glassLightBackground, R.color.glassLightCard, R.color.glassDarkBackground, R.color.glassDarkCard};
             case "modern":
             default:
                 return new int[]{R.color.modernLightBackground, R.color.modernLightCard, R.color.modernDarkBackground, R.color.modernDarkCard};
@@ -905,6 +913,25 @@ public class FragmentDialogTheme extends FragmentDialogBase {
                     color = Color.parseColor(dark ? "#121316" : "#FAF9FD");
             }
 
+        // ModernMail: el tema Cristal usa un degradado suave en lugar de un color plano
+        if (!compose && family != null && family.equals("glass") && !(dark && black)) {
+            view.setBackground(getGlassBackground(context, dark));
+            return;
+        }
+
         view.setBackgroundColor(color);
+    }
+
+    static boolean isGlass(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("theme", "minimal_system").startsWith("glass_");
+    }
+
+    static android.graphics.drawable.Drawable getGlassBackground(Context context, boolean dark) {
+        return new android.graphics.drawable.GradientDrawable(
+                android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{
+                        ContextCompat.getColor(context, dark ? R.color.glassDarkGradTop : R.color.glassLightGradTop),
+                        ContextCompat.getColor(context, dark ? R.color.glassDarkGradBottom : R.color.glassLightGradBottom)});
     }
 }

@@ -1495,6 +1495,8 @@ public class FragmentMessages extends FragmentBase
         });
 
         setupAire(view);
+        if (FragmentDialogTheme.isGlass(getContext()))
+            setupGlass();
         // La vista se crea de nuevo al volver atrás: el ajuste se aplica siempre a la vista nueva
         navInsetApplied = -1;
         // Red de seguridad: se vuelve a comprobar cada vez que la pantalla se recoloca
@@ -7421,6 +7423,8 @@ public class FragmentMessages extends FragmentBase
             // Lo que va pegado abajo sube la altura de la barra
             for (int id : new int[]{R.id.bottom_navigation, R.id.fabReply, R.id.fabMore, R.id.etSearch}) {
                 View v = view.findViewById(id);
+                if (v != null && v.getParent() instanceof eightbitlab.com.blurview.BlurView)
+                    v = (View) v.getParent();
                 if (v == null || !(v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams))
                     continue;
                 ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
@@ -7448,6 +7452,122 @@ public class FragmentMessages extends FragmentBase
         } catch (Throwable ex) {
             Log.w(ex);
         }
+    }
+
+    // ---------- ModernMail: tema Cristal (desenfoque real tras las barras flotantes) ----------
+
+    private final java.util.Map<View, View> glassPanels = new java.util.HashMap<>();
+
+    private void setupGlass() {
+        try {
+            Context context = getContext();
+            if (context == null || swipeRefresh == null)
+                return;
+            boolean dark = Helper.isDarkTheme(context);
+
+            // 1) El contenido (lista y correo) pasa a una capa que la librería puede desenfocar
+            ViewGroup root = view;
+            int idx = root.indexOfChild(swipeRefresh);
+            if (idx < 0)
+                return;
+            ViewGroup.LayoutParams slp = swipeRefresh.getLayoutParams();
+            root.removeViewAt(idx);
+            eightbitlab.com.blurview.BlurTarget target = new eightbitlab.com.blurview.BlurTarget(context);
+            target.addView(swipeRefresh, new android.widget.FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            root.addView(target, idx, slp);
+
+            // 2) La barra de acciones del correo abierto sale de esa capa (un cristal no puede
+            //    estar dentro de lo que desenfoca) y queda flotando abajo, como antes
+            View bnv = root.findViewById(R.id.bottom_navigation);
+            if (bnv != null && bnv.getParent() != root) {
+                ViewGroup.MarginLayoutParams old = (ViewGroup.MarginLayoutParams) bnv.getLayoutParams();
+                ((ViewGroup) bnv.getParent()).removeView(bnv);
+                androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams clp = new androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, old.height);
+                clp.gravity = android.view.Gravity.BOTTOM;
+                clp.setMarginStart(old.getMarginStart());
+                clp.setMarginEnd(old.getMarginEnd());
+                clp.bottomMargin = old.bottomMargin;
+                root.addView(bnv, clp);
+            }
+
+            // 3) Paneles de cristal
+            int overlay = ContextCompat.getColor(context, dark ? R.color.glassDarkBarOverlay : R.color.glassLightBarOverlay);
+            int stroke = ContextCompat.getColor(context, dark ? R.color.glassDarkStroke : R.color.glassLightStroke);
+            if (llAireBar instanceof ViewGroup && ((ViewGroup) llAireBar).getChildCount() > 0)
+                glassify(((ViewGroup) llAireBar).getChildAt(0), target, 30, overlay, stroke, dark);
+            View compose = view.findViewById(R.id.ibAireCompose);
+            if (compose != null)
+                glassify(compose, target, 30, overlay, stroke, dark);
+            if (bnv != null)
+                glassify(bnv, target, 30, overlay, stroke, dark);
+
+            // Los paneles siguen la visibilidad de lo que contienen
+            root.getViewTreeObserver().addOnPreDrawListener(new android.view.ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    for (java.util.Map.Entry<View, View> e : glassPanels.entrySet()) {
+                        int vis = e.getValue().getVisibility();
+                        int want = (vis == View.GONE ? View.GONE : View.VISIBLE);
+                        if (e.getKey().getVisibility() != want)
+                            e.getKey().setVisibility(want);
+                        float alpha = (vis == View.VISIBLE ? 1f : 0f);
+                        if (e.getKey().getAlpha() != alpha)
+                            e.getKey().setAlpha(alpha);
+                    }
+                    return true;
+                }
+            });
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
+    private void glassify(View v, eightbitlab.com.blurview.BlurTarget target,
+                          int radiusDp, int overlay, int stroke, boolean dark) {
+        Context context = v.getContext();
+        ViewGroup parent = (ViewGroup) v.getParent();
+        int i = parent.indexOfChild(v);
+        ViewGroup.LayoutParams lp = v.getLayoutParams();
+        parent.removeViewAt(i);
+
+        eightbitlab.com.blurview.BlurView panel = new eightbitlab.com.blurview.BlurView(context);
+        v.setBackground(null);
+        v.setElevation(0f);
+        panel.addView(v, new android.widget.FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        parent.addView(panel, i, lp);
+
+        final float radius = Helper.dp2pixels(context, radiusDp);
+        android.graphics.drawable.GradientDrawable shape = new android.graphics.drawable.GradientDrawable();
+        shape.setCornerRadius(radius);
+        shape.setColor(Color.TRANSPARENT);
+        panel.setBackground(shape);
+
+        // Borde fino brillante, como el canto de un cristal
+        android.graphics.drawable.GradientDrawable edge = new android.graphics.drawable.GradientDrawable();
+        edge.setCornerRadius(radius);
+        edge.setColor(Color.TRANSPARENT);
+        edge.setStroke(Math.max(1, Helper.dp2pixels(context, 1) / 2), stroke);
+        panel.setForeground(edge);
+
+        panel.setOutlineProvider(new android.view.ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, android.graphics.Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
+                outline.setAlpha(1f);
+            }
+        });
+        panel.setClipToOutline(true);
+        panel.setElevation(Helper.dp2pixels(context, 4));
+
+        panel.setupWith(target)
+                .setFrameClearDrawable(FragmentDialogTheme.getGlassBackground(context, dark))
+                .setBlurRadius(20f)
+                .setOverlayColor(overlay);
+
+        glassPanels.put(panel, v);
     }
 
     private boolean isAireList() {

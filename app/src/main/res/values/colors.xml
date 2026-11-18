@@ -275,6 +275,45 @@
     <color name="azureDarkDisabled">#5b6573</color>
     <color name="azureDarkDrawer">#0d1117</color>
 
+    <!-- Tema "Cristal" (paleta Perla): superficies de cristal con desenfoque real -->
+    <color name="glassLightSeparator">#dde0e7</color>
+    <color name="glassLightToolbar">#f2f4f7</color>
+    <color name="glassLightStatus">#f2f4f7</color>
+    <color name="glassLightSurface">#f2f4f7</color>
+    <color name="glassLightBackground">#f2f4f7</color>
+    <color name="glassLightCard">#ffffff</color>
+    <color name="glassLightFloating">#fbfbfc</color>
+    <color name="glassLightAccent">#0a66e4</color>
+    <color name="glassLightDeep">#0a57c2</color>
+    <color name="glassLightContainer">#e3ecfc</color>
+    <color name="glassLightOn">#0b3f94</color>
+    <color name="glassLightAction">#e6e8ee</color>
+    <color name="glassLightDisabled">#b4b7c0</color>
+    <color name="glassLightText">#12131a</color>
+    <color name="glassLightDrawer">#f2f4f7</color>
+    <color name="glassLightGradTop">#f7f8fa</color>
+    <color name="glassLightGradBottom">#eceff4</color>
+    <color name="glassLightBarOverlay">#9ef7f8fa</color>
+    <color name="glassLightStroke">#b3ffffff</color>
+    <color name="glassDarkSeparator">#2b2f42</color>
+    <color name="glassDarkToolbar">#0d1020</color>
+    <color name="glassDarkStatus">#0d1020</color>
+    <color name="glassDarkSurface">#0d1020</color>
+    <color name="glassDarkBackground">#0d1020</color>
+    <color name="glassDarkCard">#191c2c</color>
+    <color name="glassDarkFloating">#23263a</color>
+    <color name="glassDarkAccent">#7fb2ff</color>
+    <color name="glassDarkDeep">#7fb2ff</color>
+    <color name="glassDarkContainer">#1b3a66</color>
+    <color name="glassDarkOn">#d9e8ff</color>
+    <color name="glassDarkAction">#23263a</color>
+    <color name="glassDarkDisabled">#5b5f73</color>
+    <color name="glassDarkDrawer">#0d1020</color>
+    <color name="glassDarkGradTop">#0f1222</color>
+    <color name="glassDarkGradBottom">#141228</color>
+    <color name="glassDarkBarOverlay">#8c16192c</color>
+    <color name="glassDarkStroke">#1fffffff</color>
+
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="smoke">#fff5f5f5</color>

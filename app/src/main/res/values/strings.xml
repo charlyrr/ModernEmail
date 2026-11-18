@@ -382,6 +382,7 @@
     <string name="mm_unread_count">%1$s unread</string>
     <string name="title_setup_theme_modern">Modern</string>
     <string name="title_setup_theme_minimal">Air</string>
+    <string name="title_setup_theme_glass">Glass</string>
     <string name="title_setup_theme_violet">Violet</string>
     <string name="title_setup_theme_azure">Professional</string>
     <string name="title_setup_theme_blue_orange">Blue/orange</string>

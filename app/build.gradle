@@ -847,6 +847,10 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.seancfoley/ipaddress
     implementation "com.github.seancfoley:ipaddress:$ipaddress_version"
 
+    // ModernMail: desenfoque real para el tema Cristal
+    // https://github.com/Dimezis/BlurView (Apache 2.0)
+    implementation "com.github.Dimezis:BlurView:version-4.0.0"
+
     // https://mvnrepository.com/artifact/androidx.car.app/app?repo=google
     // implementation "androidx.car.app:app:1.4.0-rc02" // 1.8.0-alpha02
 

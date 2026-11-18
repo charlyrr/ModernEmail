@@ -50,6 +50,14 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <RadioButton
+                android:id="@+id/rbThemeGlass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/title_setup_theme_glass"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <RadioButton
                 android:id="@+id/rbThemeViolet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

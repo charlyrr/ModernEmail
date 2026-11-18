@@ -471,6 +471,67 @@
         <item name="colorDrawerBackground">@color/black</item>
     </style>
 
+
+    <!-- Cristal (Perla): mismas zonas que Aire; las barras flotantes son de cristal -->
+    <style name="AppThemeGlassLight" parent="AppThemeBaseLight">
+        <item name="colorSeparator">@color/glassLightSeparator</item>
+        <item name="colorPrimary">@color/glassLightToolbar</item>
+        <item name="colorPrimaryDark">@color/glassLightStatus</item>
+        <item name="colorAccent">@color/glassLightAccent</item>
+        <item name="colorControlActivated">@color/glassLightAccent</item>
+        <item name="colorUnreadHighlight">@color/glassLightDeep</item>
+        <item name="colorBookmark">@color/glassLightAccent</item>
+        <item name="colorFabBackground">@color/glassLightContainer</item>
+        <item name="colorFabForeground">@color/glassLightOn</item>
+        <item name="colorActionBackground">@color/glassLightAction</item>
+        <item name="colorActionForegroundDisabled">@color/glassLightDisabled</item>
+        <item name="colorInfoForeground">@color/glassLightOn</item>
+        <item name="colorInfoBackground">@color/glassLightContainer</item>
+        <item name="colorButtonTonal">@color/glassLightContainer</item>
+        <item name="colorButtonTonalText">@color/glassLightOn</item>
+        <item name="colorCardBackground">@color/glassLightCard</item>
+        <item name="colorDrawerBackground">@color/glassLightDrawer</item>
+        <item name="colorBackgroundFloating">@color/glassLightFloating</item>
+        <item name="android:colorBackgroundFloating">@color/glassLightFloating</item>
+        <item name="android:windowBackground">@color/glassLightSurface</item>
+        <item name="android:textColorLink">@color/glassLightDeep</item>
+        <item name="android:textColorLinkInverse">@color/glassLightDeep</item>
+        <item name="colorActionForeground">@color/glassLightText</item>
+        <item name="colorDrawerText">@color/glassLightText</item>
+    </style>
+    <style name="AppThemeGlassDark" parent="AppThemeBaseDark">
+        <item name="colorSeparator">@color/glassDarkSeparator</item>
+        <item name="colorPrimary">@color/glassDarkToolbar</item>
+        <item name="colorPrimaryDark">@color/glassDarkStatus</item>
+        <item name="colorAccent">@color/glassDarkAccent</item>
+        <item name="colorControlActivated">@color/glassDarkAccent</item>
+        <item name="colorUnreadHighlight">@color/glassDarkDeep</item>
+        <item name="colorBookmark">@color/glassDarkAccent</item>
+        <item name="colorFabBackground">@color/glassDarkContainer</item>
+        <item name="colorFabForeground">@color/glassDarkOn</item>
+        <item name="colorActionBackground">@color/glassDarkAction</item>
+        <item name="colorActionForegroundDisabled">@color/glassDarkDisabled</item>
+        <item name="colorInfoForeground">@color/glassDarkOn</item>
+        <item name="colorInfoBackground">@color/glassDarkContainer</item>
+        <item name="colorButtonTonal">@color/glassDarkContainer</item>
+        <item name="colorButtonTonalText">@color/glassDarkOn</item>
+        <item name="colorCardBackground">@color/glassDarkCard</item>
+        <item name="colorDrawerBackground">@color/glassDarkDrawer</item>
+        <item name="colorBackgroundFloating">@color/glassDarkFloating</item>
+        <item name="android:colorBackgroundFloating">@color/glassDarkFloating</item>
+        <item name="android:windowBackground">@color/glassDarkSurface</item>
+        <item name="android:textColorLink">@color/glassDarkDeep</item>
+        <item name="android:textColorLinkInverse">@color/glassDarkDeep</item>
+    </style>
+    <style name="AppThemeGlassBlack" parent="AppThemeGlassDark">
+        <item name="themeName">black</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorCardBackground">@color/glassDarkCard</item>
+        <item name="android:windowBackground">@drawable/background_black</item>
+        <item name="colorDrawerBackground">@color/black</item>
+    </style>
+
     <!-- Light -->
 
     <style name="AppThemeBlueOrangeLight" parent="AppThemeBaseLight">
