@@ -252,7 +252,10 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                 }
 
                 if (mmUnderNav) {
-                    // El contenido queda por encima de la barra; la lista de mensajes la invade
+                    // El contenido queda por encima de la barra; la lista de mensajes la invade.
+                    // Sin recorte en el relleno, para que se vea lo que se dibuja en esa franja
+                    if (content instanceof ViewGroup)
+                        ((ViewGroup) content).setClipToPadding(false);
                     int pad = cpad + insets.bottom;
                     if (content.getPaddingBottom() != pad)
                         content.setPaddingRelative(
