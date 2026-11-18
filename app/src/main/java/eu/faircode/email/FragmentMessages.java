@@ -7473,6 +7473,8 @@ public class FragmentMessages extends FragmentBase
             ViewGroup.LayoutParams slp = swipeRefresh.getLayoutParams();
             root.removeViewAt(idx);
             eightbitlab.com.blurview.BlurTarget target = new eightbitlab.com.blurview.BlurTarget(context);
+            // El fondo va dentro de lo que se desenfoca: el cristal nunca queda sobre un hueco vacío
+            target.setBackground(FragmentDialogTheme.getGlassBackground(context, dark));
             target.addView(swipeRefresh, new android.widget.FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             root.addView(target, idx, slp);
@@ -7552,18 +7554,18 @@ public class FragmentMessages extends FragmentBase
         edge.setStroke(Math.max(1, Helper.dp2pixels(context, 1) / 2), stroke);
         panel.setForeground(edge);
 
+        // Sin sombra: Android la dibuja detrás del panel y, al ser translúcido, se vería a través
         panel.setOutlineProvider(new android.view.ViewOutlineProvider() {
             @Override
             public void getOutline(View view, android.graphics.Outline outline) {
                 outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
-                outline.setAlpha(1f);
             }
         });
         panel.setClipToOutline(true);
-        panel.setElevation(Helper.dp2pixels(context, 4));
+        panel.setElevation(0f);
+        panel.setTranslationZ(0f);
 
         panel.setupWith(target)
-                .setFrameClearDrawable(FragmentDialogTheme.getGlassBackground(context, dark))
                 .setBlurRadius(20f)
                 .setOverlayColor(overlay);
 
