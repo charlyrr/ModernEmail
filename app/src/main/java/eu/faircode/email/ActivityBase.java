@@ -361,10 +361,13 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
             controller.setAppearanceLightStatusBars(lumStatus > LUMINANCE_THRESHOLD);
             controller.setAppearanceLightNavigationBars(lumNavigation > LUMINANCE_THRESHOLD);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
                 window.setNavigationBarColor(Color.TRANSPARENT);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                    window.setNavigationBarContrastEnforced(false);
+            // ModernMail: sin el velo blanco que Android pone tras la barra de gestos
+            // ("contraste forzado"); también en Android 15 y posteriores
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                window.setNavigationBarContrastEnforced(false);
+                window.setStatusBarContrastEnforced(false);
             }
         }
 
