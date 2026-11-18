@@ -351,8 +351,9 @@
         <item name="colorDrawerBackground">@color/black</item>
     </style>
 
-    <!-- Violeta: lavanda suave y violeta profundo, aire elegante -->
+    <!-- Violeta: lavanda suave unificado y violeta profundo -->
     <style name="AppThemeVioletLight" parent="AppThemeBaseLight">
+        <item name="colorSeparator">@color/violetLightSeparator</item>
         <item name="colorPrimary">@color/violetLightToolbar</item>
         <item name="colorPrimaryDark">@color/violetLightStatus</item>
         <item name="colorAccent">@color/violetLightAccent</item>
@@ -378,6 +379,7 @@
         <item name="colorDrawerText">@color/violetLightText</item>
     </style>
     <style name="AppThemeVioletDark" parent="AppThemeBaseDark">
+        <item name="colorSeparator">@color/violetDarkSeparator</item>
         <item name="colorPrimary">@color/violetDarkToolbar</item>
         <item name="colorPrimaryDark">@color/violetDarkStatus</item>
         <item name="colorAccent">@color/violetDarkAccent</item>
@@ -404,13 +406,14 @@
         <item name="themeName">black</item>
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorCardBackground">@color/violetDarkSurface</item>
+        <item name="colorCardBackground">@color/violetDarkCard</item>
         <item name="android:windowBackground">@drawable/background_black</item>
         <item name="colorDrawerBackground">@color/black</item>
     </style>
 
-    <!-- Profesional: barra azul sólida, sobrio y muy legible -->
+    <!-- Profesional: gris pizarra unificado y azul marino sobrio -->
     <style name="AppThemeAzureLight" parent="AppThemeBaseLight">
+        <item name="colorSeparator">@color/azureLightSeparator</item>
         <item name="colorPrimary">@color/azureLightToolbar</item>
         <item name="colorPrimaryDark">@color/azureLightStatus</item>
         <item name="colorAccent">@color/azureLightAccent</item>
@@ -436,6 +439,7 @@
         <item name="colorDrawerText">@color/azureLightText</item>
     </style>
     <style name="AppThemeAzureDark" parent="AppThemeBaseDark">
+        <item name="colorSeparator">@color/azureDarkSeparator</item>
         <item name="colorPrimary">@color/azureDarkToolbar</item>
         <item name="colorPrimaryDark">@color/azureDarkStatus</item>
         <item name="colorAccent">@color/azureDarkAccent</item>
