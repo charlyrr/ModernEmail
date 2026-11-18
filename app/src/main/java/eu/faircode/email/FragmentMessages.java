@@ -1497,6 +1497,23 @@ public class FragmentMessages extends FragmentBase
         setupAire(view);
         // La vista se crea de nuevo al volver atrás: el ajuste se aplica siempre a la vista nueva
         navInsetApplied = -1;
+        // Red de seguridad: se vuelve a comprobar cada vez que la pantalla se recoloca
+        view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int l, int t, int r, int b, int ol, int ot, int or, int ob) {
+                if (getActivity() instanceof ActivityBase) {
+                    int nav = ((ActivityBase) getActivity()).getNavInsetBottom();
+                    if (nav != navInsetApplied)
+                        v.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (getActivity() instanceof ActivityBase)
+                                    setNavInset(((ActivityBase) getActivity()).getNavInsetBottom());
+                            }
+                        });
+                }
+            }
+        });
         view.post(new Runnable() {
             @Override
             public void run() {

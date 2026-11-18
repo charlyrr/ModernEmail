@@ -209,7 +209,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
         // ModernMail: en la pantalla principal (una columna) los mensajes se dibujan también
         // por detrás de la barra de navegación de Android; FragmentMessages sube sus barras
-        final boolean mmUnderNav = (!edge_to_edge && this instanceof ActivityView &&
+        // (con o sin la opción "usar color de fondo de la aplicación para la barra de navegación")
+        final boolean mmUnderNav = (this instanceof ActivityView &&
                 cf != null && cf.getId() == R.id.content_frame);
 
         ViewCompat.setOnApplyWindowInsetsListener(holder, (v, windowInsets) -> {
