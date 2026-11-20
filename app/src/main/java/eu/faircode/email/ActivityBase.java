@@ -280,14 +280,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                 if (edge_to_edge) {
                     Insets nav = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
                     int pad = Math.max(0, cpad + (nav.bottom - nav.top));
-                    Snackbar.SnackbarLayout sl = Helper.findSnackbarLayout(content.getRootView());
-                    if (sl != null) {
-                        pad = cpad;
-                        if (sl.getPaddingBottom() != nav.bottom - nav.top)
-                            sl.setPaddingRelative(
-                                    sl.getPaddingStart(), sl.getPaddingTop(),
-                                    sl.getPaddingEnd(), nav.bottom - nav.top);
-                    }
+                    // ModernMail: la franja de avisos flota por encima de la barra de navegación
+                    // (Helper.setSnackbarOptions): ni se rellena ni cambia el relleno del contenido
                     if (pad != content.getPaddingBottom())
                         content.setPaddingRelative(
                                 content.getPaddingStart(), content.getPaddingTop(),

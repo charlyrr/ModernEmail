@@ -57,6 +57,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -2249,7 +2250,132 @@ public class Helper {
             colorAccent = ColorUtils.blendARGB(colorAccent, Color.WHITE, MIN_SNACKBAR_LUMINANCE);
             snackbar.setActionTextColor(colorAccent);
         }
+        // ModernMail: tarjeta flotante y redondeada en lugar de la franja negra pegada abajo
+        try {
+            styleSnackbar(snackbar);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
         return snackbar;
+    }
+
+    private static void styleSnackbar(Snackbar snackbar) {
+        Context context = snackbar.getContext();
+        boolean dark = isDarkTheme(context);
+        View sv = snackbar.getView();
+
+        // Tarjeta gris grafito, opaca (la sombra no se ve a través) y con esquinas suaves
+        GradientDrawable bg = new GradientDrawable();
+        bg.setCornerRadius(dp2pixels(context, 18));
+        bg.setColor(ContextCompat.getColor(context, dark ? R.color.mmSnackDark : R.color.mmSnackLight));
+        if (dark) // Canto fino para que no se pierda sobre el fondo negro
+            bg.setStroke(Math.max(1, dp2pixels(context, 1) / 2), ContextCompat.getColor(context, R.color.mmSnackDarkEdge));
+        sv.setBackgroundTintList(null);
+        sv.setBackground(bg);
+        sv.setElevation(dp2pixels(context, 6));
+
+        TextView tvText = sv.findViewById(com.google.android.material.R.id.snackbar_text);
+        if (tvText != null) {
+            tvText.setTextColor(ContextCompat.getColor(context, R.color.mmSnackText));
+            tvText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        }
+        TextView tvAction = sv.findViewById(com.google.android.material.R.id.snackbar_action);
+        if (tvAction != null) {
+            tvAction.setAllCaps(false);
+            tvAction.setTypeface(Typeface.DEFAULT_BOLD);
+            tvAction.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        }
+
+        // Aparece con un fundido suave en lugar de subir desde el borde
+        // (así la posición vertical queda libre para elevarla, ver placeSnackbar)
+        snackbar.setAnimationMode(com.google.android.material.snackbar.BaseTransientBottomBar.ANIMATION_MODE_FADE);
+
+        // Márgenes laterales: se fijan antes de mostrarla, que es cuando la librería los recuerda
+        if (sv.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            int side = dp2pixels(context, 12);
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) sv.getLayoutParams();
+            lp.leftMargin = side;
+            lp.rightMargin = side;
+            lp.bottomMargin = 0;
+            sv.setLayoutParams(lp);
+        }
+
+        sv.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(@NonNull View v) {
+                placeSnackbar(v);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull View v) {
+            }
+        });
+    }
+
+    // Flota encima de la barra inferior de la app si está a la vista;
+    // si no, por encima de la barra de navegación de Android
+    private static void placeSnackbar(View sv) {
+        try {
+            if (!(sv.getParent() instanceof ViewGroup))
+                return;
+            ViewGroup parent = (ViewGroup) sv.getParent();
+            Context context = sv.getContext();
+
+            int[] loc = new int[2];
+            parent.getLocationOnScreen(loc);
+            int parentTop = loc[1];
+            int parentBottom = loc[1] + parent.getHeight();
+
+            int bottom = -1;
+            View bar = findFloatingBar(parent, parentTop, parentBottom);
+            if (bar != null) {
+                bar.getLocationOnScreen(loc);
+                bottom = parentBottom - loc[1] + dp2pixels(context, 10);
+            }
+            if (bottom < 0) {
+                int nav = 0;
+                WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(parent);
+                if (insets != null)
+                    nav = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+                View root = parent.getRootView();
+                root.getLocationOnScreen(loc);
+                int gap = loc[1] + root.getHeight() - parentBottom;
+                bottom = Math.max(0, nav - gap) + dp2pixels(context, 14);
+            }
+
+            // La librería recoloca los márgenes al añadirla: se eleva con un desplazamiento,
+            // que con la animación de fundido no toca
+            sv.setTranslationY(-bottom);
+
+            // Que los botones flotantes no salten para esquivarla: ya flota por encima
+            if (sv.getLayoutParams() instanceof androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams)
+                ((androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams) sv.getLayoutParams())
+                        .insetEdge = android.view.Gravity.NO_GRAVITY;
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
+    }
+
+    private static View findFloatingBar(ViewGroup parent, int parentTop, int parentBottom) {
+        View aire = parent.findViewById(R.id.llAireBar);
+        if (aire instanceof ViewGroup && aire.isShown() && ((ViewGroup) aire).getChildCount() > 0) {
+            View bar = ((ViewGroup) aire).getChildAt(0);
+            if (isOnScreen(bar, parentTop, parentBottom))
+                return bar;
+        }
+        View bnv = parent.findViewById(R.id.bottom_navigation);
+        if (bnv != null && bnv.isShown() && isOnScreen(bnv, parentTop, parentBottom))
+            return bnv;
+        return null;
+    }
+
+    private static boolean isOnScreen(View v, int parentTop, int parentBottom) {
+        if (v.getHeight() == 0)
+            return false;
+        int[] loc = new int[2];
+        v.getLocationOnScreen(loc);
+        int center = loc[1] + v.getHeight() / 2;
+        return (center > parentTop && center < parentBottom);
     }
 
     static void setSnackbarLines(Snackbar snackbar, int lines) {

@@ -39,7 +39,8 @@ public class BehaviorBottomMargin extends CoordinatorLayout.Behavior<View> {
 
     @Override
     public boolean layoutDependsOn(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
-        return (dependency instanceof Snackbar.SnackbarLayout);
+        // ModernMail: la franja flota por encima de la barra inferior, no empuja el contenido
+        return false;
     }
 
     @Override

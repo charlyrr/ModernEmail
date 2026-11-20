@@ -44,7 +44,9 @@ public class BehaviorBottomPadding extends CoordinatorLayout.Behavior<View> {
 
     @Override
     public boolean onDependentViewChanged(@NonNull CoordinatorLayout parent, @NonNull View child, @NonNull View dependency) {
-        setPadding(child, dependency.isAttachedToWindow() ? dependency.getHeight() : 0);
+        // ModernMail: la franja flota algo por encima del borde (desplazada hacia arriba)
+        int lift = Math.max(0, Math.round(-dependency.getTranslationY()));
+        setPadding(child, dependency.isAttachedToWindow() ? dependency.getHeight() + lift : 0);
         return true;
     }
 

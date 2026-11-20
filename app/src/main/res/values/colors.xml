@@ -333,4 +333,9 @@
     <color name="solarizedGreen">#859900</color>
 
     <color name="google_blue">#4285F4</color>
+    <!-- ModernMail: franja de avisos flotante (Deshacer...) -->
+    <color name="mmSnackLight">#2c2c2e</color>
+    <color name="mmSnackDark">#3a3a3c</color>
+    <color name="mmSnackDarkEdge">#26ffffff</color>
+    <color name="mmSnackText">#f5f5f7</color>
 </resources>
