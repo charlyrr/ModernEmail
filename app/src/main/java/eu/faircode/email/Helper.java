@@ -43,6 +43,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -103,6 +104,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.accessibility.AccessibilityManager;
@@ -116,6 +118,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -2262,28 +2265,57 @@ public class Helper {
     private static void styleSnackbar(Snackbar snackbar) {
         Context context = snackbar.getContext();
         boolean dark = isDarkTheme(context);
+        int accent = resolveColor(context, android.R.attr.colorAccent);
         View sv = snackbar.getView();
 
-        // Tarjeta gris grafito, opaca (la sombra no se ve a través) y con esquinas suaves
+        // Tarjeta flotante a juego con la barra inferior: clara en claro, gris elevado en
+        // oscuro, muy redondeada, con canto fino y sombra suave. Opaca: la sombra no se transparenta
         GradientDrawable bg = new GradientDrawable();
-        bg.setCornerRadius(dp2pixels(context, 18));
+        bg.setCornerRadius(dp2pixels(context, 22));
         bg.setColor(ContextCompat.getColor(context, dark ? R.color.mmSnackDark : R.color.mmSnackLight));
-        if (dark) // Canto fino para que no se pierda sobre el fondo negro
-            bg.setStroke(Math.max(1, dp2pixels(context, 1) / 2), ContextCompat.getColor(context, R.color.mmSnackDarkEdge));
+        bg.setStroke(Math.max(1, dp2pixels(context, 1) / 2),
+                ContextCompat.getColor(context, dark ? R.color.mmSnackDarkEdge : R.color.mmSnackLightEdge));
         sv.setBackgroundTintList(null);
         sv.setBackground(bg);
-        sv.setElevation(dp2pixels(context, 6));
+        sv.setElevation(dp2pixels(context, 8));
 
         TextView tvText = sv.findViewById(com.google.android.material.R.id.snackbar_text);
         if (tvText != null) {
-            tvText.setTextColor(ContextCompat.getColor(context, R.color.mmSnackText));
+            tvText.setTextColor(ContextCompat.getColor(context, dark ? R.color.mmSnackTextDark : R.color.mmSnackTextLight));
             tvText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            tvText.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+            tvText.setPaddingRelative(dp2pixels(context, 20), tvText.getPaddingTop(),
+                    tvText.getPaddingEnd(), tvText.getPaddingBottom());
+            if (tvText.getParent() instanceof View) {
+                View content = (View) tvText.getParent();
+                content.setPaddingRelative(content.getPaddingStart(), content.getPaddingTop(),
+                        dp2pixels(context, 10), content.getPaddingBottom());
+            }
         }
+
+        // "Deshacer": píldora tonal del color de acento
+        snackbar.setActionTextColor(accent);
         TextView tvAction = sv.findViewById(com.google.android.material.R.id.snackbar_action);
         if (tvAction != null) {
             tvAction.setAllCaps(false);
             tvAction.setTypeface(Typeface.DEFAULT_BOLD);
             tvAction.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            int pill = ColorUtils.setAlphaComponent(accent, dark ? 0x38 : 0x1f);
+            int pad = dp2pixels(context, 16);
+            if (tvAction instanceof com.google.android.material.button.MaterialButton) {
+                com.google.android.material.button.MaterialButton mb =
+                        (com.google.android.material.button.MaterialButton) tvAction;
+                mb.setBackgroundTintList(ColorStateList.valueOf(pill));
+                mb.setRippleColor(ColorStateList.valueOf(ColorUtils.setAlphaComponent(accent, 0x33)));
+                mb.setCornerRadius(dp2pixels(context, 18));
+            } else {
+                GradientDrawable shape = new GradientDrawable();
+                shape.setCornerRadius(dp2pixels(context, 18));
+                shape.setColor(pill);
+                int inset = dp2pixels(context, 6);
+                tvAction.setBackground(new android.graphics.drawable.InsetDrawable(shape, 0, inset, 0, inset));
+            }
+            tvAction.setPaddingRelative(pad, tvAction.getPaddingTop(), pad, tvAction.getPaddingBottom());
         }
 
         // Aparece con un fundido suave en lugar de subir desde el borde
@@ -2310,6 +2342,47 @@ public class Helper {
             public void onViewDetachedFromWindow(@NonNull View v) {
             }
         });
+    }
+
+    // ModernMail: línea fina en el borde inferior de la tarjeta que se va consumiendo
+    // mientras todavía se puede deshacer
+    static void setSnackbarCountdown(Snackbar snackbar, long ms) {
+        try {
+            View sv = snackbar.getView();
+            if (ms <= 0 || !(sv instanceof FrameLayout))
+                return;
+            Context context = sv.getContext();
+
+            final View line = new View(context);
+            line.setBackgroundColor(ColorUtils.setAlphaComponent(
+                    resolveColor(context, android.R.attr.colorAccent), 0xcc));
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, dp2pixels(context, 3), Gravity.BOTTOM);
+            ((FrameLayout) sv).addView(line, lp);
+            sv.setClipToOutline(true); // la línea sigue las esquinas redondeadas
+
+            line.setPivotX(0);
+            line.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    v.setPivotX(v.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? v.getWidth() : 0);
+                }
+            });
+
+            final ObjectAnimator anim = ObjectAnimator.ofFloat(line, View.SCALE_X, 1f, 0f);
+            anim.setDuration(ms);
+            anim.setInterpolator(new android.view.animation.LinearInterpolator());
+            anim.start();
+
+            snackbar.addCallback(new Snackbar.Callback() {
+                @Override
+                public void onDismissed(Snackbar transientBottomBar, int event) {
+                    anim.cancel();
+                }
+            });
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
     }
 
     // Flota encima de la barra inferior de la app si está a la vista;
