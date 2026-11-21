@@ -337,7 +337,7 @@
     <color name="mmSnackLight">#ffffff</color>
     <color name="mmSnackLightEdge">#1a000000</color>
     <color name="mmSnackTextLight">#111113</color>
-    <color name="mmSnackDark">#2c2c2e</color>
-    <color name="mmSnackDarkEdge">#26ffffff</color>
-    <color name="mmSnackTextDark">#f5f5f7</color>
+    <color name="mmSnackDark">#48484a</color>
+    <color name="mmSnackDarkEdge">#33ffffff</color>
+    <color name="mmSnackTextDark">#ffffff</color>
 </resources>

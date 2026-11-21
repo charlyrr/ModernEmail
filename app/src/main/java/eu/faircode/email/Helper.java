@@ -2300,7 +2300,7 @@ public class Helper {
             tvAction.setAllCaps(false);
             tvAction.setTypeface(Typeface.DEFAULT_BOLD);
             tvAction.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-            int pill = ColorUtils.setAlphaComponent(accent, dark ? 0x38 : 0x1f);
+            int pill = ColorUtils.setAlphaComponent(accent, dark ? 0x42 : 0x1f);
             int pad = dp2pixels(context, 16);
             if (tvAction instanceof com.google.android.material.button.MaterialButton) {
                 com.google.android.material.button.MaterialButton mb =
