@@ -2269,15 +2269,23 @@ public class Helper {
         View sv = snackbar.getView();
 
         // Tarjeta flotante a juego con la barra inferior: clara en claro, gris elevado en
-        // oscuro, muy redondeada, con canto fino y sombra suave. Opaca: la sombra no se transparenta
-        GradientDrawable bg = new GradientDrawable();
-        bg.setCornerRadius(dp2pixels(context, 22));
-        bg.setColor(ContextCompat.getColor(context, dark ? R.color.mmSnackDark : R.color.mmSnackLight));
-        bg.setStroke(Math.max(1, dp2pixels(context, 1) / 2),
-                ContextCompat.getColor(context, dark ? R.color.mmSnackDarkEdge : R.color.mmSnackLightEdge));
+        // oscuro, muy redondeada, con canto fino y una sombra propia alrededor (MmSnackCard)
+        final MmSnackCard card = new MmSnackCard(context, dark,
+                ContextCompat.getColor(context, dark ? R.color.mmSnackDark : R.color.mmSnackLight),
+                ContextCompat.getColor(context, dark ? R.color.mmSnackDarkEdge : R.color.mmSnackLightEdge),
+                accent);
         sv.setBackgroundTintList(null);
-        sv.setBackground(bg);
-        sv.setElevation(dp2pixels(context, 8));
+        sv.setBackground(card);
+        // Margen transparente alrededor de la tarjeta, donde cabe la sombra difuminada
+        sv.setPadding(card.inset.left, card.inset.top, card.inset.right, card.inset.bottom);
+        sv.setElevation(card.usesOwnShadow() ? 0 : dp2pixels(context, 8));
+        // Solo la tarjeta recoge los toques: el margen de la sombra deja tocar lo de debajo
+        sv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return card.contains(event.getX(), event.getY());
+            }
+        });
 
         TextView tvText = sv.findViewById(com.google.android.material.R.id.snackbar_text);
         if (tvText != null) {
@@ -2322,9 +2330,10 @@ public class Helper {
         // (así la posición vertical queda libre para elevarla, ver placeSnackbar)
         snackbar.setAnimationMode(com.google.android.material.snackbar.BaseTransientBottomBar.ANIMATION_MODE_FADE);
 
-        // Márgenes laterales: se fijan antes de mostrarla, que es cuando la librería los recuerda
+        // Márgenes laterales: se fijan antes de mostrarla, que es cuando la librería los recuerda.
+        // La tarjeta queda a 16 dp de los lados (como la barra inferior) gracias a su margen de sombra
         if (sv.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            int side = dp2pixels(context, 12);
+            int side = 0;
             ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) sv.getLayoutParams();
             lp.leftMargin = side;
             lp.rightMargin = side;
@@ -2349,29 +2358,20 @@ public class Helper {
     static void setSnackbarCountdown(Snackbar snackbar, long ms) {
         try {
             View sv = snackbar.getView();
-            if (ms <= 0 || !(sv instanceof FrameLayout))
+            if (ms <= 0 || !(sv.getBackground() instanceof MmSnackCard))
                 return;
-            Context context = sv.getContext();
+            final MmSnackCard card = (MmSnackCard) sv.getBackground();
 
-            final View line = new View(context);
-            line.setBackgroundColor(ColorUtils.setAlphaComponent(
-                    resolveColor(context, android.R.attr.colorAccent), 0xcc));
-            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, dp2pixels(context, 3), Gravity.BOTTOM);
-            ((FrameLayout) sv).addView(line, lp);
-            sv.setClipToOutline(true); // la línea sigue las esquinas redondeadas
-
-            line.setPivotX(0);
-            line.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    v.setPivotX(v.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? v.getWidth() : 0);
-                }
-            });
-
-            final ObjectAnimator anim = ObjectAnimator.ofFloat(line, View.SCALE_X, 1f, 0f);
+            final ValueAnimator anim = ValueAnimator.ofFloat(1f, 0f);
             anim.setDuration(ms);
             anim.setInterpolator(new android.view.animation.LinearInterpolator());
+            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(@NonNull ValueAnimator animation) {
+                    card.setProgress((float) animation.getAnimatedValue());
+                }
+            });
+            card.setProgress(1f);
             anim.start();
 
             snackbar.addCallback(new Snackbar.Callback() {
@@ -2403,7 +2403,7 @@ public class Helper {
             View bar = findFloatingBar(parent, parentTop, parentBottom);
             if (bar != null) {
                 bar.getLocationOnScreen(loc);
-                bottom = parentBottom - loc[1] + dp2pixels(context, 10);
+                bottom = parentBottom - loc[1] + dp2pixels(context, 12);
             }
             if (bottom < 0) {
                 int nav = 0;
@@ -2417,8 +2417,18 @@ public class Helper {
             }
 
             // La librería recoloca los márgenes al añadirla: se eleva con un desplazamiento,
-            // que con la animación de fundido no toca
-            sv.setTranslationY(-bottom);
+            // que con la animación de fundido no toca. "bottom" es para la tarjeta: se descuenta
+            // el margen de la sombra que queda por debajo de ella
+            float target = -(bottom - sv.getPaddingBottom());
+
+            // Entrada visible: sube un poco con un rebote suave mientras aparece
+            sv.animate().cancel();
+            sv.setTranslationY(target + dp2pixels(context, 32));
+            sv.animate()
+                    .translationY(target)
+                    .setDuration(450)
+                    .setInterpolator(new android.view.animation.OvershootInterpolator(1.3f))
+                    .start();
 
             // Que los botones flotantes no salten para esquivarla: ya flota por encima
             if (sv.getLayoutParams() instanceof androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams)
