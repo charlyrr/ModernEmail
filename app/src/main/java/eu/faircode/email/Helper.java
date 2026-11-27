@@ -2447,12 +2447,14 @@ public class Helper {
     }
 
     private static View findFloatingBar(ViewGroup parent, int parentTop, int parentBottom) {
+        // Lo que esté visible en la barra inferior de la bandeja (hoy, el botón de redactar)
         View aire = parent.findViewById(R.id.llAireBar);
-        if (aire instanceof ViewGroup && aire.isShown() && ((ViewGroup) aire).getChildCount() > 0) {
-            View bar = ((ViewGroup) aire).getChildAt(0);
-            if (isOnScreen(bar, parentTop, parentBottom))
-                return bar;
-        }
+        if (aire instanceof ViewGroup && aire.isShown())
+            for (int i = 0; i < ((ViewGroup) aire).getChildCount(); i++) {
+                View bar = ((ViewGroup) aire).getChildAt(i);
+                if (bar.getVisibility() == View.VISIBLE && isOnScreen(bar, parentTop, parentBottom))
+                    return bar;
+            }
         View bnv = parent.findViewById(R.id.bottom_navigation);
         if (bnv != null && bnv.isShown() && isOnScreen(bnv, parentTop, parentBottom))
             return bnv;

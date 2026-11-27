@@ -380,7 +380,7 @@
                 android:paddingStart="16dp"
                 android:paddingTop="6dp"
                 android:paddingEnd="16dp"
-                android:paddingBottom="2dp"
+                android:paddingBottom="8dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -402,46 +402,46 @@
                     app:drawableStartCompat="@drawable/twotone_search_24"
                     app:drawableTint="?android:attr/textColorSecondary" />
 
+                <!-- Filtro rápido: dos chips que se activan y desactivan (ninguno = todos) -->
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/aire_field_bg"
-                    android:orientation="horizontal"
-                    android:padding="2dp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tvAireAll"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:maxLines="1"
                         android:text="@string/mm_filter_all"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="13sp" />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvAireUnread"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:drawablePadding="6dp"
                         android:gravity="center"
                         android:maxLines="1"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="14dp"
                         android:text="@string/mm_filter_unread"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="13sp" />
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvAireFlagged"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:drawablePadding="6dp"
                         android:gravity="center"
                         android:maxLines="1"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="14dp"
                         android:text="@string/mm_filter_flagged"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="13sp" />
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -1130,7 +1130,7 @@
         android:layout_gravity="bottom"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:gravity="center_vertical"
+        android:gravity="end|center_vertical"
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingTop="12dp"
@@ -1138,6 +1138,8 @@
         android:paddingBottom="14dp"
         android:visibility="gone">
 
+        <!-- Píldora de navegación (Entrada, Buzones, Destacados, Ajustes): retirada,
+             todo eso ya está en el menú lateral. Se conserva oculta por si se recupera -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="60dp"
@@ -1147,7 +1149,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="6dp"
-            android:paddingEnd="6dp">
+            android:paddingEnd="6dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/llAireInbox"
@@ -1262,17 +1265,17 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Redactar: botón redondo de color de acento, gemelo del de responder -->
         <ImageButton
             android:id="@+id/ibAireCompose"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/aire_bar_bg"
+            android:background="@drawable/aire_compose_bg"
             android:contentDescription="@string/title_compose"
             android:elevation="4dp"
             android:tooltipText="@string/title_compose"
             app:srcCompat="@drawable/twotone_edit_24"
-            app:tint="?attr/colorAccent" />
+            app:tint="@color/white" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Botón de redactar: círculo del color de acento con onda al pulsar -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#40ffffff">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="?attr/colorAccent" />
+        </shape>
+    </item>
+</ripple>

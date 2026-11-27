@@ -7469,7 +7469,12 @@ public class FragmentMessages extends FragmentBase
             GlassBlur.enableSource(rvMessage);
             if (llAireBar instanceof ViewGroup && ((ViewGroup) llAireBar).getChildCount() > 0)
                 GlassBlur.applyPanel(((ViewGroup) llAireBar).getChildAt(0), rvMessage, dark, 30);
-            GlassBlur.applyPanel(view.findViewById(R.id.ibAireCompose), rvMessage, dark, 30);
+            // Redactar, de cristal: el lápiz vuelve al color de acento
+            View compose = view.findViewById(R.id.ibAireCompose);
+            GlassBlur.applyPanel(compose, rvMessage, dark, 30);
+            if (compose instanceof android.widget.ImageView)
+                androidx.core.widget.ImageViewCompat.setImageTintList((android.widget.ImageView) compose,
+                        ColorStateList.valueOf(Helper.resolveColor(context, android.R.attr.colorAccent)));
             GlassBlur.applyPanel(view.findViewById(R.id.bottom_navigation), rvMessage, dark, 30);
         } catch (Throwable ex) {
             Log.e(ex);
@@ -7504,17 +7509,18 @@ public class FragmentMessages extends FragmentBase
             }
         });
 
+        // Chips: tocar uno lo activa; tocarlo otra vez vuelve a mostrar todos
         tvAireUnread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setAireFilter(true, false);
+                setAireFilter(!aireUnread, false);
             }
         });
 
         tvAireFlagged.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setAireFilter(false, true);
+                setAireFilter(false, !aireFlagged);
             }
         });
 
@@ -7585,22 +7591,73 @@ public class FragmentMessages extends FragmentBase
         loadMessages(true);
     }
 
+    private boolean aireUnread = false;
+    private boolean aireFlagged = false;
+
     private void updateAireFilter(boolean filter_seen, boolean filter_unflagged) {
         if (tvAireAll == null)
             return;
-        boolean unread = (filter_seen && !filter_unflagged);
-        boolean flagged = filter_unflagged;
-        styleAireSegment(tvAireAll, !filter_seen && !filter_unflagged);
-        styleAireSegment(tvAireUnread, unread);
-        styleAireSegment(tvAireFlagged, flagged);
+        aireUnread = (filter_seen && !filter_unflagged);
+        aireFlagged = filter_unflagged;
+        styleAireChip(tvAireUnread, aireUnread, false);
+        styleAireChip(tvAireFlagged, aireFlagged, true);
     }
 
-    private void styleAireSegment(TextView tv, boolean selected) {
-        if (selected)
-            tv.setBackgroundResource(R.drawable.aire_segment_selected);
-        else
-            tv.setBackground(null);
-        tv.setTypeface(null, selected ? Typeface.BOLD : Typeface.NORMAL);
+    // Chip del filtro: contorno fino y texto gris cuando está apagado; fondo suave y texto
+    // del color de acento cuando está activo. Con un punto (no leídos) o una estrella delante
+    private void styleAireChip(TextView tv, boolean selected, boolean star) {
+        if (tv == null)
+            return;
+        try {
+            Context context = tv.getContext();
+            boolean dark = Helper.isDarkTheme(context);
+            int accent = Helper.resolveColor(context, android.R.attr.colorAccent);
+            int secondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
+            int separator = Helper.resolveColor(context, R.attr.colorSeparator);
+            int fg = (selected ? accent : secondary);
+
+            android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable();
+            bg.setCornerRadius(Helper.dp2pixels(context, 17));
+            int px1 = Math.max(1, Helper.dp2pixels(context, 1));
+            if (selected) {
+                bg.setColor(androidx.core.graphics.ColorUtils.setAlphaComponent(accent, dark ? 0x40 : 0x1f));
+                bg.setStroke(px1, androidx.core.graphics.ColorUtils.setAlphaComponent(accent, 0x59));
+            } else {
+                bg.setColor(Color.TRANSPARENT);
+                bg.setStroke(px1, separator);
+            }
+            tv.setBackground(new android.graphics.drawable.RippleDrawable(
+                    ColorStateList.valueOf(androidx.core.graphics.ColorUtils.setAlphaComponent(accent, 0x33)),
+                    bg, null));
+
+            tv.setTextColor(fg);
+            tv.setTypeface(selected
+                    ? Typeface.create("sans-serif-medium", Typeface.NORMAL)
+                    : Typeface.DEFAULT);
+
+            android.graphics.drawable.Drawable icon;
+            if (star) {
+                icon = ContextCompat.getDrawable(context,
+                        selected ? R.drawable.baseline_star_24 : R.drawable.twotone_star_24);
+                if (icon != null) {
+                    icon = androidx.core.graphics.drawable.DrawableCompat.wrap(icon.mutate());
+                    androidx.core.graphics.drawable.DrawableCompat.setTint(icon, fg);
+                    int size = Helper.dp2pixels(context, 16);
+                    icon.setBounds(0, 0, size, size);
+                }
+            } else {
+                android.graphics.drawable.GradientDrawable dot = new android.graphics.drawable.GradientDrawable();
+                dot.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+                dot.setColor(fg);
+                int size = Helper.dp2pixels(context, 8);
+                dot.setBounds(0, 0, size, size);
+                icon = dot;
+            }
+            tv.setCompoundDrawablesRelative(icon, null, null, null);
+            tv.setSelected(selected);
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
     }
 
     private void onMenuFilter(String name, AdapterMessage.ViewType viewType, String type, boolean filter) {
